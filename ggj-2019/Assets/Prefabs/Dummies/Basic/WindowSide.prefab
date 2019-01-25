@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 4496398863401876017}
   - component: {fileID: 8894217158634206586}
   m_Layer: 0
-  m_Name: window
-  m_TagString: Untagged
+  m_Name: WindowSide
+  m_TagString: Window
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
