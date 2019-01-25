@@ -8,6 +8,7 @@ TagManager:
   - SideDoor
   - Window
   - RoofJumpSite
+  - Interactible
   layers:
   - Default
   - TransparentFX
@@ -18,8 +19,8 @@ TagManager:
   - 
   - 
   - PostProcessing
-  - 
-  - 
+  - Furniture
+  - Character
   - 
   - 
   - 
