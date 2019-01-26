@@ -111,7 +111,7 @@ namespace GaryMoveOut
                     prefab = scheme.SideWallR;
                     break;
                 default:
-                    prefab = scheme.SideWindow;
+                    prefab = scheme.SideWindowR;
                     break;
             }
             var segment = GameObject.Instantiate(prefab, position, rotation, floor.transform) as GameObject;
@@ -162,7 +162,7 @@ namespace GaryMoveOut
                     prefab = scheme.SideWallL;
                     break;
                 case FloorType.MiddleFloor:
-                    prefab = scheme.SideWindow;
+                    prefab = scheme.SideWindowL;
                     break;
                 default:
                     prefab = scheme.GetRandomSideWall(rightSide: false);
