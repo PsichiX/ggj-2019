@@ -3,56 +3,59 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameplayEvents
+namespace GaryMoveOut
 {
-    private Dictionary<GamePhases.GameplayPhase, Action<object>> eventDict;
-    private static GameplayEvents events;
-    public static GameplayEvents GetGameplayEvents()
+    public class GameplayEvents
     {
-        return events;
-    }
-
-    public GameplayEvents()
-    {
-        eventDict = new Dictionary<GamePhases.GameplayPhase, Action<object>>();
-        AddAllEventsToDict();
-        events = this;
-    }
-
-    private void AddAllEventsToDict()
-    {
-        foreach (GamePhases.GameplayPhase phases in (GamePhases.GameplayPhase[])Enum.GetValues(typeof(GamePhases.GameplayPhase)))
+        private Dictionary<GamePhases.GameplayPhase, Action<object>> eventDict;
+        private static GameplayEvents events;
+        public static GameplayEvents GetGameplayEvents()
         {
-            eventDict.Add(phases, null);
+            return events;
         }
-    }
 
-
-    public bool AttachToEvent(GamePhases.GameplayPhase gamePhase, Action<object> action)
-    {
-        if (eventDict.ContainsKey(gamePhase))
+        public GameplayEvents()
         {
-            eventDict[gamePhase] += action;
-            return true;
+            eventDict = new Dictionary<GamePhases.GameplayPhase, Action<object>>();
+            AddAllEventsToDict();
+            events = this;
         }
-        return false;
-    }
 
-    public bool DetachFromEvent(GamePhases.GameplayPhase gamePhase, Action<object> action)
-    {
-        if (eventDict.ContainsKey(gamePhase))
+        private void AddAllEventsToDict()
         {
-            eventDict[gamePhase] -= action;
-            return true;
+            foreach (GamePhases.GameplayPhase phases in (GamePhases.GameplayPhase[])Enum.GetValues(typeof(GamePhases.GameplayPhase)))
+            {
+                eventDict.Add(phases, null);
+            }
         }
-        return false;
-    }
 
-    public void CallEvent(GamePhases.GameplayPhase gamePhase, object param)
-    {
-        if (eventDict.ContainsKey(gamePhase))
+
+        public bool AttachToEvent(GamePhases.GameplayPhase gamePhase, Action<object> action)
         {
-            eventDict[gamePhase]?.Invoke(param);
+            if (eventDict.ContainsKey(gamePhase))
+            {
+                eventDict[gamePhase] += action;
+                return true;
+            }
+            return false;
+        }
+
+        public bool DetachFromEvent(GamePhases.GameplayPhase gamePhase, Action<object> action)
+        {
+            if (eventDict.ContainsKey(gamePhase))
+            {
+                eventDict[gamePhase] -= action;
+                return true;
+            }
+            return false;
+        }
+
+        public void CallEvent(GamePhases.GameplayPhase gamePhase, object param)
+        {
+            if (eventDict.ContainsKey(gamePhase))
+            {
+                eventDict[gamePhase]?.Invoke(param);
+            }
         }
     }
 }
