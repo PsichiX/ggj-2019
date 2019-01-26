@@ -26,14 +26,9 @@ namespace GaryMoveOut
 
                 buildingsGenerator.DebugGenerateItems(ref building);
 
+                //building.RelocateItems2();
                 building.RelocateItems();
             }
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
         }
     }
 

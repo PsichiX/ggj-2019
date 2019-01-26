@@ -5,14 +5,20 @@ namespace GaryMoveOut
     public class BuildingsGenerator
     {
         private BuildingSegmentsDatabase buildingsDatabase;
+        private ItemsDatabase itemsDatabase;
 
 
         public BuildingsGenerator()
         {
             buildingsDatabase = Resources.Load<BuildingSegmentsDatabase>("Databases/BuildingSegmentsDatabase");
+            itemsDatabase = Resources.Load<ItemsDatabase>("Databases/ItemsDatabase");
         }
 
 
+        public void Destroy(ref Building building)
+        {
+            // to do
+        }
 
         public Building GenerateBuilding(Transform root, int floorSegmentsCount, int buildingFloorsCount, int stairsSegmentIndex)
         {
@@ -127,11 +133,11 @@ namespace GaryMoveOut
             {
                 for(int i = 0; i < building.floors.Count; i++)
                 {
-                    int rnd = Random.Range(3, 7);
+                    int rnd = Random.Range(1, 3);
                     for(int j = 0; j < rnd; j++)
                     {
-                        var go = new GameObject().AddComponent<Item>();
-                        building.floors[i].AddItem(go.GetComponent<Item>());
+                        var item = GameObject.Instantiate<Item>(itemsDatabase.debugItem);
+                        building.floors[i].AddItem(item);
                     }
                 }
             }
