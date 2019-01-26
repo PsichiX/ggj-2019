@@ -215,6 +215,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 12
       objectReference: {fileID: 0}
+    - target: {fileID: 664151527202963016, guid: f5fe2a6bd30ae814b95669ad05a539f5,
+        type: 3}
+      propertyPath: m_TagString
+      value: Interactible
+      objectReference: {fileID: 0}
     - target: {fileID: 7383356231996779767, guid: f5fe2a6bd30ae814b95669ad05a539f5,
         type: 3}
       propertyPath: m_LocalPosition.x
