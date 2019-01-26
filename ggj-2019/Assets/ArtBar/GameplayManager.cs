@@ -3,256 +3,266 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class GameplayManager : MonoBehaviour
+namespace GaryMoveOut
 {
-    private Dictionary<GamePhases.GameplayPhase, Action<System.Object>> eventDict = new Dictionary<GamePhases.GameplayPhase, Action<System.Object>>();
-
-    private static GameplayManager _instance;
-    public static GameplayManager GetGameplayManager()
+    public class GameplayManager : MonoBehaviour
     {
-        return _instance;
-    }
-
-    void Awake()
-    {
-        if (_instance != null && _instance != this)
+        private static GameplayManager _instance;
+        public static GameplayManager GetGameplayManager()
         {
-            Destroy(this.gameObject);
-            return;
-        }
-        else
-        {
-            _instance = this;
+            return _instance;
         }
 
-        AddAllEventsToDict();
-    }
+        private GameplayEvents events;
+        private BuildingsGenerator buildingsGenerator;
+        private BuildingConfigurator buildingConfigurator;
 
-    private void AddAllEventsToDict()
-    {
-        foreach (GamePhases.GameplayPhase phases in (GamePhases.GameplayPhase[])Enum.GetValues(typeof(GamePhases.GameplayPhase)))
+        [SerializeField] private GameObject placeBuildingOut;
+        private Building buildingOut;
+        [SerializeField] private GameObject placeBuildingIn;
+        private Building buildingIn;
+        
+        void Awake()
         {
-            eventDict.Add(phases, null);
-        }
-    }
+            if (_instance != null && _instance != this)
+            {
+                Destroy(this.gameObject);
+                return;
+            }
+            else
+            {
+                _instance = this;
+            }
 
-    private void Start()
-    {
-        AttachReactionsToEvents();
-        PhaseStartGame();
-    }
-
-    private void AttachReactionsToEvents()
-    {
-        AttachToEvent(GamePhases.GameplayPhase.PlayerJump, ReactionPlayerJump);
-        AttachToEvent(GamePhases.GameplayPhase.PlayerInTruck, ReactionPlayerInTruck);
-        AttachToEvent(GamePhases.GameplayPhase.LastItemShot, ReactionLastItemShot);
-        AttachToEvent(GamePhases.GameplayPhase.PlayerDie, ReactionPlayerDie);
-        AttachToEvent(GamePhases.GameplayPhase.GameOver, ReactionGameOver);
-        AttachToEvent(GamePhases.GameplayPhase.StartNewGame, PhaseStartNewGame);
-    }
-
-    void Update()
-    {
-
-        EvacuationProcess();
-
-    }
-
-    public bool AttachToEvent(GamePhases.GameplayPhase gamePhase, Action<object> action)
-    {
-        if (eventDict.ContainsKey(gamePhase))
-        {
-            eventDict[gamePhase] += action;
-            return true;
-        }
-        return false;
-    }
-
-    public bool DetachFromEvent(GamePhases.GameplayPhase gamePhase, Action<object> action)
-    {
-        if (eventDict.ContainsKey(gamePhase))
-        {
-            eventDict[gamePhase] -= action;
-            return true;
-        }
-        return false;
-    }
-
-    public void CallEvent(GamePhases.GameplayPhase gamePhase, object param)
-    {
-        if (eventDict.ContainsKey(gamePhase))
-        {
-            eventDict[gamePhase]?.Invoke(param);
-        }
-    }
-
-    private void PhaseStartNewGame(object param)
-    {
-        PhaseStartGame();
-    }
-
-    private void PhaseStartGame()
-    {
-        SetupNewBuilding();
-        CallEvent(GamePhases.GameplayPhase.FadeIn, null);
-        float fadeDealy = 1f;
-        DOVirtual.DelayedCall(fadeDealy, PhaseBadEventStart);
-        Debug.Log("PhaseStart");
-    }
-
-    private void SetupNewBuilding()
-    {
-
-    }
-
-    private void PhaseBadEventStart()
-    {
-        CallEvent(GamePhases.GameplayPhase.BadEventStart, null);
-        float delay = 2f;
-        DOVirtual.DelayedCall(delay, PhaseStartEvacuation);
-        Debug.Log("PhaseBadEventStart");
-    }
-
-    private void PhaseStartEvacuation()
-    {
-        CallEvent(GamePhases.GameplayPhase.Evacuation, null);
-        Debug.Log("PhaseStartEvacuation");
-        isEvacuation = true;
-        currentFloorBadEvent = -1;
-        NextFloorBadEvent();
-    }
-
-    private void PhaseFloorEvacuationStart(int floor)
-    {
-        CallEvent(GamePhases.GameplayPhase.FloorEvacuationStart, floor);
-        Debug.Log($"PhaseFloorEvacuationStart Floor [{floor}]");
-    }
-
-    private void PhaseFloorEvacuationBreakPoint(int floor)
-    {
-        CallEvent(GamePhases.GameplayPhase.FloorEvacuationBreakPoint, floor);
-        Debug.Log($"PhaseFloorEvacuationBreakPoint Floor [{floor}]");
-    }
-
-    private void PhaseFloorEvacuationEnd(int floor)
-    {
-        CallEvent(GamePhases.GameplayPhase.FloorEvacuationEnd, floor);
-        Debug.Log($"PhaseFloorEvacuationEnd Floor [{floor}]");
-    }
-
-    public int buildingFloorNumber = 4; //0,1,2,3,4
-    public int currentFloorBadEvent = 0;
-    private bool isEvacuation = false;
-    private float evacuationTimeStartToBreakPoint = 5f;     //start to break point
-    private float evacuationTimeStartToEnd = 10f;           //start to end
-
-    private float currentEvacuationTime = 0;
-    private float currentEvacuationTimeStartToBreakPoint = 0;
-    private float currentEvacuationTimeStartToEnd = 0;
-
-    private void EvacuationProcess()
-    {
-        if (isEvacuation == false)
-        {
-            return;
+            events = new GameplayEvents();
+            buildingsGenerator = new BuildingsGenerator();
+            buildingConfigurator = new BuildingConfigurator();
         }
 
-        currentEvacuationTime += Time.deltaTime;
-
-        if (currentEvacuationTimeStartToBreakPoint > 0 && currentEvacuationTime > currentEvacuationTimeStartToBreakPoint)
+        private void Start()
         {
-            currentEvacuationTimeStartToBreakPoint = -1f;
-            PhaseFloorEvacuationBreakPoint(currentFloorBadEvent);
+            AttachReactionsToEvents();
+            PhaseStartGame();
         }
 
-        if (currentEvacuationTimeStartToEnd > 0 && currentEvacuationTime > currentEvacuationTimeStartToEnd)
+        private void AttachReactionsToEvents()
         {
-            currentEvacuationTimeStartToEnd = -1f;
-            PhaseFloorEvacuationEnd(currentFloorBadEvent);
+            events.AttachToEvent(GamePhases.GameplayPhase.PlayerJump, ReactionPlayerJump);
+            events.AttachToEvent(GamePhases.GameplayPhase.PlayerInTruck, ReactionPlayerInTruck);
+            events.AttachToEvent(GamePhases.GameplayPhase.LastItemShot, ReactionLastItemShot);
+            events.AttachToEvent(GamePhases.GameplayPhase.PlayerDie, ReactionPlayerDie);
+            events.AttachToEvent(GamePhases.GameplayPhase.GameOver, ReactionGameOver);
+            events.AttachToEvent(GamePhases.GameplayPhase.StartNewGame, PhaseStartNewGame);
+        }
+
+        void Update()
+        {
+
+            EvacuationProcess();
+
+        }
+
+
+        private void PhaseStartNewGame(object param)
+        {
+            PhaseStartGame();
+        }
+
+        private void PhaseStartGame()
+        {
+            SetupBuildingOut();
+            events.CallEvent(GamePhases.GameplayPhase.FadeIn, null);
+            float fadeDealy = 1f;
+            DOVirtual.DelayedCall(fadeDealy, PhaseBadEventStart);
+            Debug.Log("PhaseStart");
+        }
+
+        private void SetupBuildingOut()
+        {
+            if(buildingsGenerator == null)
+            {
+                Debug.Log("building generator == null");
+                return;
+            }
+
+            if (placeBuildingOut != null)
+            {
+                var buildingConfig = buildingConfigurator.BuildingParameterGenerator(currentBuildingId);
+                buildingOut = buildingsGenerator.GenerateBuilding(placeBuildingOut.transform, buildingConfig.floorSegmentsCount, buildingConfig.buildingFloorsCount, buildingConfig.stairsSegmentIndex);
+                buildingFloorNumber = buildingConfig.buildingFloorsCount;
+            }
+        }
+
+        private void SetupBuildingIn()
+        {
+            if (buildingsGenerator == null)
+            {
+                Debug.Log("building generator == null");
+                return;
+            }
+
+            if (placeBuildingIn != null)
+            {
+                var buildingConfig = buildingConfigurator.BuildingParameterGenerator(currentBuildingId);
+                buildingIn = buildingsGenerator.GenerateBuilding(placeBuildingIn.transform, buildingConfig.floorSegmentsCount, buildingConfig.buildingFloorsCount, buildingConfig.stairsSegmentIndex);
+            }
+        }
+
+        private void PhaseBadEventStart()
+        {
+            events.CallEvent(GamePhases.GameplayPhase.BadEventStart, null);
+            float delay = 2f;
+            DOVirtual.DelayedCall(delay, PhaseStartEvacuation);
+            Debug.Log("PhaseBadEventStart");
+        }
+
+        private void PhaseStartEvacuation()
+        {
+            events.CallEvent(GamePhases.GameplayPhase.Evacuation, null);
+            Debug.Log("PhaseStartEvacuation");
+            isEvacuation = true;
+            currentFloorBadEvent = -1;
             NextFloorBadEvent();
         }
-    }
 
-    private void NextFloorBadEvent()
-    {
-        currentFloorBadEvent++;
-        if (currentFloorBadEvent > buildingFloorNumber)
+        private void PhaseFloorEvacuationStart(int floor)
         {
-            isEvacuation = false;
-            CallEvent(GamePhases.GameplayPhase.GameOver, null);
-            return;
+            events.CallEvent(GamePhases.GameplayPhase.FloorEvacuationStart, floor);
+            Debug.Log($"PhaseFloorEvacuationStart Floor [{floor}]");
         }
 
-        currentEvacuationTime = 0f;
-        currentEvacuationTimeStartToBreakPoint = evacuationTimeStartToBreakPoint;
-        currentEvacuationTimeStartToEnd = evacuationTimeStartToEnd;
-        PhaseFloorEvacuationStart(currentFloorBadEvent);
-    }
+        private void PhaseFloorEvacuationBreakPoint(int floor)
+        {
+            events.CallEvent(GamePhases.GameplayPhase.FloorEvacuationBreakPoint, floor);
+            Debug.Log($"PhaseFloorEvacuationBreakPoint Floor [{floor}]");
+        }
 
-    private void EndEvacuation()
-    {
-        isEvacuation = false;
-    }
+        private void PhaseFloorEvacuationEnd(int floor)
+        {
+            events.CallEvent(GamePhases.GameplayPhase.FloorEvacuationEnd, floor);
+            Debug.Log($"PhaseFloorEvacuationEnd Floor [{floor}]");
+        }
 
-    private void ReactionPlayerDie(object param)
-    {
-        EndEvacuation();
-        float delay = 1f;
-        DOVirtual.DelayedCall(delay, () => CallEvent(GamePhases.GameplayPhase.GameOver, null));       
-    }
+        private int buildingFloorNumber = 0;
+        public int currentFloorBadEvent = 0;
+        public int currentBuildingId = 0;
+        private bool isEvacuation = false;
+        private float evacuationTimeStartToBreakPoint = 5f;     //start to break point
+        private float evacuationTimeStartToEnd = 10f;           //start to end
 
-    private void ReactionPlayerJump(object param)
-    {
-        EndEvacuation();
-    }
+        private float currentEvacuationTime = 0;
+        private float currentEvacuationTimeStartToBreakPoint = 0;
+        private float currentEvacuationTimeStartToEnd = 0;
 
-    private void ReactionGameOver(object param)
-    {
-        Debug.Log("GameOver");
-    }
+        private void EvacuationProcess()
+        {
+            if (isEvacuation == false)
+            {
+                return;
+            }
 
-    private void ReactionPlayerInTruck(object param)
-    {
-        PhaseTruckStart();
-    }
+            currentEvacuationTime += Time.deltaTime;
 
-    private void PhaseTruckStart()
-    {
-        CallEvent(GamePhases.GameplayPhase.TruckStart, null);
-        float delay = 2f;
-        DOVirtual.DelayedCall(delay, PhaseTruckStop);
-        Debug.Log("PhaseTruckStart");
-    }
+            if (currentEvacuationTimeStartToBreakPoint > 0 && currentEvacuationTime > currentEvacuationTimeStartToBreakPoint)
+            {
+                currentEvacuationTimeStartToBreakPoint = -1f;
+                PhaseFloorEvacuationBreakPoint(currentFloorBadEvent);
+            }
 
-    private void PhaseTruckStop()
-    {
-        CallEvent(GamePhases.GameplayPhase.TruckStop, null);
-        float delay = 1f;
-        DOVirtual.DelayedCall(delay, PhaseDeEvacuation);
-        Debug.Log("PhaseTruckStop");
-    }
+            if (currentEvacuationTimeStartToEnd > 0 && currentEvacuationTime > currentEvacuationTimeStartToEnd)
+            {
+                currentEvacuationTimeStartToEnd = -1f;
+                PhaseFloorEvacuationEnd(currentFloorBadEvent);
+                NextFloorBadEvent();
+            }
+        }
 
-    private void PhaseDeEvacuation()
-    {
-        CallEvent(GamePhases.GameplayPhase.DeEvacuation, null);
-        Debug.Log("PhaseDeEvacuation");
-    }
+        private void NextFloorBadEvent()
+        {
+            currentFloorBadEvent++;
+            if (currentFloorBadEvent > buildingFloorNumber)
+            {
+                isEvacuation = false;
+                events.CallEvent(GamePhases.GameplayPhase.GameOver, null);
+                return;
+            }
 
-    private void ReactionLastItemShot(object param)
-    {
-        CallEvent(GamePhases.GameplayPhase.FadeOut, null);
-        float delay = 1f;
-        DOVirtual.DelayedCall(delay, PhaseFewDaysLater);
-        Debug.Log("FadeOut");
-    }
+            currentEvacuationTime = 0f;
+            currentEvacuationTimeStartToBreakPoint = evacuationTimeStartToBreakPoint;
+            currentEvacuationTimeStartToEnd = evacuationTimeStartToEnd;
+            PhaseFloorEvacuationStart(currentFloorBadEvent);
+        }
 
-    private void PhaseFewDaysLater()
-    {
-        CallEvent(GamePhases.GameplayPhase.FewDaysLater, null);
-        float delay = 1f;
-        DOVirtual.DelayedCall(delay, PhaseStartGame);
-        Debug.Log("PhaseFewDaysLater");
-    }
+        private void EndEvacuation()
+        {
+            isEvacuation = false;
+        }
 
+        private void ReactionPlayerDie(object param)
+        {
+            EndEvacuation();
+            float delay = 1f;
+            DOVirtual.DelayedCall(delay, () => events.CallEvent(GamePhases.GameplayPhase.GameOver, null));
+        }
+
+        private void ReactionPlayerJump(object param)
+        {
+            EndEvacuation();
+        }
+
+        private void ReactionGameOver(object param)
+        {
+            Debug.Log("GameOver");
+        }
+
+        private void ReactionPlayerInTruck(object param)
+        {
+            PhaseTruckStart();
+        }
+
+        private void PhaseTruckStart()
+        {
+            events.CallEvent(GamePhases.GameplayPhase.TruckStart, null);
+            currentBuildingId++;
+            SetupBuildingIn();
+
+            float delay = 2f;
+            DOVirtual.DelayedCall(delay, PhaseTruckStop);
+            Debug.Log("PhaseTruckStart");
+        }
+
+        private void PhaseTruckStop()
+        {
+            events.CallEvent(GamePhases.GameplayPhase.TruckStop, null);
+
+            buildingsGenerator.Destroy(ref buildingOut);
+
+            float delay = 1f;
+            DOVirtual.DelayedCall(delay, PhaseDeEvacuation);
+            Debug.Log("PhaseTruckStop");
+        }
+
+        private void PhaseDeEvacuation()
+        {
+            events.CallEvent(GamePhases.GameplayPhase.DeEvacuation, null);
+            Debug.Log("PhaseDeEvacuation");
+        }
+
+        private void ReactionLastItemShot(object param)
+        {
+            events.CallEvent(GamePhases.GameplayPhase.FadeOut, null);
+            float delay = 1f;
+            DOVirtual.DelayedCall(delay, PhaseFewDaysLater);
+            Debug.Log("FadeOut");
+        }
+
+        private void PhaseFewDaysLater()
+        {
+            events.CallEvent(GamePhases.GameplayPhase.FewDaysLater, null);
+            buildingsGenerator.Destroy(ref buildingIn);
+            float delay = 1f;
+            DOVirtual.DelayedCall(delay, PhaseStartGame);
+            Debug.Log("PhaseFewDaysLater");
+        }
+    }
 }

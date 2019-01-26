@@ -6,6 +6,15 @@ namespace GaryMoveOut
     [RequireComponent(typeof(Rigidbody2D))]
     public class PlayerController : MonoBehaviour
     {
+        public enum Side
+        {
+            Left = -1,
+            Right = 1
+        }
+
+        public float Velocity { get; private set; }
+        public Side TurnToSide { get; private set; }
+
         [SerializeField]
         private InputHandler m_inputHandler;
         [SerializeField]
@@ -29,39 +38,42 @@ namespace GaryMoveOut
         private float m_aimAngle;
         private float m_aimStrength;
         private UiController m_ui;
-        private GameplayManager m_gameplay;
+        private GameplayEvents m_gameplayEvents;
         private bool m_inputBlocked = false;
+        private Animator m_animator;
 
         private void Start()
         {
             m_rigidBody = GetComponent<Rigidbody2D>();
             m_ui = FindObjectOfType<UiController>();
-            m_gameplay = GameplayManager.GetGameplayManager();
+            m_gameplayEvents = GameplayEvents.GetGameplayEvents();
+            m_animator = GetComponentInChildren<Animator>();
 
-            if (m_gameplay != null)
+            if (m_gameplayEvents != null)
             {
-                m_gameplay.AttachToEvent(GamePhases.GameplayPhase.Evacuation, OnEvacuation);
-                m_gameplay.AttachToEvent(GamePhases.GameplayPhase.PlayerJump, OnPlayerJump);
-                m_gameplay.AttachToEvent(GamePhases.GameplayPhase.DeEvacuation, OnDeEvacuation);
-                m_gameplay.AttachToEvent(GamePhases.GameplayPhase.LastItemShot, OnLastItemShot);
+                m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.Evacuation, OnEvacuation);
+                m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.PlayerJump, OnPlayerJump);
+                m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.DeEvacuation, OnDeEvacuation);
+                m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.LastItemShot, OnLastItemShot);
                 m_inputBlocked = true;
             }
         }
 
         private void OnDestroy()
         {
-            if (m_gameplay != null)
+            if (m_gameplayEvents != null)
             {
-                //m_gameplay.DetachToEvent(GamePhases.GameplayPhase.Evacuation, OnEvacuation);
-                //m_gameplay.DetachToEvent(GamePhases.GameplayPhase.PlayerJump, OnPlayerJump);
-                //m_gameplay.DetachToEvent(GamePhases.GameplayPhase.DeEvacuation, OnDeEvacuation);
-                //m_gameplay.DetachToEvent(GamePhases.GameplayPhase.LastItemShot, OnLastItemShot);
+                m_gameplayEvents.DetachFromEvent(GamePhases.GameplayPhase.Evacuation, OnEvacuation);
+                m_gameplayEvents.DetachFromEvent(GamePhases.GameplayPhase.PlayerJump, OnPlayerJump);
+                m_gameplayEvents.DetachFromEvent(GamePhases.GameplayPhase.DeEvacuation, OnDeEvacuation);
+                m_gameplayEvents.DetachFromEvent(GamePhases.GameplayPhase.LastItemShot, OnLastItemShot);
             }
-            m_gameplay = null;
+            m_gameplayEvents = null;
         }
 
         private void FixedUpdate()
         {
+            Velocity = 0;
             if (m_inputHandler != null && !m_inputBlocked)
             {
                 var dt = Time.fixedDeltaTime;
@@ -83,15 +95,15 @@ namespace GaryMoveOut
                 }
                 if (m_isAiming)
                 {
-                    if (m_inputHandler.Left)
+                    if (m_inputHandler.Up)
                     {
                         m_aimAngle += m_aimingAngleSpeed * dt;
                     }
-                    else if (m_inputHandler.Right)
+                    else if (m_inputHandler.Down)
                     {
                         m_aimAngle -= m_aimingAngleSpeed * dt;
                     }
-                    if (m_inputHandler.Up)
+                    if (m_inputHandler.Right)
                     {
                         m_aimStrength = Mathf.Clamp(
                             m_aimStrength + dt * m_aimingStrengthSpeed,
@@ -99,7 +111,7 @@ namespace GaryMoveOut
                             m_aimStrengthRange.y
                         );
                     }
-                    if (m_inputHandler.Down)
+                    else if (m_inputHandler.Left)
                     {
                         m_aimStrength = Mathf.Clamp(
                             m_aimStrength - dt * m_aimingStrengthSpeed,
@@ -120,7 +132,7 @@ namespace GaryMoveOut
                             PickUp();
                         }
                     }
-                    if (down != m_lastDown)
+                    else if (down != m_lastDown)
                     {
                         m_lastDown = down;
                         if (down)
@@ -131,10 +143,14 @@ namespace GaryMoveOut
                     if (m_inputHandler.Left)
                     {
                         m_rigidBody.MovePosition(m_rigidBody.position + Vector2.left * m_speed * dt);
+                        Velocity = -m_speed;
+                        TurnToSide = Side.Left;
                     }
                     else if (m_inputHandler.Right)
                     {
                         m_rigidBody.MovePosition(m_rigidBody.position + Vector2.right * m_speed * dt);
+                        Velocity = m_speed;
+                        TurnToSide = Side.Right;
                     }
                 }
             }
@@ -172,6 +188,7 @@ namespace GaryMoveOut
             {
                 m_pickedUp = pickable;
                 m_pickedUp.PickUp();
+                m_animator?.SetBool("PickedUp", true);
             }
         }
 
@@ -181,6 +198,7 @@ namespace GaryMoveOut
             {
                 m_pickedUp.PutDown();
                 m_pickedUp = null;
+                m_animator?.SetBool("PickedUp", false);
             }
         }
 
@@ -205,6 +223,7 @@ namespace GaryMoveOut
                 m_isAiming = false;
                 var force = Quaternion.Euler(0, 0, m_aimAngle) * Vector2.right * m_aimStrength;
                 m_pickedUp.Throw(force);
+                m_animator?.SetBool("PickedUp", false);
                 m_pickedUp = null;
             }
             if (m_ui != null)
