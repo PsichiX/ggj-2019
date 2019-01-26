@@ -10,6 +10,7 @@ namespace GaryMoveOut
         private GameObject truck;
         private Vector3 truckInPosition;
         private Animator anim;
+        private TruckLoader truckLoader;
 
         public TruckManager()
         {
@@ -30,6 +31,11 @@ namespace GaryMoveOut
                             truck.transform.Rotate(Vector3.up, 180f);
                             this.truckInPosition = truckInPosition;
                             anim = truck.GetComponent<Animator>();
+                            truckLoader = truck.GetComponentInChildren<TruckLoader>();
+                            if(truckLoader == null)
+                            {
+                                Debug.LogError("Truck Loader not found!");
+                            }
                             return true;
                         }
                         return false;
@@ -41,6 +47,11 @@ namespace GaryMoveOut
             truck.transform.position = truckOutPosition;
             this.truckInPosition = truckInPosition;
             return true;
+        }
+
+        public void ResetTruckItemList()
+        {
+            truckLoader.ResetTruckItemList();
         }
 
         public void StartTruckMovement(float duration)
