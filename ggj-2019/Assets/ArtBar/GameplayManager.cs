@@ -5,13 +5,13 @@ using DG.Tweening;
 
 public class GameplayManager : MonoBehaviour
 {
-    private Dictionary<GamePhases.GameplayPhase, Action<System.Object>> eventDict = new Dictionary<GamePhases.GameplayPhase, Action<System.Object>>();
-
     private static GameplayManager _instance;
     public static GameplayManager GetGameplayManager()
     {
         return _instance;
     }
+
+    private GameplayEvents events;
 
     void Awake()
     {
@@ -25,15 +25,7 @@ public class GameplayManager : MonoBehaviour
             _instance = this;
         }
 
-        AddAllEventsToDict();
-    }
-
-    private void AddAllEventsToDict()
-    {
-        foreach (GamePhases.GameplayPhase phases in (GamePhases.GameplayPhase[])Enum.GetValues(typeof(GamePhases.GameplayPhase)))
-        {
-            eventDict.Add(phases, null);
-        }
+        events = new GameplayEvents();
     }
 
     private void Start()
@@ -44,12 +36,12 @@ public class GameplayManager : MonoBehaviour
 
     private void AttachReactionsToEvents()
     {
-        AttachToEvent(GamePhases.GameplayPhase.PlayerJump, ReactionPlayerJump);
-        AttachToEvent(GamePhases.GameplayPhase.PlayerInTruck, ReactionPlayerInTruck);
-        AttachToEvent(GamePhases.GameplayPhase.LastItemShot, ReactionLastItemShot);
-        AttachToEvent(GamePhases.GameplayPhase.PlayerDie, ReactionPlayerDie);
-        AttachToEvent(GamePhases.GameplayPhase.GameOver, ReactionGameOver);
-        AttachToEvent(GamePhases.GameplayPhase.StartNewGame, PhaseStartNewGame);
+        events.AttachToEvent(GamePhases.GameplayPhase.PlayerJump, ReactionPlayerJump);
+        events.AttachToEvent(GamePhases.GameplayPhase.PlayerInTruck, ReactionPlayerInTruck);
+        events.AttachToEvent(GamePhases.GameplayPhase.LastItemShot, ReactionLastItemShot);
+        events.AttachToEvent(GamePhases.GameplayPhase.PlayerDie, ReactionPlayerDie);
+        events.AttachToEvent(GamePhases.GameplayPhase.GameOver, ReactionGameOver);
+        events.AttachToEvent(GamePhases.GameplayPhase.StartNewGame, PhaseStartNewGame);
     }
 
     void Update()
@@ -59,33 +51,6 @@ public class GameplayManager : MonoBehaviour
 
     }
 
-    public bool AttachToEvent(GamePhases.GameplayPhase gamePhase, Action<object> action)
-    {
-        if (eventDict.ContainsKey(gamePhase))
-        {
-            eventDict[gamePhase] += action;
-            return true;
-        }
-        return false;
-    }
-
-    public bool DetachFromEvent(GamePhases.GameplayPhase gamePhase, Action<object> action)
-    {
-        if (eventDict.ContainsKey(gamePhase))
-        {
-            eventDict[gamePhase] -= action;
-            return true;
-        }
-        return false;
-    }
-
-    public void CallEvent(GamePhases.GameplayPhase gamePhase, object param)
-    {
-        if (eventDict.ContainsKey(gamePhase))
-        {
-            eventDict[gamePhase]?.Invoke(param);
-        }
-    }
 
     private void PhaseStartNewGame(object param)
     {
@@ -95,7 +60,7 @@ public class GameplayManager : MonoBehaviour
     private void PhaseStartGame()
     {
         SetupNewBuilding();
-        CallEvent(GamePhases.GameplayPhase.FadeIn, null);
+        events.CallEvent(GamePhases.GameplayPhase.FadeIn, null);
         float fadeDealy = 1f;
         DOVirtual.DelayedCall(fadeDealy, PhaseBadEventStart);
         Debug.Log("PhaseStart");
@@ -108,7 +73,7 @@ public class GameplayManager : MonoBehaviour
 
     private void PhaseBadEventStart()
     {
-        CallEvent(GamePhases.GameplayPhase.BadEventStart, null);
+        events.CallEvent(GamePhases.GameplayPhase.BadEventStart, null);
         float delay = 2f;
         DOVirtual.DelayedCall(delay, PhaseStartEvacuation);
         Debug.Log("PhaseBadEventStart");
@@ -116,7 +81,7 @@ public class GameplayManager : MonoBehaviour
 
     private void PhaseStartEvacuation()
     {
-        CallEvent(GamePhases.GameplayPhase.Evacuation, null);
+        events.CallEvent(GamePhases.GameplayPhase.Evacuation, null);
         Debug.Log("PhaseStartEvacuation");
         isEvacuation = true;
         currentFloorBadEvent = -1;
@@ -125,19 +90,19 @@ public class GameplayManager : MonoBehaviour
 
     private void PhaseFloorEvacuationStart(int floor)
     {
-        CallEvent(GamePhases.GameplayPhase.FloorEvacuationStart, floor);
+        events.CallEvent(GamePhases.GameplayPhase.FloorEvacuationStart, floor);
         Debug.Log($"PhaseFloorEvacuationStart Floor [{floor}]");
     }
 
     private void PhaseFloorEvacuationBreakPoint(int floor)
     {
-        CallEvent(GamePhases.GameplayPhase.FloorEvacuationBreakPoint, floor);
+        events.CallEvent(GamePhases.GameplayPhase.FloorEvacuationBreakPoint, floor);
         Debug.Log($"PhaseFloorEvacuationBreakPoint Floor [{floor}]");
     }
 
     private void PhaseFloorEvacuationEnd(int floor)
     {
-        CallEvent(GamePhases.GameplayPhase.FloorEvacuationEnd, floor);
+        events.CallEvent(GamePhases.GameplayPhase.FloorEvacuationEnd, floor);
         Debug.Log($"PhaseFloorEvacuationEnd Floor [{floor}]");
     }
 
@@ -180,7 +145,7 @@ public class GameplayManager : MonoBehaviour
         if (currentFloorBadEvent > buildingFloorNumber)
         {
             isEvacuation = false;
-            CallEvent(GamePhases.GameplayPhase.GameOver, null);
+            events.CallEvent(GamePhases.GameplayPhase.GameOver, null);
             return;
         }
 
@@ -199,7 +164,7 @@ public class GameplayManager : MonoBehaviour
     {
         EndEvacuation();
         float delay = 1f;
-        DOVirtual.DelayedCall(delay, () => CallEvent(GamePhases.GameplayPhase.GameOver, null));       
+        DOVirtual.DelayedCall(delay, () => events.CallEvent(GamePhases.GameplayPhase.GameOver, null));       
     }
 
     private void ReactionPlayerJump(object param)
@@ -219,7 +184,7 @@ public class GameplayManager : MonoBehaviour
 
     private void PhaseTruckStart()
     {
-        CallEvent(GamePhases.GameplayPhase.TruckStart, null);
+        events.CallEvent(GamePhases.GameplayPhase.TruckStart, null);
         float delay = 2f;
         DOVirtual.DelayedCall(delay, PhaseTruckStop);
         Debug.Log("PhaseTruckStart");
@@ -227,7 +192,7 @@ public class GameplayManager : MonoBehaviour
 
     private void PhaseTruckStop()
     {
-        CallEvent(GamePhases.GameplayPhase.TruckStop, null);
+        events.CallEvent(GamePhases.GameplayPhase.TruckStop, null);
         float delay = 1f;
         DOVirtual.DelayedCall(delay, PhaseDeEvacuation);
         Debug.Log("PhaseTruckStop");
@@ -235,13 +200,13 @@ public class GameplayManager : MonoBehaviour
 
     private void PhaseDeEvacuation()
     {
-        CallEvent(GamePhases.GameplayPhase.DeEvacuation, null);
+        events.CallEvent(GamePhases.GameplayPhase.DeEvacuation, null);
         Debug.Log("PhaseDeEvacuation");
     }
 
     private void ReactionLastItemShot(object param)
     {
-        CallEvent(GamePhases.GameplayPhase.FadeOut, null);
+        events.CallEvent(GamePhases.GameplayPhase.FadeOut, null);
         float delay = 1f;
         DOVirtual.DelayedCall(delay, PhaseFewDaysLater);
         Debug.Log("FadeOut");
@@ -249,7 +214,7 @@ public class GameplayManager : MonoBehaviour
 
     private void PhaseFewDaysLater()
     {
-        CallEvent(GamePhases.GameplayPhase.FewDaysLater, null);
+        events.CallEvent(GamePhases.GameplayPhase.FewDaysLater, null);
         float delay = 1f;
         DOVirtual.DelayedCall(delay, PhaseStartGame);
         Debug.Log("PhaseFewDaysLater");

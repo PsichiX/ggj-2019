@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class GameplayTest : MonoBehaviour
 {
-    private GameplayManager gamplayManager;
+    private GameplayEvents gamplayEvents;
     void Start()
     {
-        gamplayManager = GameplayManager.GetGameplayManager();
+        gamplayEvents = GameplayEvents.GetGameplayEvents();
     }
 
     
@@ -32,23 +32,23 @@ public class GameplayTest : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            gamplayManager.CallEvent(GamePhases.GameplayPhase.PlayerJump, null);
+            gamplayEvents.CallEvent(GamePhases.GameplayPhase.PlayerJump, null);
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            gamplayManager.CallEvent(GamePhases.GameplayPhase.PlayerInTruck, null);
+            gamplayEvents.CallEvent(GamePhases.GameplayPhase.PlayerInTruck, null);
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            gamplayManager.CallEvent(GamePhases.GameplayPhase.LastItemShot, null);
+            gamplayEvents.CallEvent(GamePhases.GameplayPhase.LastItemShot, null);
         }
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            gamplayManager.CallEvent(GamePhases.GameplayPhase.PlayerDie, null);
+            gamplayEvents.CallEvent(GamePhases.GameplayPhase.PlayerDie, null);
         }
         if (Input.GetKeyDown(KeyCode.Alpha5))
         {
-            gamplayManager.CallEvent(GamePhases.GameplayPhase.StartNewGame, null);
+            gamplayEvents.CallEvent(GamePhases.GameplayPhase.StartNewGame, null);
         }
 
     }
