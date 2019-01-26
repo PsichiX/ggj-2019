@@ -17,8 +17,9 @@ namespace GaryMoveOut
         public bool Up { get; private set; }
         public bool Down { get; private set; }
         public bool Action { get; private set; }
-        public Layout InputLayout { get; set; } = Layout.None;
-        
+
+        public Layout InputLayout = Layout.None;
+
         private void Update()
         {
             if (InputLayout == Layout.Wsad)

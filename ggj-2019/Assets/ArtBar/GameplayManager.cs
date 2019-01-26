@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace GaryMoveOut
@@ -21,6 +22,7 @@ namespace GaryMoveOut
         private Building buildingOut;
         [SerializeField] private GameObject placeBuildingIn;
         private Building buildingIn;
+        [SerializeField] private Vector3 playerSpawnOffset;
 
         private Dictionary<int, List<Item>> itemsFromLastInBuilding;
         [SerializeField] private GameObject prefabPlayer;
@@ -243,7 +245,9 @@ namespace GaryMoveOut
             for (var i = 0; i < players.Length; ++i)
             {
                 var instance = Instantiate(prefabPlayer);
-                instance.transform.position = buildingIn.GetSpawnPosition() ?? Vector3.zero;
+                var spawnPos = buildingOut.GetSpawnPosition();
+                var pos = spawnPos.HasValue ? new Vector3(spawnPos.Value.x, spawnPos.Value.y, 0) : Vector3.zero;
+                instance.transform.position = pos + playerSpawnOffset;
                 instance.transform.rotation = Quaternion.identity;
                 var player = players[i] = instance.GetComponent<PlayerController>();
                 player.InputLayout = (InputHandler.Layout)(1 + i);

@@ -20,7 +20,10 @@ namespace GaryMoveOut
 
         public Vector3? GetSpawnPosition()
         {
-            // TODO: get first floor stairs and its position.
+            if (stairs.TryGetValue(1, out DoorPortal door))
+            {
+                return door.transform.position;
+            }
             return null;
         }
 
@@ -110,7 +113,7 @@ namespace GaryMoveOut
         public Dictionary<int, List<Item>> GetItems()
         {
             Dictionary<int, List<Item>> itemsByFloorsId = new Dictionary<int, List<Item>>();
-            foreach(var floor in floors)
+            foreach (var floor in floors)
             {
                 itemsByFloorsId.Add(floor.Key, new List<Item>(floor.Value.items));
             }
