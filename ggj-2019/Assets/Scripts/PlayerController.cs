@@ -240,10 +240,11 @@ namespace GaryMoveOut
             if (pickable != null)
             {
                 m_pickedUp = pickable;
-                m_pickedUp.PickUp();
+                m_pickedUp.PickUp(TurnToSide);
                 m_animator?.SetBool("PickedUp", true);
                 isCarryingItem = true;
                 CarryItemStart?.Invoke();
+
             }
         }
 

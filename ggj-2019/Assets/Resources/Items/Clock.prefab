@@ -109,6 +109,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   value: 10
   weight: 1
+  vertical: 1
   type: 0
 --- !u!1 &6454755486222873185
 GameObject:

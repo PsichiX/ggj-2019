@@ -36,7 +36,7 @@ namespace GaryMoveOut
                 Down = Input.GetKey(KeyCode.DownArrow);
                 Left = Input.GetKey(KeyCode.LeftArrow);
                 Right = Input.GetKey(KeyCode.RightArrow);
-                Action = Input.GetKey(KeyCode.KeypadEnter);
+                Action = Input.GetKey(KeyCode.RightControl);
             }
             else if (InputLayout == Layout.Gamepad)
             {

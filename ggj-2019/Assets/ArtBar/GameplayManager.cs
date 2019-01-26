@@ -28,6 +28,8 @@ namespace GaryMoveOut
         [SerializeField] private GameObject prefabPlayer;
         [SerializeField] private int playersCount = 1;
 
+        public List<ItemScheme> DeEvacuationTruckItemList;
+
         void Awake()
         {
             if (_instance != null && _instance != this)
@@ -310,6 +312,7 @@ namespace GaryMoveOut
 
         private void PhaseDeEvacuation()
         {
+            DeEvacuationTruckItemList = truckManager.GetTruckItemList();
             events.CallEvent(GamePhases.GameplayPhase.DeEvacuation, null);
             Debug.Log("PhaseDeEvacuation");
         }
