@@ -24,7 +24,6 @@ namespace GaryMoveOut
                 {
                     if (TruckDatabase.truckPrefabs.Count > 0)
                     {
-                        //truck = Object.Instantiate(TruckDatabase.truckPrefabs[0], truckOutPosition, parent.rotation, parent);
                         truck = Object.Instantiate(TruckDatabase.truckPrefabs[0], truckOutPosition, parent.rotation, parent);
                         if( truck != null)
                         {
@@ -46,9 +45,9 @@ namespace GaryMoveOut
 
         public void StartTruckMovement(float duration)
         {
-            anim.SetFloat("Forward", 1f);
+            //anim.SetFloat("Forward", 1f);
             truck.transform.DOMove(truckInPosition, duration).SetEase(Ease.InOutQuad);
-            DOVirtual.DelayedCall(duration - 0.2f, () => { anim.SetFloat("Forward", 0f); });
+            //DOVirtual.DelayedCall(duration - 0.2f, () => { anim.SetFloat("Forward", 0f); });
         }
     }
 }
