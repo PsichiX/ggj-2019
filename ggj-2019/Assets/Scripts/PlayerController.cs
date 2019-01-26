@@ -20,7 +20,7 @@ namespace GaryMoveOut
         [SerializeField]
         private float m_speed;
         [SerializeField]
-        private Vector3 m_pickableOffset;
+        private Transform m_pickableOrigin;
         [SerializeField]
         private Vector2 m_aimStrengthRange = new Vector2(1, 10);
         [SerializeField]
@@ -177,15 +177,16 @@ namespace GaryMoveOut
                 }
             }
 
+            var handPos = m_pickableOrigin == null ? transform.position : m_pickableOrigin.position;
             if (m_pickedUp != null && m_pickedUp.IsPickedUp)
             {
-                m_pickedUp.transform.position = transform.position + m_pickableOffset;
+                m_pickedUp.transform.position = handPos;
             }
             if (m_pickedUp != null && m_pickedUp.IsPickedUp && m_ui != null)
             {
                 m_ui.UpdateAim(
                     this,
-                    transform.position + m_pickableOffset,
+                    handPos,
                     TurnToSide == Side.Left ? 180 - m_aimAngle : m_aimAngle,
                     m_aimStrength
                 );
