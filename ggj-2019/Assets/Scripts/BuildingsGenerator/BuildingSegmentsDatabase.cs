@@ -1,54 +1,44 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
-[System.Serializable]
-public class FloorScheme
+namespace GaryMoveOut
 {
-    public GameObject EmptyWall;
-    public GameObject Stairs;
-    public GameObject SideWall;
-    [SerializeField] private GameObject sideWallR;
-    public GameObject SideWallR { get { return sideWallR ?? SideWall; } }
-    [SerializeField] private GameObject sideWallL;
-    public GameObject SideWallL { get { return sideWallL ?? SideWall; } }
-    public GameObject SideDoor;
-    public GameObject SideWindow;
-}
-
-
-[CreateAssetMenu(menuName = "ScriptableObjects/Building Segments Database")]
-public class BuildingSegmentsDatabase : ScriptableObject
-{
-    public FloorScheme defaultFloor;
-    public FloorScheme defaultRoof;
-
-    public List<FloorScheme> floorsSegments = new List<FloorScheme>();
-    public List<FloorScheme> roofsSegments = new List<FloorScheme>();
-
-
-    public FloorScheme GetRandomFloorScheme()
+    [CreateAssetMenu(menuName = "ScriptableObjects/Building Segments Database")]
+    public class BuildingSegmentsDatabase : ScriptableObject
     {
-        if (floorsSegments == null || floorsSegments.Count == 0)
+        public Floor floorPrefab;
+
+        public FloorScheme defaultFloor;
+        public FloorScheme defaultRoof;
+
+        public List<FloorScheme> floorsSegments = new List<FloorScheme>();
+        public List<FloorScheme> roofsSegments = new List<FloorScheme>();
+
+
+        public FloorScheme GetRandomFloorScheme()
         {
-            return defaultFloor;
+            if (floorsSegments == null || floorsSegments.Count == 0)
+            {
+                return defaultFloor;
+            }
+            else
+            {
+                int index = Random.Range(0, floorsSegments.Count);
+                return floorsSegments[index];
+            }
         }
-        else
+        public FloorScheme GetRandomRoofScheme()
         {
-            int index = Random.Range(0, floorsSegments.Count);
-            return floorsSegments[index];
+            if (roofsSegments == null || roofsSegments.Count == 0)
+            {
+                return defaultRoof;
+            }
+            else
+            {
+                int index = Random.Range(0, roofsSegments.Count);
+                return roofsSegments[index];
+            }
         }
     }
-    public FloorScheme GetRandomRoofScheme()
-    {
-        if (roofsSegments == null || roofsSegments.Count == 0)
-        {
-            return defaultRoof;
-        }
-        else
-        {
-            int index = Random.Range(0, roofsSegments.Count);
-            return roofsSegments[index];
-        }
-    }
+
 }
