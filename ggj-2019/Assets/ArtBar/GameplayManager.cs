@@ -262,7 +262,7 @@ namespace GaryMoveOut
         {
             events.CallEvent(GamePhases.GameplayPhase.TruckStop, null);
 
-            buildingsGenerator.Destroy(ref buildingOut);
+            buildingsGenerator.DestroyBuildingOut(ref buildingOut);
 
             float delay = 1f;
             DOVirtual.DelayedCall(delay, PhaseDeEvacuation);
@@ -286,7 +286,7 @@ namespace GaryMoveOut
         private void PhaseFewDaysLater()
         {
             events.CallEvent(GamePhases.GameplayPhase.FewDaysLater, null);
-            buildingsGenerator.Destroy(ref buildingIn);
+            buildingsGenerator.DestroyBuildingOut(ref buildingIn);
             float delay = 1f;
             DOVirtual.DelayedCall(delay, PhaseStartGame);
             Debug.Log("PhaseFewDaysLater");
