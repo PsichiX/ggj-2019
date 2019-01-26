@@ -13,6 +13,7 @@ public class GameplayTest : MonoBehaviour
     
     void Update()
     {
+        /*
         if (Input.GetKeyDown(KeyCode.Space))
         {
             gamplayManager.AttachToEvent(GamePhases.GameplayPhase.FloorEvacuationStart, EvacuationStart);
@@ -27,7 +28,29 @@ public class GameplayTest : MonoBehaviour
         {
             int level = 77;
             gamplayManager.CallEvent(GamePhases.GameplayPhase.FloorEvacuationStart, level);
+        }*/
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            gamplayManager.CallEvent(GamePhases.GameplayPhase.PlayerJump, null);
         }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            gamplayManager.CallEvent(GamePhases.GameplayPhase.PlayerInTruck, null);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            gamplayManager.CallEvent(GamePhases.GameplayPhase.LastItemShot, null);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            gamplayManager.CallEvent(GamePhases.GameplayPhase.PlayerDie, null);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            gamplayManager.CallEvent(GamePhases.GameplayPhase.StartNewGame, null);
+        }
+
     }
 
     private void EvacuationStart(System.Object param)
