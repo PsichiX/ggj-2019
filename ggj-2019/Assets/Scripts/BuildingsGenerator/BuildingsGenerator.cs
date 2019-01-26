@@ -1,29 +1,31 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace GaryMoveOut
 {
     public class BuildingsGenerator
     {
-        private BuildingSegmentsDatabase buildingsDatabase;
-        private ItemsDatabase itemsDatabase;
+        public BuildingSegmentsDatabase BuildingsDatabase { get; private set; }
+        public ItemsDatabase ItemsDatabase { get; private set; }
 
 
         public BuildingsGenerator()
         {
-            buildingsDatabase = Resources.Load<BuildingSegmentsDatabase>("Databases/BuildingSegmentsDatabase");
-            itemsDatabase = Resources.Load<ItemsDatabase>("Databases/ItemsDatabase");
+            BuildingsDatabase = Resources.Load<BuildingSegmentsDatabase>("Databases/BuildingSegmentsDatabase");
+            ItemsDatabase = Resources.Load<ItemsDatabase>("Databases/ItemsDatabase");
         }
 
 
         public void Destroy(ref Building building)
         {
             // to do
+            // ...
         }
 
         public Building GenerateBuilding(Transform root, int floorSegmentsCount, int buildingFloorsCount, int stairsSegmentIndex)
         {
             var building = new Building();
-            var floorScheme = buildingsDatabase.GetRandomFloorScheme();
+            var floorScheme = BuildingsDatabase.GetRandomFloorScheme();
 
             Vector3 position = root.position;
             Quaternion rotation = root.rotation;
@@ -38,7 +40,7 @@ namespace GaryMoveOut
             }
 
             position += new Vector3(0f, floorScheme.segmentHeight, 0f);
-            var roofScheme = buildingsDatabase.GetRandomRoofScheme();
+            var roofScheme = BuildingsDatabase.GetRandomRoofScheme();
             GenerateFloor(ref building, roofScheme, root, position, root.rotation, floorSegmentsCount, stairsSegmentIndex, index, FloorType.Roof);
 
 
@@ -47,6 +49,33 @@ namespace GaryMoveOut
             return building;
         }
 
+
+        public Building GenerateBuildingWithItems(Transform root, int floorSegmentsCount, int buildingFloorsCount, int stairsSegmentIndex, List<ItemScheme> items)
+        {
+            var building = new Building();
+            var floorScheme = BuildingsDatabase.GetRandomFloorScheme();
+
+            Vector3 position = root.position;
+            Quaternion rotation = root.rotation;
+
+            GenerateFloor(ref building, floorScheme, root, position, root.rotation, floorSegmentsCount, stairsSegmentIndex, 0, FloorType.GroundFloor);
+
+            int index = 1;
+            for (; index <= buildingFloorsCount; index++)
+            {
+                position += new Vector3(0f, floorScheme.segmentHeight, 0f);
+                GenerateFloor(ref building, floorScheme, root, position, root.rotation, floorSegmentsCount, stairsSegmentIndex, index, FloorType.MiddleFloor);
+            }
+
+            position += new Vector3(0f, floorScheme.segmentHeight, 0f);
+            var roofScheme = BuildingsDatabase.GetRandomRoofScheme();
+            GenerateFloor(ref building, roofScheme, root, position, root.rotation, floorSegmentsCount, stairsSegmentIndex, index, FloorType.Roof);
+
+            building.SpawnItemsInside(items);
+
+            Debug.Log($"Generated building with {floorSegmentsCount} segments width, {buildingFloorsCount} floors and stairs at each {stairsSegmentIndex} floor segment");
+            return building;
+        }
 
         private void GenerateFloor(ref Building building,
                                    FloorScheme scheme,
@@ -60,7 +89,7 @@ namespace GaryMoveOut
         {
             if (!building.floors.TryGetValue(floorIndex, out Floor floor))
             {
-                floor = Object.Instantiate(buildingsDatabase.floorPrefab, floorParent.position, floorParent.rotation);
+                floor = Object.Instantiate(BuildingsDatabase.floorPrefab, floorParent.position, floorParent.rotation);
                 building.floors.Add(floorIndex, floor);
             }
             floor.Type = type;
@@ -127,21 +156,24 @@ namespace GaryMoveOut
         }
 
 
-        public void DebugGenerateItems(ref Building building)
-        {
-            if (building != null)
-            {
-                for(int i = 0; i < building.floors.Count; i++)
-                {
-                    int rnd = Random.Range(1, 3);
-                    for(int j = 0; j < rnd; j++)
-                    {
-                        var item = GameObject.Instantiate<Item>(itemsDatabase.debugItem);
-                        building.floors[i].AddItem(item);
-                    }
-                }
-            }
-        }
+        //public void DebugGenerateItems(ref Building building)
+        //{
+        //    if (building != null)
+        //    {
+        //        for(int i = 0; i < building.floors.Count; i++)
+        //        {
+        //            int rnd = Random.Range(1, 3);
+        //            Debug.Log($"generated {rnd} items");
+        //            for(int j = 0; j < rnd; j++)
+        //            {
+        //                //var item = GameObject.Instantiate<Item>(itemsDatabase.debugItem);
+        //                //item.transform.localPosition = Vector3.zero;
+        //                //item.transform.localRotation = Quaternion.identity;
+        //                //building.floors[i].AddItem(item);
+        //            }
+        //        }
+        //    }
+        //}
     }
 
 }
