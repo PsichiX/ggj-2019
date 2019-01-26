@@ -23,7 +23,9 @@ namespace GaryMoveOut
         private Building buildingOut;
         [SerializeField] private GameObject placeBuildingIn;
         private Building buildingIn;
-        
+
+        private Dictionary<int, List<Item>> itemsFromLastInBuilding;
+
         void Awake()
         {
             if (_instance != null && _instance != this)
@@ -85,11 +87,11 @@ namespace GaryMoveOut
         {
             var truckOutPosition = placeBuildingOut.transform.position;
             truckOutPosition.x += 20f;
-            truckOutPosition.z += -1f;
+            truckOutPosition.z += -3.5f;
 
             var truckInPosition = placeBuildingIn.transform.position;
             truckInPosition.x -= 7f;
-            truckInPosition.z += -1f;
+            truckInPosition.z += -3.5f;
             truckManager.CreateTruck(gameObject.transform, truckOutPosition, truckInPosition);
         }
 
@@ -110,11 +112,22 @@ namespace GaryMoveOut
                 var itemsCount = UnityEngine.Random.Range(minItemsCount, maxFreeSegments);
                 var items = buildingsGenerator.ItemsDatabase.GetRandomItems(itemsCount);
 
-                buildingOut = buildingsGenerator.GenerateBuildingWithItems(placeBuildingOut.transform,
-                                                                           buildingConfig.floorSegmentsCount,
-                                                                           buildingConfig.buildingFloorsCount,
-                                                                           buildingConfig.stairsSegmentIndex,
-                                                                           items);
+                if (itemsFromLastInBuilding != null)
+                {
+                    buildingOut = buildingsGenerator.GenerateBuildingWithItems(placeBuildingOut.transform,
+                                                                               buildingConfig.floorSegmentsCount,
+                                                                               buildingConfig.buildingFloorsCount,
+                                                                               buildingConfig.stairsSegmentIndex,
+                                                                               itemsFromLastInBuilding);
+                }
+                else
+                {
+                    buildingOut = buildingsGenerator.GenerateBuildingWithItems(placeBuildingOut.transform,
+                                                           buildingConfig.floorSegmentsCount,
+                                                           buildingConfig.buildingFloorsCount,
+                                                           buildingConfig.stairsSegmentIndex,
+                                                           items);
+                }
                 buildingFloorNumber = buildingConfig.buildingFloorsCount;
             }
         }
@@ -262,7 +275,7 @@ namespace GaryMoveOut
         {
             events.CallEvent(GamePhases.GameplayPhase.TruckStop, null);
 
-            buildingsGenerator.Destroy(ref buildingOut);
+            buildingsGenerator.DestroyBuildingOut(ref buildingOut);
 
             float delay = 1f;
             DOVirtual.DelayedCall(delay, PhaseDeEvacuation);
@@ -286,7 +299,8 @@ namespace GaryMoveOut
         private void PhaseFewDaysLater()
         {
             events.CallEvent(GamePhases.GameplayPhase.FewDaysLater, null);
-            buildingsGenerator.Destroy(ref buildingIn);
+            itemsFromLastInBuilding = buildingIn.GetItems();
+            buildingsGenerator.DestroyBuildingOut(ref buildingIn);
             float delay = 1f;
             DOVirtual.DelayedCall(delay, PhaseStartGame);
             Debug.Log("PhaseFewDaysLater");

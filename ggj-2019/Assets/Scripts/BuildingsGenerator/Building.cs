@@ -1,6 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 
 namespace GaryMoveOut
@@ -8,13 +7,13 @@ namespace GaryMoveOut
     public class Building
     {
         public Dictionary<int, Floor> floors;
-        public List<DoorPortal> stairs;
+        public Dictionary<int, DoorPortal> stairs;
 
 
         public Building()
         {
             floors = new Dictionary<int, Floor>();
-            stairs = new List<DoorPortal>();
+            stairs = new Dictionary<int, DoorPortal>();
         }
 
 
@@ -87,6 +86,30 @@ namespace GaryMoveOut
                 }
                 i++;
             }
+        }
+
+        public void SpawnItemsInside(Dictionary<int, List<Item>> itemsByFloorIndex)
+        {
+            if (this.floors.Count == 0)
+            {
+                return;
+            }
+
+
+
+
+
+
+        }
+
+        public Dictionary<int, List<Item>> GetItems()
+        {
+            Dictionary<int, List<Item>> itemsByFloorsId = new Dictionary<int, List<Item>>();
+            foreach(var floor in floors)
+            {
+                itemsByFloorsId.Add(floor.Key, new List<Item>(floor.Value.items));
+            }
+            return itemsByFloorsId;
         }
     }
 }
