@@ -25,7 +25,7 @@ ModelImporter:
     2100002: Trunk
     2100004: Leaves
     4300000: Cube.003
-    7400000: TreeIdle
+    7400000: TreeSway
     7400002: Armature|ArmatureAction
     7400004: Armature|EmptyAction
     7400006: Armature|emptySway
@@ -41,7 +41,7 @@ ModelImporter:
     7400026: TreeIdle
     7400028: Armature|EmptyAction.001
     7400030: Armature|Tree
-    7400032: TreeStrongSway
+    7400032: TreeIdle
     9500000: //RootNode
     13700000: Cube.003
   externalObjects: {}
@@ -73,7 +73,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: TreeIdle
+      name: TreeSway
       takeName: Armature|Tree.001
       firstFrame: 0
       lastFrame: 40
@@ -101,7 +101,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: TreeStrongSway
+      name: TreeIdle
       takeName: Armature|Tree.001
       firstFrame: 42
       lastFrame: 157
