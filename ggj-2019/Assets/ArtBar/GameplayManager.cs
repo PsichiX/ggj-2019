@@ -316,6 +316,7 @@ namespace GaryMoveOut
 
         private void ReactionLastItemShot(object param)
         {
+            truckManager.ResetTruckItemList();
             events.CallEvent(GamePhases.GameplayPhase.FadeOut, null);
             float delay = 1f;
             DOVirtual.DelayedCall(delay, PhaseFewDaysLater);
