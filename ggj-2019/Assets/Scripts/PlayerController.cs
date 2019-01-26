@@ -177,6 +177,7 @@ namespace GaryMoveOut
 			{
 				m_pickedUp = pickable;
 				m_pickedUp.PickUp();
+				GetComponentInChildren<Animator>().SetBool("PickedUp", true);
 			}
 		}
 
@@ -186,6 +187,7 @@ namespace GaryMoveOut
 			{
 				m_pickedUp.PutDown();
 				m_pickedUp = null;
+				GetComponentInChildren<Animator>().SetBool("PickedUp", false);
 			}
 		}
 
@@ -210,6 +212,7 @@ namespace GaryMoveOut
 				m_isAiming = false;
 				var force = Quaternion.Euler(0, 0, m_aimAngle) * Vector2.right * m_aimStrength;
 				m_pickedUp.Throw(force);
+				GetComponentInChildren<Animator>().SetBool("PickedUp", false);
 				m_pickedUp = null;
 			}
 			if (m_ui != null)
