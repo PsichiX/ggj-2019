@@ -97,7 +97,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_inputHandler: {fileID: 8141853408582077107}
   m_speed: 10
-  m_pickableOffset: {x: 0, y: 2.5, z: 0}
+  m_pickableOrigin: {fileID: 406794870914967185}
   m_aimStrengthRange: {x: 4, y: 20}
   m_aimingAngleSpeed: 180
   m_aimingStrengthSpeed: 16
@@ -113,7 +113,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a79df06d0874914fbecd0fdefcf54b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_layout: 1
+  m_layout: 3
 --- !u!114 &2082014842
 MonoBehaviour:
   m_ObjectHideFlags: 0

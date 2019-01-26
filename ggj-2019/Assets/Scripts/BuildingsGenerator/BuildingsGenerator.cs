@@ -13,13 +13,24 @@ namespace GaryMoveOut
         {
             BuildingsDatabase = Resources.Load<BuildingSegmentsDatabase>("Databases/BuildingSegmentsDatabase");
             ItemsDatabase = Resources.Load<ItemsDatabase>("Databases/ItemsDatabase");
+            ItemsDatabase.LoadItemsFromAssets();
         }
 
 
         public void Destroy(ref Building building)
         {
-            // to do
-            // ...
+            foreach(var floor in building.floors.Values)
+            {
+                foreach(var segment in floor.segments)
+                {
+                    GameObject.Destroy(segment);
+                }
+                floor.segments.Clear();
+
+                floor.items.Clear();
+                GameObject.Destroy(floor.gameObject);
+            }
+            building.floors.Clear();
         }
 
         public Building GenerateBuilding(Transform root, int floorSegmentsCount, int buildingFloorsCount, int stairsSegmentIndex)

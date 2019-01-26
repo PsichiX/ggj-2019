@@ -103,8 +103,15 @@ namespace GaryMoveOut
 
             if (placeBuildingOut != null)
             {
+                var itemsCount = UnityEngine.Random.Range(5, 8);
+                var items = buildingsGenerator.ItemsDatabase.GetRandomItems(itemsCount);
+
                 var buildingConfig = buildingConfigurator.BuildingParameterGenerator(currentBuildingId);
-                buildingOut = buildingsGenerator.GenerateBuilding(placeBuildingOut.transform, buildingConfig.floorSegmentsCount, buildingConfig.buildingFloorsCount, buildingConfig.stairsSegmentIndex);
+                buildingOut = buildingsGenerator.GenerateBuildingWithItems(placeBuildingOut.transform,
+                                                                           buildingConfig.floorSegmentsCount,
+                                                                           buildingConfig.buildingFloorsCount,
+                                                                           buildingConfig.stairsSegmentIndex,
+                                                                           items);
                 buildingFloorNumber = buildingConfig.buildingFloorsCount;
             }
         }
