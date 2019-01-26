@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 8141853408582077109}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_Children:
   - {fileID: 406794870914967227}
   m_Father: {fileID: 0}
@@ -137,6 +137,14 @@ PrefabInstance:
     - target: {fileID: 100096, guid: d828466b95d023b4190a563cae09d160, type: 3}
       propertyPath: m_Name
       value: Ludek (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 400074, guid: d828466b95d023b4190a563cae09d160, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.08678741
+      objectReference: {fileID: 0}
+    - target: {fileID: 400074, guid: d828466b95d023b4190a563cae09d160, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.088184945
       objectReference: {fileID: 0}
     - target: {fileID: 400096, guid: d828466b95d023b4190a563cae09d160, type: 3}
       propertyPath: m_LocalPosition.x
@@ -446,14 +454,6 @@ PrefabInstance:
       propertyPath: m_RootBone
       value: 
       objectReference: {fileID: 406794870914967173}
-    - target: {fileID: 400074, guid: d828466b95d023b4190a563cae09d160, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.08678741
-      objectReference: {fileID: 0}
-    - target: {fileID: 400074, guid: d828466b95d023b4190a563cae09d160, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0.088184945
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d828466b95d023b4190a563cae09d160, type: 3}
 --- !u!4 &406794870914967173 stripped
