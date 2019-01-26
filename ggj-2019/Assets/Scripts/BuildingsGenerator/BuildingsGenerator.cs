@@ -145,8 +145,10 @@ namespace GaryMoveOut
                     doorPortal.floorIndexBelow = indexBelow;
                     // setup index above:
                     var indexAbove = floorIndex + 1;
-                    indexAbove = (indexAbove >= building.floors.Count) ? DoorPortal.MaxIndex : indexAbove;
+                    indexAbove = (indexAbove < building.floors.Count) ? DoorPortal.MaxIndex : indexAbove;
                     doorPortal.floorIndexAbove = indexAbove;
+                    doorPortal.building = building;
+
                     building.stairs.Add(floorIndex, doorPortal);
                 }
                 floor.segments.Add(segment);

@@ -56,6 +56,9 @@ namespace GaryMoveOut
         private bool m_inputBlocked = false;
         private Animator m_animator;
         private bool isCarryingItem;
+        private bool m_isNearPortal = false;
+        private bool m_canTeleportUp = false;
+        private bool m_canTeleportDown = false;
 
         private void Start()
         {
@@ -166,6 +169,27 @@ namespace GaryMoveOut
                         }
                     }
                 }
+                else if (m_isNearPortal)
+                {
+                    var up = m_inputHandler.Up;
+                    var down = m_inputHandler.Down;
+                    if (up != m_lastUp)
+                    {
+                        m_lastUp = up;
+                        if (up && m_canTeleportUp)
+                        {
+                            TeleportUp();
+                        }
+                    }
+                    else if (down != m_lastDown)
+                    {
+                        m_lastDown = down;
+                        if (down && m_canTeleportDown)
+                        {
+                            TeleportDown();
+                        }
+                    }
+                }
                 else
                 {
                     var up = m_inputHandler.Up;
@@ -227,7 +251,7 @@ namespace GaryMoveOut
             {
                 CollidesWithPickable?.Invoke();
             }
-            else if (other.tag == "Portal")
+            if (other.tag == "Portal")
             {
                 var portal = other.gameObject.GetComponentInChildren<DoorPortal>();
                 if (portal != null)
@@ -235,14 +259,20 @@ namespace GaryMoveOut
                     switch (m_ui.CurrentEvecuationDirection)
                     {
                         case GameplayManager.EvecuationDirection.Up:
-                            if (portal.floorIndexAbove != DoorPortal.MaxIndex)
+                            if (portal.floorIndexAbove < DoorPortal.MaxIndex)
                             {
                                 m_ui.SetupPortalUpArrow(portal.transform);
+                                m_interactibles.Add(portal.gameObject);
+                                m_isNearPortal = true;
+                                m_canTeleportUp = true;
                                 CollidesWithPortalUp?.Invoke();
                             }
                             if (portal.floorIndexBelow > m_ui.CurrentFloorBadEvent)
                             {
                                 m_ui.SetupPortalDownArrow(portal.transform);
+                                m_interactibles.Add(portal.gameObject);
+                                m_isNearPortal = true;
+                                m_canTeleportDown = true;
                                 CollidesWithPortalDown?.Invoke();
                             }
                             break;
@@ -250,11 +280,17 @@ namespace GaryMoveOut
                             if (portal.floorIndexAbove < m_ui.CurrentFloorBadEvent)
                             {
                                 m_ui.SetupPortalUpArrow(portal.transform);
+                                m_interactibles.Add(portal.gameObject);
+                                m_isNearPortal = true;
+                                m_canTeleportUp = true;
                                 CollidesWithPortalUp?.Invoke();
                             }
                             if (portal.floorIndexBelow > DoorPortal.MinIndex)
                             {
                                 m_ui.SetupPortalDownArrow(portal.transform);
+                                m_interactibles.Add(portal.gameObject);
+                                m_isNearPortal = true;
+                                m_canTeleportDown = true;
                                 CollidesWithPortalDown?.Invoke();
                             }
                             break;
@@ -270,7 +306,7 @@ namespace GaryMoveOut
                 m_interactibles.Remove(other.transform.parent.gameObject);
                 CollidesWithPickableEnd?.Invoke();
             }
-            else if (other.tag == "Portal")
+            if (other.tag == "Portal")
             {
                 var portal = other.gameObject.GetComponentInChildren<DoorPortal>();
                 if (portal != null)
@@ -280,20 +316,28 @@ namespace GaryMoveOut
                         case GameplayManager.EvecuationDirection.Up:
                             if (portal.floorIndexAbove != DoorPortal.MaxIndex)
                             {
+                                m_isNearPortal = false;
+                                m_interactibles.Remove(portal.gameObject);
                                 CollidesWithPortalUpEnd?.Invoke();
                             }
                             if (portal.floorIndexBelow > m_ui.CurrentFloorBadEvent)
                             {
+                                m_isNearPortal = false;
+                                m_interactibles.Remove(portal.gameObject);
                                 CollidesWithPortalDownEnd?.Invoke();
                             }
                             break;
                         case GameplayManager.EvecuationDirection.Down:
                             if (portal.floorIndexAbove < m_ui.CurrentFloorBadEvent)
                             {
+                                m_isNearPortal = false;
+                                m_interactibles.Remove(portal.gameObject);
                                 CollidesWithPortalUpEnd?.Invoke();
                             }
                             if (portal.floorIndexBelow > DoorPortal.MinIndex)
                             {
+                                m_isNearPortal = false;
+                                m_interactibles.Remove(portal.gameObject);
                                 CollidesWithPortalDownEnd?.Invoke();
                             }
                             break;
@@ -325,6 +369,26 @@ namespace GaryMoveOut
                 m_animator?.SetBool("PickedUp", false);
                 isCarryingItem = false;
                 CarryItemEnd?.Invoke();
+            }
+        }
+
+        private void TeleportUp()
+        {
+            var portal = GetInteractible<DoorPortal>();
+            if (portal != null)
+            {
+                var portalAbove = portal.building.stairs[portal.floorIndexAbove];
+                gameObject.transform.position = portalAbove.transform.position + new Vector3(0f, 1f, 0f);
+            }
+        }
+
+        private void TeleportDown()
+        {
+            var portal = GetInteractible<DoorPortal>();
+            if (portal != null)
+            {
+                var portalBelow = portal.building.stairs[portal.floorIndexBelow];
+                gameObject.transform.position = portalBelow.transform.position - new Vector3(0f, 1f, 0f);
             }
         }
 

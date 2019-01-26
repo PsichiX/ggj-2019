@@ -146,8 +146,8 @@ namespace GaryMoveOut
             pressToPickText.SetActive(false);
         }
 
-        private float arrowXOffset = 0.1f;
-        private float arrowYOffset = 0.1f;
+        private float arrowXOffset = 1f;
+        private float arrowYOffset = 0.5f;
         public void SetupPortalUpArrow(Transform portal)
         {
             var position = portalUpArrow.transform.position;
