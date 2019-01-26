@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5435162398588548104}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RoofSideRSegment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,6 +42,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: RoofSideR
+      objectReference: {fileID: 0}
+    - target: {fileID: 1291012775932372565, guid: 2e20a2694a86ccd4a8e254b9e9412c90,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 80718734418662671, guid: 2e20a2694a86ccd4a8e254b9e9412c90,
         type: 3}
@@ -97,6 +102,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614502353657248133, guid: 2e20a2694a86ccd4a8e254b9e9412c90,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2e20a2694a86ccd4a8e254b9e9412c90, type: 3}
