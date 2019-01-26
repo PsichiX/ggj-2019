@@ -15,7 +15,13 @@ namespace GaryMoveOut
 
         private GameplayEvents events;
         private BuildingsGenerator buildingsGenerator;
+        private BuildingConfigurator buildingConfigurator;
 
+        [SerializeField] private GameObject placeBuildingOut;
+        private Building buildingOut;
+        [SerializeField] private GameObject placeBuildingIn;
+        private Building buildingIn;
+        
         void Awake()
         {
             if (_instance != null && _instance != this)
@@ -30,7 +36,7 @@ namespace GaryMoveOut
 
             events = new GameplayEvents();
             buildingsGenerator = new BuildingsGenerator();
-
+            buildingConfigurator = new BuildingConfigurator();
         }
 
         private void Start()
@@ -64,16 +70,42 @@ namespace GaryMoveOut
 
         private void PhaseStartGame()
         {
-            SetupNewBuilding();
+            SetupBuildingOut();
             events.CallEvent(GamePhases.GameplayPhase.FadeIn, null);
             float fadeDealy = 1f;
             DOVirtual.DelayedCall(fadeDealy, PhaseBadEventStart);
             Debug.Log("PhaseStart");
         }
 
-        private void SetupNewBuilding()
+        private void SetupBuildingOut()
         {
+            if(buildingsGenerator == null)
+            {
+                Debug.Log("building generator == null");
+                return;
+            }
 
+            if (placeBuildingOut != null)
+            {
+                var buildingConfig = buildingConfigurator.BuildingParameterGenerator(currentBuildingId);
+                buildingOut = buildingsGenerator.GenerateBuilding(placeBuildingOut.transform, buildingConfig.floorSegmentsCount, buildingConfig.buildingFloorsCount, buildingConfig.stairsSegmentIndex);
+                buildingFloorNumber = buildingConfig.buildingFloorsCount;
+            }
+        }
+
+        private void SetupBuildingIn()
+        {
+            if (buildingsGenerator == null)
+            {
+                Debug.Log("building generator == null");
+                return;
+            }
+
+            if (placeBuildingIn != null)
+            {
+                var buildingConfig = buildingConfigurator.BuildingParameterGenerator(currentBuildingId);
+                buildingIn = buildingsGenerator.GenerateBuilding(placeBuildingIn.transform, buildingConfig.floorSegmentsCount, buildingConfig.buildingFloorsCount, buildingConfig.stairsSegmentIndex);
+            }
         }
 
         private void PhaseBadEventStart()
@@ -111,8 +143,9 @@ namespace GaryMoveOut
             Debug.Log($"PhaseFloorEvacuationEnd Floor [{floor}]");
         }
 
-        public int buildingFloorNumber = 4; //0,1,2,3,4
+        private int buildingFloorNumber = 0;
         public int currentFloorBadEvent = 0;
+        public int currentBuildingId = 0;
         private bool isEvacuation = false;
         private float evacuationTimeStartToBreakPoint = 5f;     //start to break point
         private float evacuationTimeStartToEnd = 10f;           //start to end
@@ -190,6 +223,9 @@ namespace GaryMoveOut
         private void PhaseTruckStart()
         {
             events.CallEvent(GamePhases.GameplayPhase.TruckStart, null);
+            currentBuildingId++;
+            SetupBuildingIn();
+
             float delay = 2f;
             DOVirtual.DelayedCall(delay, PhaseTruckStop);
             Debug.Log("PhaseTruckStart");
@@ -198,6 +234,9 @@ namespace GaryMoveOut
         private void PhaseTruckStop()
         {
             events.CallEvent(GamePhases.GameplayPhase.TruckStop, null);
+
+            buildingsGenerator.Destroy(ref buildingOut);
+
             float delay = 1f;
             DOVirtual.DelayedCall(delay, PhaseDeEvacuation);
             Debug.Log("PhaseTruckStop");
@@ -220,6 +259,7 @@ namespace GaryMoveOut
         private void PhaseFewDaysLater()
         {
             events.CallEvent(GamePhases.GameplayPhase.FewDaysLater, null);
+            buildingsGenerator.Destroy(ref buildingIn);
             float delay = 1f;
             DOVirtual.DelayedCall(delay, PhaseStartGame);
             Debug.Log("PhaseFewDaysLater");
