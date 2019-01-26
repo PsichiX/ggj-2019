@@ -146,6 +146,7 @@ GameObject:
   - component: {fileID: 7351675690817806410}
   - component: {fileID: 794618405756130364}
   - component: {fileID: 6607721992016087546}
+  - component: {fileID: 2765002413529712616}
   m_Layer: 9
   m_Name: VaseRed
   m_TagString: Untagged
@@ -228,3 +229,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.43, y: 0.4}
   m_EdgeRadius: 0
+--- !u!114 &2765002413529712616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5684485804950680673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f21d7955f3b8e9f49937662433293c99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  value: 50
+  weight: 1
+  type: 1

@@ -87,7 +87,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2090524775388853420}
   - component: {fileID: 3788797531409744170}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: GameObject
   m_TagString: Interactible
   m_Icon: {fileID: 0}
@@ -146,6 +146,7 @@ GameObject:
   - component: {fileID: 9181447833347432149}
   - component: {fileID: 9181447833347432147}
   - component: {fileID: 9181447833347432148}
+  - component: {fileID: 1098765401}
   m_Layer: 9
   m_Name: Wardrobe00
   m_TagString: Untagged
@@ -228,3 +229,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 326efb51a4acb90489c1df4ab12f3421, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1098765401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4841973043220262430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f21d7955f3b8e9f49937662433293c99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  value: 10
+  weight: 1
+  type: 2
