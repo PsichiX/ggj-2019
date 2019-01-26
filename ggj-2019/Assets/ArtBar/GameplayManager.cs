@@ -38,7 +38,18 @@ public class GameplayManager : MonoBehaviour
 
     private void Start()
     {
+        AttachReactionsToEvents();
         PhaseStartGame();
+    }
+
+    private void AttachReactionsToEvents()
+    {
+        AttachToEvent(GamePhases.GameplayPhase.PlayerJump, ReactionPlayerJump);
+        AttachToEvent(GamePhases.GameplayPhase.PlayerInTruck, ReactionPlayerInTruck);
+        AttachToEvent(GamePhases.GameplayPhase.LastItemShot, ReactionLastItemShot);
+        AttachToEvent(GamePhases.GameplayPhase.PlayerDie, ReactionPlayerDie);
+        AttachToEvent(GamePhases.GameplayPhase.GameOver, ReactionGameOver);
+        AttachToEvent(GamePhases.GameplayPhase.StartNewGame, PhaseStartNewGame);
     }
 
     void Update()
@@ -76,6 +87,11 @@ public class GameplayManager : MonoBehaviour
         }
     }
 
+    private void PhaseStartNewGame(object param)
+    {
+        PhaseStartGame();
+    }
+
     private void PhaseStartGame()
     {
         SetupNewBuilding();
@@ -101,10 +117,10 @@ public class GameplayManager : MonoBehaviour
     private void PhaseStartEvacuation()
     {
         CallEvent(GamePhases.GameplayPhase.Evacuation, null);
+        Debug.Log("PhaseStartEvacuation");
         isEvacuation = true;
         currentFloorBadEvent = -1;
         NextFloorBadEvent();
-        Debug.Log("PhaseStartEvacuation");
     }
 
     private void PhaseFloorEvacuationStart(int floor)
@@ -179,9 +195,21 @@ public class GameplayManager : MonoBehaviour
         isEvacuation = false;
     }
 
+    private void ReactionPlayerDie(object param)
+    {
+        EndEvacuation();
+        float delay = 1f;
+        DOVirtual.DelayedCall(delay, () => CallEvent(GamePhases.GameplayPhase.GameOver, null));       
+    }
+
     private void ReactionPlayerJump(object param)
     {
         EndEvacuation();
+    }
+
+    private void ReactionGameOver(object param)
+    {
+        Debug.Log("GameOver");
     }
 
     private void ReactionPlayerInTruck(object param)
@@ -216,6 +244,7 @@ public class GameplayManager : MonoBehaviour
         CallEvent(GamePhases.GameplayPhase.FadeOut, null);
         float delay = 1f;
         DOVirtual.DelayedCall(delay, PhaseFewDaysLater);
+        Debug.Log("FadeOut");
     }
 
     private void PhaseFewDaysLater()
@@ -223,6 +252,7 @@ public class GameplayManager : MonoBehaviour
         CallEvent(GamePhases.GameplayPhase.FewDaysLater, null);
         float delay = 1f;
         DOVirtual.DelayedCall(delay, PhaseStartGame);
+        Debug.Log("PhaseFewDaysLater");
     }
 
 }
