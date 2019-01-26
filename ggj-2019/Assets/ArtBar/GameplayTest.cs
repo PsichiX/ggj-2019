@@ -18,6 +18,11 @@ public class GameplayTest : MonoBehaviour
             gamplayManager.AttachToEvent(GamePhases.GameplayPhase.FloorEvacuationStart, EvacuationStart);
         }
 
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            gamplayManager.DetachFromEvent(GamePhases.GameplayPhase.FloorEvacuationStart, EvacuationStart);
+        }
+
         if (Input.GetKeyDown(KeyCode.A))
         {
             int level = 77;

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class GameplayManager : MonoBehaviour
 {
@@ -58,6 +59,16 @@ public class GameplayManager : MonoBehaviour
         return false;
     }
 
+    public bool DetachFromEvent(GamePhases.GameplayPhase gamePhase, Action<System.Object> action)
+    {
+        if (eventDict.ContainsKey(gamePhase))
+        {
+            eventDict[gamePhase] -= action;
+            return true;
+        }
+        return false;
+    }
+
     public void CallEvent(GamePhases.GameplayPhase gamePhase, System.Object param)
     {
         if(eventDict.ContainsKey(gamePhase))
@@ -70,7 +81,9 @@ public class GameplayManager : MonoBehaviour
     {
         SetupNewBuilding();
         CallEvent(GamePhases.GameplayPhase.FadeIn, null);
-        //delay call 1s PhaseBadEventStart()
+        float fadeDealy = 1f;
+        DOVirtual.DelayedCall(fadeDealy, PhaseBadEventStart);
+        Debug.Log("PhaseStart");
     }
 
     private void SetupNewBuilding()
@@ -82,28 +95,35 @@ public class GameplayManager : MonoBehaviour
     {
         CallEvent(GamePhases.GameplayPhase.BadEventStart, null);
         float delay = 2f;
-        //delay call 1s   PhaseStartEvacuation();
+        DOVirtual.DelayedCall(delay, PhaseStartEvacuation);
+        Debug.Log("PhaseBadEventStart");
     }
 
     private void PhaseStartEvacuation()
     {
         CallEvent(GamePhases.GameplayPhase.Evacuation, null);
         isEvacuation = true;
+        currentFloorBadEvent = -1;
+        NextFloorBadEvent();
+        Debug.Log("PhaseStartEvacuation");
     }
 
     private void PhaseFloorEvacuationStart(int floor)
     {
         CallEvent(GamePhases.GameplayPhase.FloorEvacuationStart, floor);
+        Debug.Log($"PhaseFloorEvacuationStart Floor [{floor}]");
     }
 
     private void PhaseFloorEvacuationBreakPoint(int floor)
     {
         CallEvent(GamePhases.GameplayPhase.FloorEvacuationBreakPoint, floor);
+        Debug.Log($"PhaseFloorEvacuationBreakPoint Floor [{floor}]");
     }
 
     private void PhaseFloorEvacuationEnd(int floor)
     {
         CallEvent(GamePhases.GameplayPhase.FloorEvacuationEnd, floor);
+        Debug.Log($"PhaseFloorEvacuationEnd Floor [{floor}]");
     }
 
     public int buildingFloorNumber = 4; //0,1,2,3,4
@@ -174,33 +194,36 @@ public class GameplayManager : MonoBehaviour
     {
         CallEvent(GamePhases.GameplayPhase.TruckStart, null);
         float delay = 2f;
-        //delay call 1s   PhaseTruckStop();
+        DOVirtual.DelayedCall(delay, PhaseTruckStop);
+        Debug.Log("PhaseTruckStart");
     }
 
     private void PhaseTruckStop()
     {
         CallEvent(GamePhases.GameplayPhase.TruckStop, null);
         float delay = 1f;
-        //delay call PhaseDeEvacuation();
+        DOVirtual.DelayedCall(delay, PhaseDeEvacuation);
+        Debug.Log("PhaseTruckStop");
     }
 
     private void PhaseDeEvacuation()
     {
         CallEvent(GamePhases.GameplayPhase.DeEvacuation, null);
+        Debug.Log("PhaseDeEvacuation");
     }
 
     private void ReactionLastItemShot(System.Object param)
     {
         CallEvent(GamePhases.GameplayPhase.FadeOut, null);
         float delay = 1f;
-        //delay call PhaseFewDaysLater();
+        DOVirtual.DelayedCall(delay, PhaseFewDaysLater);
     }
 
     private void PhaseFewDaysLater()
     {
         CallEvent(GamePhases.GameplayPhase.FewDaysLater, null);
         float delay = 1f;
-        //delay call PhaseStartGame();
+        DOVirtual.DelayedCall(delay, PhaseStartGame);
     }
 
 }
