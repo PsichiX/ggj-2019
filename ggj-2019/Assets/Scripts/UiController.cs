@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 using static GaryMoveOut.GameplayManager;
 
 namespace GaryMoveOut
@@ -16,35 +16,43 @@ namespace GaryMoveOut
         [SerializeField] private GameObject pressToThrowText;
         [SerializeField] private GameObject portalUpArrow;
         [SerializeField] private GameObject portalDownArrow;
-        [SerializeField] private GameplayManager gameplayManager;
-		[SerializeField] private TextMeshProUGUI buildingCounter;
-		[SerializeField] private TextMeshProUGUI pointsCounter;
+        [SerializeField] private TextMeshProUGUI buildingCounter;
+        [SerializeField] private TextMeshProUGUI pointsCounter;
 
         public int CurrentFloorBadEvent { get { return gameplayManager.currentFloorBadEvent; } }
         public EvecuationDirection CurrentEvecuationDirection { get { return gameplayManager.currentEvacuationDirection; } }
 
 
         private PlayerController[] m_players;
+        private GameplayManager gameplayManager;
 
-		public void UpdateCounter()
-		{
-			buildingCounter.text = gameplayManager.currentBuildingId.ToString("0");
-		}
+        public void UpdateCounter()
+        {
+            if (gameplayManager != null)
+            {
+                buildingCounter.text = gameplayManager.currentBuildingId.ToString("0");
+            }
+        }
 
-		public void UpdatePoints(int pointsCount)
-		{
-			pointsCounter.text = pointsCount.ToString("0");
-		}
+        public void UpdatePoints(int pointsCount)
+        {
+            pointsCounter.text = pointsCount.ToString("0");
+        }
 
-		// FixMe:
-		public void Update()
-		{
-			UpdateCounter();
-		}
+        // FixMe:
+        public void Update()
+        {
+            UpdateCounter();
+        }
 
         private void Awake()
         {
             m_players = new PlayerController[m_aims.Count];
+        }
+
+        private void Start()
+        {
+            gameplayManager = GameplayManager.GetGameplayManager();
         }
 
         public bool RegisterPlayer(PlayerController player)

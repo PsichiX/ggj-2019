@@ -28,7 +28,9 @@ MonoBehaviour:
     sideWallLeft: {fileID: 0}
     SideDoor: {fileID: 653785589163784278, guid: aa56266f68d05bf42ba004c2935d8dae,
       type: 3}
-    SideWindow: {fileID: 9134690517315506629, guid: bfd0b1b56420e5546873bbae6c6d8f8a,
+    SideWindowR: {fileID: 9134690517315506629, guid: 489d6bd688c52ce47a789a01d7f35475,
+      type: 3}
+    SideWindowL: {fileID: 9134690517315506629, guid: bfd0b1b56420e5546873bbae6c6d8f8a,
       type: 3}
   defaultRoof:
     segmentWidth: 2
@@ -44,6 +46,7 @@ MonoBehaviour:
     sideWallLeft: {fileID: 46571895524148536, guid: bbf88b18a844c744b9644485fdaa6b6f,
       type: 3}
     SideDoor: {fileID: 0}
-    SideWindow: {fileID: 0}
+    SideWindowR: {fileID: 0}
+    SideWindowL: {fileID: 0}
   floorsSegments: []
   roofsSegments: []

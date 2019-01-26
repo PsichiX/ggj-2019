@@ -56,6 +56,7 @@ namespace GaryMoveOut
         private bool m_inputBlocked = false;
         private Animator m_animator;
         private bool isCarryingItem;
+        private WindowJumpSite m_window;
         private bool m_isNearPortal = false;
         private bool m_canTeleportUp = false;
         private bool m_canTeleportDown = false;
@@ -119,53 +120,57 @@ namespace GaryMoveOut
                             Throw();
                         }
                     }
+                    else if (m_window == null && action)
+                    {
+                        m_window = GetInteractible<WindowJumpSite>();
+                        if (m_window != null)
+                        {
+                            AimMe();
+                        }
+                    }
+                    else if (m_window != null && !action)
+                    {
+                        ThrowMe();
+                    }
                 }
                 if (m_isAiming)
                 {
                     if (m_inputHandler.Up)
                     {
-                        m_aimAngle += m_aimingAngleSpeed * dt;
+                        m_aimStrength = Mathf.Clamp(
+                            m_aimStrength + dt * m_aimingStrengthSpeed,
+                            m_aimStrengthRange.x,
+                            m_aimStrengthRange.y
+                        );
                     }
                     else if (m_inputHandler.Down)
                     {
-                        m_aimAngle -= m_aimingAngleSpeed * dt;
+                        m_aimStrength = Mathf.Clamp(
+                            m_aimStrength - dt * m_aimingStrengthSpeed,
+                            m_aimStrengthRange.x,
+                            m_aimStrengthRange.y
+                        );
                     }
                     if (TurnToSide == Side.Left)
                     {
-                        if (m_inputHandler.Left)
+                        if (m_inputHandler.Right)
                         {
-                            m_aimStrength = Mathf.Clamp(
-                                m_aimStrength + dt * m_aimingStrengthSpeed,
-                                m_aimStrengthRange.x,
-                                m_aimStrengthRange.y
-                            );
+                            m_aimAngle += m_aimingAngleSpeed * dt;
                         }
-                        else if (m_inputHandler.Right)
+                        else if (m_inputHandler.Left)
                         {
-                            m_aimStrength = Mathf.Clamp(
-                                m_aimStrength - dt * m_aimingStrengthSpeed,
-                                m_aimStrengthRange.x,
-                                m_aimStrengthRange.y
-                            );
+                            m_aimAngle -= m_aimingAngleSpeed * dt;
                         }
                     }
                     else
                     {
-                        if (m_inputHandler.Right)
+                        if (m_inputHandler.Left)
                         {
-                            m_aimStrength = Mathf.Clamp(
-                                m_aimStrength + dt * m_aimingStrengthSpeed,
-                                m_aimStrengthRange.x,
-                                m_aimStrengthRange.y
-                            );
+                            m_aimAngle += m_aimingAngleSpeed * dt;
                         }
-                        else if (m_inputHandler.Left)
+                        else if (m_inputHandler.Right)
                         {
-                            m_aimStrength = Mathf.Clamp(
-                                m_aimStrength - dt * m_aimingStrengthSpeed,
-                                m_aimStrengthRange.x,
-                                m_aimStrengthRange.y
-                            );
+                            m_aimAngle -= m_aimingAngleSpeed * dt;
                         }
                     }
                 }
@@ -239,6 +244,15 @@ namespace GaryMoveOut
                     m_aimStrength
                 );
             }
+            else if (m_window != null && m_ui != null)
+            {
+                m_ui.UpdateAim(
+                    this,
+                    handPos,
+                    TurnToSide == Side.Left ? 180 - m_aimAngle : m_aimAngle,
+                    m_aimStrength
+                );
+            }
         }
 
         private void OnTriggerEnter2D(Collider2D other)
@@ -246,12 +260,12 @@ namespace GaryMoveOut
             if (other.tag == "Interactible")
             {
                 m_interactibles.Add(other.transform.parent.gameObject);
-            }
-            if (isCarryingItem == false)
-            {
-                CollidesWithPickable?.Invoke();
-            }
-            if (other.tag == "Portal")
+            	if (isCarryingItem == false && other.GetComponent<Pickable>() != null)
+            	{
+                	CollidesWithPickable?.Invoke();
+            	}
+			}
+            else if (other.tag == "Portal")
             {
                 var portal = other.gameObject.GetComponentInChildren<DoorPortal>();
                 if (portal != null)
@@ -297,6 +311,10 @@ namespace GaryMoveOut
                     }
                 }
             }
+            else if (other.tag == "InteractibleRoot")
+            {
+                m_interactibles.Add(other.gameObject);
+            }
         }
 
         private void OnTriggerExit2D(Collider2D other)
@@ -304,9 +322,16 @@ namespace GaryMoveOut
             if (other.tag == "Interactible")
             {
                 m_interactibles.Remove(other.transform.parent.gameObject);
-                CollidesWithPickableEnd?.Invoke();
+                if (other.GetComponent<Pickable>() != null)
+                {
+                    CollidesWithPickableEnd?.Invoke();
+                }
             }
-            if (other.tag == "Portal")
+            else if (other.tag == "InteractibleRoot")
+            {
+                m_interactibles.Remove(other.gameObject);
+            }
+            else if (other.tag == "Portal")
             {
                 var portal = other.gameObject.GetComponentInChildren<DoorPortal>();
                 if (portal != null)
@@ -418,6 +443,37 @@ namespace GaryMoveOut
                 isCarryingItem = false;
                 CarryItemEnd?.Invoke();
                 m_pickedUp = null;
+            }
+            if (m_ui != null)
+            {
+                m_ui.DeactivateAim(this);
+            }
+        }
+
+        private void AimMe()
+        {
+            if (m_window != null && !m_isAiming)
+            {
+                m_isAiming = true;
+            }
+            if (m_ui != null)
+            {
+                m_ui.ActivateAim(this);
+            }
+            m_aimAngle = 0;
+            m_aimStrength = m_aimStrengthRange.x;
+        }
+
+        private void ThrowMe()
+        {
+            if (m_window != null && m_isAiming)
+            {
+                m_isAiming = false;
+                var angle = TurnToSide == Side.Left ? 180 - m_aimAngle : m_aimAngle;
+                var force = Quaternion.Euler(0, 0, angle) * Vector2.right * m_aimStrength;
+                m_rigidBody.AddForce(force, ForceMode2D.Impulse);
+                m_rigidBody.constraints = RigidbodyConstraints2D.None;
+                m_window = null;
             }
             if (m_ui != null)
             {

@@ -9,6 +9,7 @@ TagManager:
   - Window
   - RoofJumpSite
   - Interactible
+  - InteractibleRoot
   - Ground
   layers:
   - Default
@@ -25,7 +26,7 @@ TagManager:
   - FurnitureInUse
   - Background
   - Player
-  - 
+  - CharacterInUse
   - 
   - 
   - 

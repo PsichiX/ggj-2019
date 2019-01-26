@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 2730091705060337864}
   - component: {fileID: 192110782769903944}
   - component: {fileID: 6019690126746299181}
+  - component: {fileID: 1975933902146153403}
   m_Layer: 12
   m_Name: ItemCatcherInside
-  m_TagString: Untagged
+  m_TagString: InteractibleRoot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -71,6 +72,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInside: 1
+--- !u!114 &1975933902146153403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1976709495371676547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b79a206f574db7643a51f26e3f0bf1c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!61 &4784964839798196087
 BoxCollider2D:
   m_ObjectHideFlags: 0

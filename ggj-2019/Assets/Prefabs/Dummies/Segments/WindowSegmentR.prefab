@@ -108,9 +108,10 @@ GameObject:
   - component: {fileID: 3351482632468893474}
   - component: {fileID: 9094204299397926281}
   - component: {fileID: 7602716002032906262}
+  - component: {fileID: 6778200868499384322}
   m_Layer: 12
   m_Name: ItemCatcherInside
-  m_TagString: Untagged
+  m_TagString: InteractibleRoot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -168,6 +169,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInside: 1
+--- !u!114 &6778200868499384322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8913597589515755033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b79a206f574db7643a51f26e3f0bf1c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &9134690517315506629
 GameObject:
   m_ObjectHideFlags: 0
