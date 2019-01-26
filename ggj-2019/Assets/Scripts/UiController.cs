@@ -14,7 +14,9 @@ namespace GaryMoveOut
         [SerializeField] private Vector2 m_arrowScaleMapTo = new Vector2(0, 1);
         [SerializeField] private GameObject pressToPickText;
         [SerializeField] private GameObject pressToThrowText;
-		[SerializeField] private GameplayManager gameplayManager;
+        [SerializeField] private GameObject portalUpArrow;
+        [SerializeField] private GameObject portalDownArrow;
+        [SerializeField] private GameplayManager gameplayManager;
 		[SerializeField] private TextMeshProUGUI buildingCounter;
 		[SerializeField] private TextMeshProUGUI pointsCounter;
 
@@ -144,24 +146,40 @@ namespace GaryMoveOut
             pressToPickText.SetActive(false);
         }
 
+        private float arrowXOffset = 0.1f;
+        private float arrowYOffset = 0.1f;
+        public void SetupPortalUpArrow(Transform portal)
+        {
+            var position = portalUpArrow.transform.position;
+            position = new Vector3(portal.position.x + arrowXOffset, portal.position.y + arrowYOffset, position.z);
+            portalUpArrow.transform.position = position;
+        }
+
+        public void SetupPortalDownArrow(Transform portal)
+        {
+            var position = portalDownArrow.transform.position;
+            position = new Vector3(portal.position.x + arrowXOffset, portal.position.y - arrowYOffset, position.z);
+            portalDownArrow.transform.position = position;
+        }
+
         public void ShowPortalUpText()
         {
-            //pressToPickText.SetActive(true);
+            portalUpArrow.SetActive(true);
         }
 
         public void HidePortalUpText()
         {
-            //pressToPickText.SetActive(false);
+            portalUpArrow.SetActive(false);
         }
 
         public void ShowPortalDownText()
         {
-            //pressToPickText.SetActive(true);
+            portalDownArrow.SetActive(true);
         }
 
         public void HidePortalDownText()
         {
-            //pressToPickText.SetActive(false);
+            portalDownArrow.SetActive(false);
         }
 
         public void ShowThrowText()

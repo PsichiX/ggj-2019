@@ -24,10 +24,10 @@ namespace GaryMoveOut
         public event Action CollidesWithPickableEnd;
         public event Action CarryItemStart;
         public event Action CarryItemEnd;
-            public event Action CollidesWithPortalUp;
-            public event Action CollidesWithPortalUpEnd;
-            public event Action CollidesWithPortalDown;
-            public event Action CollidesWithPortalDownEnd;
+        public event Action CollidesWithPortalUp;
+        public event Action CollidesWithPortalUpEnd;
+        public event Action CollidesWithPortalDown;
+        public event Action CollidesWithPortalDownEnd;
 
         [SerializeField]
         private InputHandler m_inputHandler;
@@ -222,12 +222,11 @@ namespace GaryMoveOut
             if (other.tag == "Interactible")
             {
                 m_interactibles.Add(other.transform.parent.gameObject);
-              }
-				if (isCarryingItem == false)
-				{
-					CollidesWithPickable?.Invoke();
-				}
-			}
+            }
+            if (isCarryingItem == false)
+            {
+                CollidesWithPickable?.Invoke();
+            }
             else if (other.tag == "Portal")
             {
                 var portal = other.gameObject.GetComponentInChildren<DoorPortal>();
@@ -238,20 +237,24 @@ namespace GaryMoveOut
                         case GameplayManager.EvecuationDirection.Up:
                             if (portal.floorIndexAbove != DoorPortal.MaxIndex)
                             {
+                                m_ui.SetupPortalUpArrow(portal.transform);
                                 CollidesWithPortalUp?.Invoke();
                             }
                             if (portal.floorIndexBelow > m_ui.CurrentFloorBadEvent)
                             {
+                                m_ui.SetupPortalDownArrow(portal.transform);
                                 CollidesWithPortalDown?.Invoke();
                             }
                             break;
                         case GameplayManager.EvecuationDirection.Down:
                             if (portal.floorIndexAbove < m_ui.CurrentFloorBadEvent)
                             {
+                                m_ui.SetupPortalUpArrow(portal.transform);
                                 CollidesWithPortalUp?.Invoke();
                             }
                             if (portal.floorIndexBelow > DoorPortal.MinIndex)
                             {
+                                m_ui.SetupPortalDownArrow(portal.transform);
                                 CollidesWithPortalDown?.Invoke();
                             }
                             break;
@@ -265,7 +268,7 @@ namespace GaryMoveOut
             if (other.tag == "Interactible")
             {
                 m_interactibles.Remove(other.transform.parent.gameObject);
-				CollidesWithPickableEnd?.Invoke();
+                CollidesWithPickableEnd?.Invoke();
             }
             else if (other.tag == "Portal")
             {
