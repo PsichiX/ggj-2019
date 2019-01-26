@@ -1,15 +1,14 @@
 fileFormatVersion: 2
-guid: 457c2049382971f41b57b9850e9d37a3
+guid: 97e8f6a6890d8614a834ca5be368c492
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: Wardrobe
-    2100002: Wood
+    2100000: Vase_Blue
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Wardrobe
+    4300000: Cube.001
   externalObjects: {}
   materials:
     importMaterials: 1

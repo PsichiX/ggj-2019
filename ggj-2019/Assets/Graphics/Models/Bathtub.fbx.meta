@@ -1,15 +1,36 @@
 fileFormatVersion: 2
-guid: 457c2049382971f41b57b9850e9d37a3
+guid: d1de8212f755df34bb49e41faa85c9c7
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
+    100002: Camera
+    100004: Cube
+    100006: Cube.001
+    100008: Cube.002
+    100010: Cube.003
     400000: //RootNode
-    2100000: Wardrobe
-    2100002: Wood
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: Wardrobe
+    400002: Camera
+    400004: Cube
+    400006: Cube.001
+    400008: Cube.002
+    400010: Cube.003
+    2000000: Camera
+    2100000: No Name
+    2100002: Chrome
+    2100004: Bathtub
+    2300000: Cube
+    2300002: Cube.001
+    2300004: Cube.002
+    2300006: Cube.003
+    3300000: Cube
+    3300002: Cube.001
+    3300004: Cube.002
+    3300006: Cube.003
+    4300000: Cube.003
+    4300002: Cube.002
+    4300004: Cube.001
+    4300006: Cube
   externalObjects: {}
   materials:
     importMaterials: 1
