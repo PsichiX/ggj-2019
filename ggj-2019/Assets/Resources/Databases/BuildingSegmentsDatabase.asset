@@ -12,7 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 039b11254108d0d44b6ee62fa9d2a632, type: 3}
   m_Name: BuildingSegmentsDatabase
   m_EditorClassIdentifier: 
+  floorPrefab: {fileID: 5173171807403977234, guid: 8052d1508bd169e4980fceb9aa57f687,
+    type: 3}
   defaultFloor:
+    segmentWidth: 2
+    segmentHeight: 3
+    segmentDepth: 3
     EmptyWall: {fileID: 6609838129568284721, guid: f169d6b9c77a45e4a8fd2676e8e0e195,
       type: 3}
     Stairs: {fileID: 5189282402832524550, guid: 2818c3817612d2d4f9d8508923f29b34,
@@ -26,6 +31,9 @@ MonoBehaviour:
     SideWindow: {fileID: 9134690517315506629, guid: bfd0b1b56420e5546873bbae6c6d8f8a,
       type: 3}
   defaultRoof:
+    segmentWidth: 2
+    segmentHeight: 3
+    segmentDepth: 3
     EmptyWall: {fileID: 46571895524148536, guid: 20a8188f0a976de4298e1172c8ca8a4c,
       type: 3}
     Stairs: {fileID: 2227411561322223352, guid: a9814a19a5b2ff647aaade0ba97b5fe3,

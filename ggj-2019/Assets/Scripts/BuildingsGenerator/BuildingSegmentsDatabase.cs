@@ -1,10 +1,13 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 [System.Serializable]
 public class FloorScheme
 {
+    public float segmentWidth = 2f;
+    public float segmentHeight = 3f;
+    public float segmentDepth = 3f;
+
     public GameObject EmptyWall;
     public GameObject Stairs;
     public GameObject SideWall;
@@ -20,6 +23,8 @@ public class FloorScheme
 [CreateAssetMenu(menuName = "ScriptableObjects/Building Segments Database")]
 public class BuildingSegmentsDatabase : ScriptableObject
 {
+    public Floor floorPrefab;
+
     public FloorScheme defaultFloor;
     public FloorScheme defaultRoof;
 
