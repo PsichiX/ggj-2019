@@ -19,6 +19,11 @@ namespace GaryMoveOut
             m_rigidBody.bodyType = RigidbodyType2D.Kinematic;
         }
 
+        public void PutDown()
+        {
+            m_rigidBody.bodyType = RigidbodyType2D.Dynamic;
+        }
+
         public void Throw(Vector2 impulse)
         {
             m_rigidBody.bodyType = RigidbodyType2D.Dynamic;

@@ -17,6 +17,7 @@ namespace GaryMoveOut
         private HashSet<GameObject> m_interactibles = new HashSet<GameObject>();
         private bool m_lastAction = false;
         private bool m_lastUp = false;
+        private bool m_lastDown = false;
         private Pickable m_pickedUp;
 
         private void Start()
@@ -31,6 +32,7 @@ namespace GaryMoveOut
                 var dt = Time.fixedDeltaTime;
                 var action = m_inputHandler.Action;
                 var up = m_inputHandler.Up;
+                var down = m_inputHandler.Down;
                 if (action != m_lastAction)
                 {
                     m_lastAction = action;
@@ -49,6 +51,14 @@ namespace GaryMoveOut
                     if (up)
                     {
                         PickUp();
+                    }
+                }
+                if (down != m_lastDown)
+                {
+                    m_lastDown = down;
+                    if (down)
+                    {
+                        PutDown();
                     }
                 }
                 if (m_inputHandler.Left)
@@ -90,6 +100,15 @@ namespace GaryMoveOut
             {
                 m_pickedUp = pickable;
                 m_pickedUp.PickUp();
+            }
+        }
+
+        private void PutDown()
+        {
+            if (m_pickedUp != null)
+            {
+                m_pickedUp.PutDown();
+                m_pickedUp = null;
             }
         }
 

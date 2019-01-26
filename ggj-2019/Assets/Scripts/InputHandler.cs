@@ -43,7 +43,7 @@ namespace GaryMoveOut
             {
                 Up = Input.GetAxis("GamepadVertical") > 0.5;
                 Down = Input.GetAxis("GamepadVertical") < -0.5;
-                Left = Input.GetAxis("GamepadHorizontal") > 0.5;
+                Left = Input.GetAxis("GamepadHorizontal") < -0.5;
                 Right = Input.GetAxis("GamepadHorizontal") > 0.5;
                 Action = Input.GetButton("GamepadAction");
             }
