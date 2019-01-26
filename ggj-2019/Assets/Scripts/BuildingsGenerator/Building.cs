@@ -94,11 +94,61 @@ namespace GaryMoveOut
             {
                 return;
             }
+            
+            int index = 0;
+            List<Item> unstackedItems = new List<Item>();
+            foreach(var floor in floors)
+            {
+                List<int> indices = new List<int>();
+                for(int i = 0; i < floor.Value.segments.Count; i++)
+                {
+                    indices.Add(i);
+                }
 
+                while (itemsByFloorIndex[floor.Key].Count > 0 && indices.Count > 0)
+                {
+                    var rnd = Random.Range(0, indices.Count);
+                    index = indices[rnd];
+                    indices.RemoveAt(rnd);
 
+                    var itemSlot = floor.Value.segments[index].GetComponent<ItemSlot>();
+                    if (itemSlot != null && !itemSlot.isOccupied)
+                    {
+                        var item = itemsByFloorIndex[floor.Key][0];
+                        itemsByFloorIndex[floor.Key].RemoveAt(0);
+                        var itemGO = GameObject.Instantiate(item.prefab, itemSlot.gameObject.transform);
+                        floor.Value.items.Add(item);
+                        itemSlot.isOccupied = true;
+                    }
+                }
+                if (itemsByFloorIndex[floor.Key].Count > 0)
+                {
+                    unstackedItems.AddRange(itemsByFloorIndex[floor.Key]);
+                }
+            }
 
+            // place unstacked items:
+            var floorsList = new List<Floor>(floors.Values);
+            index = 0;
+            while (unstackedItems.Count > 0)
+            {
+                var floor = floorsList[index];
+                foreach (var segment in floor.segments)
+                {
+                    var itemSlot = segment.GetComponent<ItemSlot>();
+                    if (itemSlot != null && !itemSlot.isOccupied)
+                    {
+                        var item = unstackedItems[0];
+                        unstackedItems.RemoveAt(0);
+                        var itemGO = GameObject.Instantiate(item.prefab, itemSlot.gameObject.transform);
+                        floor.items.Add(item);
+                        itemSlot.isOccupied = true;
 
-
+                        break;
+                    }
+                }
+                index = (++index == floorsList.Count) ? 0 : index;
+            }
 
         }
 
