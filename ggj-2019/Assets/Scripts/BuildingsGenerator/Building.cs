@@ -88,5 +88,18 @@ namespace GaryMoveOut
                 i++;
             }
         }
+
+        public void SpawnItemsInside(Dictionary<int, List<Item>> itemsByFloorIndex)
+        {
+            if (this.floors.Count == 0)
+            {
+                return;
+            }
+        }
+
+        public Dictionary<int, List<Item>> GetItems()
+        {
+            return null;
+        }
     }
 }
