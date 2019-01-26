@@ -12,6 +12,12 @@ namespace GaryMoveOut
         private float m_speed;
         [SerializeField]
         private Vector3 m_pickableOffset;
+        [SerializeField]
+        private Vector2 m_aimStrengthRange = new Vector2(1, 10);
+        [SerializeField]
+        private float m_aimingAngleSpeed = 1;
+        [SerializeField]
+        private float m_aimingStrengthSpeed = 1;
 
         private Rigidbody2D m_rigidBody;
         private HashSet<GameObject> m_interactibles = new HashSet<GameObject>();
@@ -19,10 +25,15 @@ namespace GaryMoveOut
         private bool m_lastUp = false;
         private bool m_lastDown = false;
         private Pickable m_pickedUp;
+        private bool m_isAiming = false;
+        private float m_aimAngle;
+        private float m_aimStrength;
+        private UiController m_ui;
 
         private void Start()
         {
             m_rigidBody = GetComponent<Rigidbody2D>();
+            m_ui = FindObjectOfType<UiController>();
         }
 
         private void FixedUpdate()
@@ -31,49 +42,86 @@ namespace GaryMoveOut
             {
                 var dt = Time.fixedDeltaTime;
                 var action = m_inputHandler.Action;
-                var up = m_inputHandler.Up;
-                var down = m_inputHandler.Down;
                 if (action != m_lastAction)
                 {
                     m_lastAction = action;
-                    if (action)
+                    if (m_pickedUp != null && m_pickedUp.IsPickedUp)
                     {
-                        Aim();
-                    }
-                    else
-                    {
-                        Throw();
-                    }
-                }
-                if (up != m_lastUp)
-                {
-                    m_lastUp = up;
-                    if (up)
-                    {
-                        PickUp();
+                        if (action)
+                        {
+                            Aim();
+                        }
+                        else
+                        {
+                            Throw();
+                        }
                     }
                 }
-                if (down != m_lastDown)
+                if (m_isAiming)
                 {
-                    m_lastDown = down;
-                    if (down)
+                    if (m_inputHandler.Left)
                     {
-                        PutDown();
+                        m_aimAngle += m_aimingAngleSpeed * dt;
+                    }
+                    else if (m_inputHandler.Right)
+                    {
+                        m_aimAngle -= m_aimingAngleSpeed * dt;
+                    }
+                    if (m_inputHandler.Up)
+                    {
+                        m_aimStrength = Mathf.Clamp(
+                            m_aimStrength + dt * m_aimingStrengthSpeed,
+                            m_aimStrengthRange.x,
+                            m_aimStrengthRange.y
+                        );
+                    }
+                    if (m_inputHandler.Down)
+                    {
+                        m_aimStrength = Mathf.Clamp(
+                            m_aimStrength - dt * m_aimingStrengthSpeed,
+                            m_aimStrengthRange.x,
+                            m_aimStrengthRange.y
+                        );
                     }
                 }
-                if (m_inputHandler.Left)
+                else
                 {
-                    m_rigidBody.MovePosition(m_rigidBody.position + Vector2.left * m_speed * dt);
-                }
-                if (m_inputHandler.Right)
-                {
-                    m_rigidBody.MovePosition(m_rigidBody.position + Vector2.right * m_speed * dt);
+                    var up = m_inputHandler.Up;
+                    var down = m_inputHandler.Down;
+                    if (up != m_lastUp)
+                    {
+                        m_lastUp = up;
+                        if (up)
+                        {
+                            PickUp();
+                        }
+                    }
+                    if (down != m_lastDown)
+                    {
+                        m_lastDown = down;
+                        if (down)
+                        {
+                            PutDown();
+                        }
+                    }
+                    if (m_inputHandler.Left)
+                    {
+                        m_rigidBody.MovePosition(m_rigidBody.position + Vector2.left * m_speed * dt);
+                    }
+                    else if (m_inputHandler.Right)
+                    {
+                        m_rigidBody.MovePosition(m_rigidBody.position + Vector2.right * m_speed * dt);
+                    }
                 }
             }
 
             if (m_pickedUp != null && m_pickedUp.IsPickedUp)
             {
                 m_pickedUp.transform.position = transform.position + m_pickableOffset;
+            }
+            if (m_pickedUp != null && m_pickedUp.IsPickedUp && m_ui != null)
+            {
+                m_ui.UpdateAim(this, transform.position + m_pickableOffset, m_aimAngle, m_aimStrength);
             }
         }
 
@@ -105,7 +153,7 @@ namespace GaryMoveOut
 
         private void PutDown()
         {
-            if (m_pickedUp != null)
+            if (m_pickedUp != null && !m_isAiming)
             {
                 m_pickedUp.PutDown();
                 m_pickedUp = null;
@@ -114,12 +162,31 @@ namespace GaryMoveOut
 
         private void Aim()
         {
-
+            if (m_pickedUp != null && !m_isAiming)
+            {
+                m_isAiming = true;
+            }
+            if (m_ui != null)
+            {
+                m_ui.RegisterAim(this);
+            }
+            m_aimAngle = 0;
+            m_aimStrength = m_aimStrengthRange.x;
         }
 
         private void Throw()
         {
-
+            if (m_pickedUp != null && m_isAiming)
+            {
+                m_isAiming = false;
+                var force = Quaternion.Euler(0, 0, m_aimAngle) * Vector2.right * m_aimStrength;
+                m_pickedUp.Throw(force);
+                m_pickedUp = null;
+            }
+            if (m_ui != null)
+            {
+                m_ui.UnregisterAim(this);
+            }
         }
 
         private T GetInteractible<T>() where T : MonoBehaviour
