@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2730091705060337864}
   - component: {fileID: 192110782769903944}
   - component: {fileID: 6019690126746299181}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: ItemCatcherOutside
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -82,7 +82,7 @@ GameObject:
   - component: {fileID: 3351482632468893474}
   - component: {fileID: 9094204299397926281}
   - component: {fileID: 7602716002032906262}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: ItemCatcherInside
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -151,7 +151,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1275672359086025732}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: WindowSegment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -187,6 +187,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: window
+      objectReference: {fileID: 0}
+    - target: {fileID: 3790818550796767561, guid: 6a1964d481605234f953697d693cfd0a,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 5022533092597790176, guid: 6a1964d481605234f953697d693cfd0a,
         type: 3}
@@ -262,6 +267,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: WallSide
+      objectReference: {fileID: 0}
+    - target: {fileID: 8652244165596983215, guid: 515c8a29a1a124842a30ddfa5e2d668e,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 4848630327381539228, guid: 515c8a29a1a124842a30ddfa5e2d668e,
         type: 3}

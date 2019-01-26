@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7377564036742989207}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: DoorSegment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23,7 +23,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 653785589163784278}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4, y: 0, z: 2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -43,6 +43,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: WallSide
+      objectReference: {fileID: 0}
+    - target: {fileID: 8652244165596983215, guid: 515c8a29a1a124842a30ddfa5e2d668e,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 4848630327381539228, guid: 515c8a29a1a124842a30ddfa5e2d668e,
         type: 3}
@@ -118,6 +123,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: DoorSide
+      objectReference: {fileID: 0}
+    - target: {fileID: 1938775609249908544, guid: 841855227705dde4b9792c0f31c15f90,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 7768643912923931625, guid: 841855227705dde4b9792c0f31c15f90,
         type: 3}
