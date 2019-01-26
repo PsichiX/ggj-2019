@@ -1,7 +1,6 @@
-﻿using System;
+﻿using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
 
 namespace GaryMoveOut
 {
@@ -17,20 +16,23 @@ namespace GaryMoveOut
         private BuildingsGenerator buildingsGenerator;
         private BuildingConfigurator buildingConfigurator;
         private TruckManager truckManager;
-
+        private PlayerController[] players;
 
         [SerializeField] private GameObject placeBuildingOut;
         private Building buildingOut;
         [SerializeField] private GameObject placeBuildingIn;
         private Building buildingIn;
+        [SerializeField] private Vector3 playerSpawnOffset;
 
         private Dictionary<int, List<Item>> itemsFromLastInBuilding;
+        [SerializeField] private GameObject prefabPlayer;
+        [SerializeField] private int playersCount = 1;
 
         void Awake()
         {
             if (_instance != null && _instance != this)
             {
-                Destroy(this.gameObject);
+                Destroy(gameObject);
                 return;
             }
             else
@@ -42,6 +44,7 @@ namespace GaryMoveOut
             buildingsGenerator = new BuildingsGenerator();
             buildingConfigurator = new BuildingConfigurator();
             truckManager = new TruckManager();
+            players = new PlayerController[playersCount];
         }
 
         private void Start()
@@ -52,6 +55,8 @@ namespace GaryMoveOut
 
         private void AttachReactionsToEvents()
         {
+            events.AttachToEvent(GamePhases.GameplayPhase.FadeIn, ReactionFadeIn);
+            events.AttachToEvent(GamePhases.GameplayPhase.FadeOut, ReactionFadeOut);
             events.AttachToEvent(GamePhases.GameplayPhase.PlayerJump, ReactionPlayerJump);
             events.AttachToEvent(GamePhases.GameplayPhase.PlayerInTruck, ReactionPlayerInTruck);
             events.AttachToEvent(GamePhases.GameplayPhase.LastItemShot, ReactionLastItemShot);
@@ -62,9 +67,7 @@ namespace GaryMoveOut
 
         void Update()
         {
-
             EvacuationProcess();
-
         }
 
 
@@ -97,7 +100,7 @@ namespace GaryMoveOut
 
         private void SetupBuildingOut()
         {
-            if(buildingsGenerator == null)
+            if (buildingsGenerator == null)
             {
                 Debug.Log("building generator == null");
                 return;
@@ -235,6 +238,29 @@ namespace GaryMoveOut
         private void EndEvacuation()
         {
             isEvacuation = false;
+        }
+
+        private void ReactionFadeIn(object param)
+        {
+            for (var i = 0; i < players.Length; ++i)
+            {
+                var instance = Instantiate(prefabPlayer);
+                var spawnPos = buildingOut.GetSpawnPosition();
+                var pos = spawnPos.HasValue ? new Vector3(spawnPos.Value.x, spawnPos.Value.y, 0) : Vector3.zero;
+                instance.transform.position = pos + playerSpawnOffset;
+                instance.transform.rotation = Quaternion.identity;
+                var player = players[i] = instance.GetComponent<PlayerController>();
+                player.InputLayout = (InputHandler.Layout)(1 + i);
+            }
+        }
+
+        private void ReactionFadeOut(object param)
+        {
+            for (var i = 0; i < players.Length; ++i)
+            {
+                GameObject.Destroy(players[i]);
+                players[i] = null;
+            }
         }
 
         private void ReactionPlayerDie(object param)

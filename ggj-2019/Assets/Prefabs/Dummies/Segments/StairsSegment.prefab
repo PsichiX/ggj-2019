@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1796637525987327542}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: StairsSegment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,6 +44,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Wall
+      objectReference: {fileID: 0}
+    - target: {fileID: 8030603017668433953, guid: deb49b4f225936044b9f09acddb69420,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 7042947746599480059, guid: deb49b4f225936044b9f09acddb69420,
         type: 3}
@@ -125,6 +130,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: FloorGround
       objectReference: {fileID: 0}
+    - target: {fileID: 7337668900026078210, guid: 680ab59ed9c787148b2ddae6134744d7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 7337668900026078214, guid: 680ab59ed9c787148b2ddae6134744d7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -202,8 +212,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 664151527202963016, guid: f5fe2a6bd30ae814b95669ad05a539f5,
         type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 664151527202963016, guid: f5fe2a6bd30ae814b95669ad05a539f5,
+        type: 3}
       propertyPath: m_TagString
-      value: Portal
+      value: Interactible
       objectReference: {fileID: 0}
     - target: {fileID: 7383356231996779767, guid: f5fe2a6bd30ae814b95669ad05a539f5,
         type: 3}
@@ -264,21 +279,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4149826107227367175, guid: f5fe2a6bd30ae814b95669ad05a539f5,
-        type: 3}
-      propertyPath: m_Size.y
-      value: 27.564198
-      objectReference: {fileID: 0}
-    - target: {fileID: 4149826107227367175, guid: f5fe2a6bd30ae814b95669ad05a539f5,
-        type: 3}
-      propertyPath: m_Center.y
-      value: -13.28209
-      objectReference: {fileID: 0}
-    - target: {fileID: 4149826107227367175, guid: f5fe2a6bd30ae814b95669ad05a539f5,
-        type: 3}
-      propertyPath: m_Center.z
-      value: -2.332068e-15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f5fe2a6bd30ae814b95669ad05a539f5, type: 3}
