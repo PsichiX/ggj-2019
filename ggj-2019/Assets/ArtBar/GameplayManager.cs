@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -45,10 +44,10 @@ public class GameplayManager : MonoBehaviour
     {
 
         EvacuationProcess();
-        
+
     }
 
-    public bool AttachToEvent(GamePhases.GameplayPhase gamePhase, Action<System.Object> action)
+    public bool AttachToEvent(GamePhases.GameplayPhase gamePhase, Action<object> action)
     {
         if (eventDict.ContainsKey(gamePhase))
         {
@@ -58,9 +57,9 @@ public class GameplayManager : MonoBehaviour
         return false;
     }
 
-    public void CallEvent(GamePhases.GameplayPhase gamePhase, System.Object param)
+    public void CallEvent(GamePhases.GameplayPhase gamePhase, object param)
     {
-        if(eventDict.ContainsKey(gamePhase))
+        if (eventDict.ContainsKey(gamePhase))
         {
             eventDict[gamePhase]?.Invoke(param);
         }
@@ -77,7 +76,7 @@ public class GameplayManager : MonoBehaviour
     {
 
     }
-   
+
     private void PhaseBadEventStart()
     {
         CallEvent(GamePhases.GameplayPhase.BadEventStart, null);
@@ -142,7 +141,7 @@ public class GameplayManager : MonoBehaviour
     private void NextFloorBadEvent()
     {
         currentFloorBadEvent++;
-        if(currentFloorBadEvent > buildingFloorNumber)
+        if (currentFloorBadEvent > buildingFloorNumber)
         {
             isEvacuation = false;
             CallEvent(GamePhases.GameplayPhase.GameOver, null);
@@ -160,12 +159,12 @@ public class GameplayManager : MonoBehaviour
         isEvacuation = false;
     }
 
-    private void ReactionPlayerJump(System.Object param)
+    private void ReactionPlayerJump(object param)
     {
         EndEvacuation();
     }
 
-    private void ReactionPlayerInTruck(System.Object param)
+    private void ReactionPlayerInTruck(object param)
     {
         PhaseTruckStart();
     }
@@ -189,7 +188,7 @@ public class GameplayManager : MonoBehaviour
         CallEvent(GamePhases.GameplayPhase.DeEvacuation, null);
     }
 
-    private void ReactionLastItemShot(System.Object param)
+    private void ReactionLastItemShot(object param)
     {
         CallEvent(GamePhases.GameplayPhase.FadeOut, null);
         float delay = 1f;

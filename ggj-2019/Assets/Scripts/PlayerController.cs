@@ -29,16 +29,40 @@ namespace GaryMoveOut
         private float m_aimAngle;
         private float m_aimStrength;
         private UiController m_ui;
+        private GameplayManager m_gameplay;
+        private bool m_inputBlocked = false;
 
         private void Start()
         {
             m_rigidBody = GetComponent<Rigidbody2D>();
             m_ui = FindObjectOfType<UiController>();
+            m_gameplay = GameplayManager.GetGameplayManager();
+
+            if (m_gameplay != null)
+            {
+                m_gameplay.AttachToEvent(GamePhases.GameplayPhase.Evacuation, OnEvacuation);
+                m_gameplay.AttachToEvent(GamePhases.GameplayPhase.PlayerJump, OnPlayerJump);
+                m_gameplay.AttachToEvent(GamePhases.GameplayPhase.DeEvacuation, OnDeEvacuation);
+                m_gameplay.AttachToEvent(GamePhases.GameplayPhase.LastItemShot, OnLastItemShot);
+                m_inputBlocked = true;
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (m_gameplay != null)
+            {
+                //m_gameplay.DetachToEvent(GamePhases.GameplayPhase.Evacuation, OnEvacuation);
+                //m_gameplay.DetachToEvent(GamePhases.GameplayPhase.PlayerJump, OnPlayerJump);
+                //m_gameplay.DetachToEvent(GamePhases.GameplayPhase.DeEvacuation, OnDeEvacuation);
+                //m_gameplay.DetachToEvent(GamePhases.GameplayPhase.LastItemShot, OnLastItemShot);
+            }
+            m_gameplay = null;
         }
 
         private void FixedUpdate()
         {
-            if (m_inputHandler != null)
+            if (m_inputHandler != null && !m_inputBlocked)
             {
                 var dt = Time.fixedDeltaTime;
                 var action = m_inputHandler.Action;
@@ -200,6 +224,26 @@ namespace GaryMoveOut
                 }
             }
             return null;
+        }
+
+        private void OnLastItemShot(object obj)
+        {
+            m_inputBlocked = true;
+        }
+
+        private void OnDeEvacuation(object obj)
+        {
+            m_inputBlocked = false;
+        }
+
+        private void OnPlayerJump(object obj)
+        {
+            m_inputBlocked = true;
+        }
+
+        private void OnEvacuation(object obj)
+        {
+            m_inputBlocked = false;
         }
     }
 }
