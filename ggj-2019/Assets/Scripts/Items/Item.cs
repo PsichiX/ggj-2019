@@ -6,6 +6,7 @@ namespace GaryMoveOut
     {
         public float value;
         public float weight;
+        public bool vertical;
         public ItemType type;
         public GameObject prefab;
 
@@ -13,6 +14,7 @@ namespace GaryMoveOut
         {
             value = scheme.value;
             weight = scheme.weight;
+            vertical = scheme.vertical;
             type = scheme.type;
             prefab = scheme.gameObject;
         }
