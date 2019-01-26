@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 
 public class BuildingsGenerator
 {
@@ -17,16 +15,23 @@ public class BuildingsGenerator
     public Building GenerateBuilding(Transform root, int floorSegmentsCount, int buildingFloorsCount, int stairsSegmentIndex)
     {
         var building = new Building();
-        var scheme = buildingsDatabase.GetRandomFloorScheme();
+        var floorScheme = buildingsDatabase.GetRandomFloorScheme();
 
-        GenerateFloorZero(ref building, scheme, root, floorSegmentsCount, stairsSegmentIndex);
+        Vector3 position = root.position;
+        Quaternion rotation = root.rotation;
 
-        //for (int i = 1; i < buildingFloorsCount; i++)
+        GenerateFloor(ref building, floorScheme, root, position, root.rotation, floorSegmentsCount, stairsSegmentIndex, 0, FloorType.GroundFloor);
+
+        int index = 1;
+        for (; index <= buildingFloorsCount; index++)
         {
-            // to do. generate middle floors
+            position += new Vector3(0f, floorScheme.segmentHeight, 0f);
+            GenerateFloor(ref building, floorScheme, root, position, root.rotation, floorSegmentsCount, stairsSegmentIndex, index, FloorType.MiddleFloor);
         }
 
-        // to do: generate roof
+        position += new Vector3(0f, floorScheme.segmentHeight, 0f);
+        var roofScheme = buildingsDatabase.GetRandomRoofScheme();
+        GenerateFloor(ref building, roofScheme, root, position, root.rotation, floorSegmentsCount, stairsSegmentIndex, index, FloorType.Roof);
 
 
 
@@ -35,61 +40,71 @@ public class BuildingsGenerator
     }
 
 
-    private void GenerateFloorZero(ref Building building, FloorScheme scheme, Transform floorRoot, int floorSegmentsCount, int stairsSegmentIndex)
+    private void GenerateFloor(ref Building building,
+                               FloorScheme scheme,
+                               Transform floorParent,
+                               Vector3 position,
+                               Quaternion rotation,
+                               int floorSegmentsCount,
+                               int stairsSegmentIndex,
+                               int floorIndex,
+                               FloorType type)
     {
-        if (building.floors.Count != 0)
-        {
-            building.floors.Clear();
-        }
-        int floorIndex = 0;
-
-
-
         Floor floor = null;
         if (!building.floors.TryGetValue(floorIndex, out floor))
         {
-            floor = GameObject.Instantiate<Floor>(buildingsDatabase.floorPrefab, floorRoot.position, floorRoot.rotation);
+            floor = GameObject.Instantiate<Floor>(buildingsDatabase.floorPrefab, floorParent.position, floorParent.rotation);
             building.floors.Add(floorIndex, floor);
         }
+        floor.Type = type;
+        floor.transform.SetParent(floorParent);
+        GameObject prefab = null;
 
-        // add door on the right side:
-        floor.segments.Add(GameObject.Instantiate(scheme.SideDoor, floorRoot.position, floorRoot.rotation, floor.transform) as GameObject);
+
+        // add the right side:
+        switch (floor.Type)
+        {
+            case FloorType.GroundFloor:
+                prefab = scheme.SideDoor;
+                break;
+            case FloorType.Roof:
+                prefab = scheme.SideWallR;
+                break;
+            default:
+                prefab = scheme.SideWindow;
+                break;
+        }
+        floor.segments.Add(GameObject.Instantiate(prefab, position, rotation, floor.transform) as GameObject);
 
         // add floor middle segments:
         for (int i = 0; i < floorSegmentsCount; i++)
         {
             if (i == stairsSegmentIndex)
             {
-                floor.segments.Add(GameObject.Instantiate(scheme.Stairs, floorRoot.position, floorRoot.rotation, floor.transform) as GameObject);
+                prefab = scheme.Stairs;
             }
             else
             {
-                floor.segments.Add(GameObject.Instantiate(scheme.EmptyWall, floorRoot.position, floorRoot.rotation, floor.transform) as GameObject);
+                prefab = scheme.EmptyWall;
             }
 
-            floorRoot.position += new Vector3(scheme.segmentWidth, 0f, 0f);
+            floor.segments.Add(GameObject.Instantiate(prefab, position, rotation, floor.transform) as GameObject);
+            position += new Vector3(scheme.segmentWidth, 0f, 0f);
         }
 
         // add empty wall OR window on the left side:
-        int rnd = Random.Range(0, 2);
-        switch (rnd)
+        switch (floor.Type)
         {
-            // empty side wall
-            case 0:
-                floor.segments.Add(GameObject.Instantiate(scheme.SideWall, floorRoot.position, floorRoot.rotation, floor.transform) as GameObject);
+            case FloorType.Roof:
+                prefab = scheme.SideWallL;
                 break;
-            // side window:
+            case FloorType.MiddleFloor:
+                prefab = scheme.SideWindow;
+                break;
             default:
-                floor.segments.Add(GameObject.Instantiate(scheme.SideWindow, floorRoot.position, floorRoot.rotation, floor.transform) as GameObject);
+                prefab = scheme.GetRandomSideWall(rightSide: false);
                 break;
         }
-    }
-
-
-
-
-    private void GenerateFloor(FloorScheme scheme, Transform floorRoot, int floorSegmentsCount, int buildingFloorsCount, int stairsSegmentIndex)
-    {
-        Vector3 currPosition = floorRoot.position;
+        floor.segments.Add(GameObject.Instantiate(prefab, position, rotation, floor.transform) as GameObject);
     }
 }

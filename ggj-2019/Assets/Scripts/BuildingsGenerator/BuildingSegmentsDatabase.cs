@@ -1,25 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class FloorScheme
-{
-    public float segmentWidth = 2f;
-    public float segmentHeight = 3f;
-    public float segmentDepth = 3f;
-
-    public GameObject EmptyWall;
-    public GameObject Stairs;
-    public GameObject SideWall;
-    [SerializeField] private GameObject sideWallR;
-    public GameObject SideWallR { get { return sideWallR ?? SideWall; } }
-    [SerializeField] private GameObject sideWallL;
-    public GameObject SideWallL { get { return sideWallL ?? SideWall; } }
-    public GameObject SideDoor;
-    public GameObject SideWindow;
-}
-
-
 [CreateAssetMenu(menuName = "ScriptableObjects/Building Segments Database")]
 public class BuildingSegmentsDatabase : ScriptableObject
 {
