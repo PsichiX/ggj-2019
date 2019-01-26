@@ -17,7 +17,8 @@ namespace GaryMoveOut
         [SerializeField] private GameObject sideWallLeft;
         public GameObject SideWallL { get { return (sideWallLeft != null) ? sideWallLeft : SideWall; } }
         public GameObject SideDoor;
-        public GameObject SideWindow;
+        public GameObject SideWindowR;
+        public GameObject SideWindowL;
 
 
         public GameObject GetRandomSideWall(bool rightSide)

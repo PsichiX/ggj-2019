@@ -111,7 +111,7 @@ namespace GaryMoveOut
                     prefab = scheme.SideWallR;
                     break;
                 default:
-                    prefab = scheme.SideWindow;
+                    prefab = scheme.SideWindowR;
                     break;
             }
             var segment = GameObject.Instantiate(prefab, position, rotation, floor.transform) as GameObject;
@@ -139,6 +139,16 @@ namespace GaryMoveOut
                 if (doorPortal != null)
                 {
                     doorPortal.floorIndex = floorIndex;
+                    // setup index below:
+                    var indexBelow = floorIndex - 1;
+                    indexBelow = (indexBelow < 0) ? DoorPortal.MinIndex : indexBelow;
+                    doorPortal.floorIndexBelow = indexBelow;
+                    // setup index above:
+                    var indexAbove = floorIndex + 1;
+                    indexAbove = (indexAbove < building.floors.Count) ? DoorPortal.MaxIndex : indexAbove;
+                    doorPortal.floorIndexAbove = indexAbove;
+                    doorPortal.building = building;
+
                     building.stairs.Add(floorIndex, doorPortal);
                 }
                 floor.segments.Add(segment);
@@ -152,7 +162,7 @@ namespace GaryMoveOut
                     prefab = scheme.SideWallL;
                     break;
                 case FloorType.MiddleFloor:
-                    prefab = scheme.SideWindow;
+                    prefab = scheme.SideWindowL;
                     break;
                 default:
                     prefab = scheme.GetRandomSideWall(rightSide: false);

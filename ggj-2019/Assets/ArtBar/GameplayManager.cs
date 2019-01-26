@@ -6,6 +6,12 @@ namespace GaryMoveOut
 {
     public class GameplayManager : MonoBehaviour
     {
+        public enum EvecuationDirection
+        {
+            Up,
+            Down
+        }
+
         private static GameplayManager _instance;
         public static GameplayManager GetGameplayManager()
         {
@@ -165,6 +171,7 @@ namespace GaryMoveOut
             events.CallEvent(GamePhases.GameplayPhase.Evacuation, null);
             Debug.Log("PhaseStartEvacuation");
             isEvacuation = true;
+            currentEvacuationDirection = EvecuationDirection.Up;
             currentFloorBadEvent = -1;
             NextFloorBadEvent();
         }
@@ -194,6 +201,7 @@ namespace GaryMoveOut
         private float evacuationTimeStartToBreakPoint = 5f;     //start to break point
         private float evacuationTimeStartToEnd = 10f;           //start to end
 
+        public EvecuationDirection currentEvacuationDirection;
         private float currentEvacuationTime = 0;
         private float currentEvacuationTimeStartToBreakPoint = 0;
         private float currentEvacuationTimeStartToEnd = 0;

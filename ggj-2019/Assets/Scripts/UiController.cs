@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using static GaryMoveOut.GameplayManager;
 
 namespace GaryMoveOut
 {
@@ -13,8 +14,15 @@ namespace GaryMoveOut
         [SerializeField] private Vector2 m_arrowScaleMapTo = new Vector2(0, 1);
         [SerializeField] private GameObject pressToPickText;
         [SerializeField] private GameObject pressToThrowText;
-        [SerializeField] private TextMeshProUGUI buildingCounter;
-        [SerializeField] private TextMeshProUGUI pointsCounter;
+        [SerializeField] private GameObject portalUpArrow;
+        [SerializeField] private GameObject portalDownArrow;
+        [SerializeField] private GameplayManager gameplayManager;
+		[SerializeField] private TextMeshProUGUI buildingCounter;
+		[SerializeField] private TextMeshProUGUI pointsCounter;
+
+        public int CurrentFloorBadEvent { get { return gameplayManager.currentFloorBadEvent; } }
+        public EvecuationDirection CurrentEvecuationDirection { get { return gameplayManager.currentEvacuationDirection; } }
+
 
         private PlayerController[] m_players;
         private GameplayManager gameplayManager;
@@ -55,6 +63,10 @@ namespace GaryMoveOut
                     player.CollidesWithPickableEnd += HidePickupText;
                     player.CarryItemStart += ShowThrowText;
                     player.CarryItemEnd += HideThrowText;
+                    player.CollidesWithPortalUp += ShowPortalUpText;
+                    player.CollidesWithPortalUpEnd += HidePortalUpText;
+                    player.CollidesWithPortalDown += ShowPortalDownText;
+                    player.CollidesWithPortalDownEnd += HidePortalDownText;
                     return true;
                 }
             }
@@ -72,6 +84,10 @@ namespace GaryMoveOut
                     player.CollidesWithPickableEnd -= HidePickupText;
                     player.CarryItemStart -= ShowThrowText;
                     player.CarryItemEnd -= HideThrowText;
+                    player.CollidesWithPortalUp -= ShowPortalUpText;
+                    player.CollidesWithPortalUpEnd -= HidePortalUpText;
+                    player.CollidesWithPortalDown -= ShowPortalDownText;
+                    player.CollidesWithPortalDownEnd -= HidePortalDownText;
                     return true;
                 }
             }
@@ -133,6 +149,42 @@ namespace GaryMoveOut
         public void HidePickupText()
         {
             pressToPickText.SetActive(false);
+        }
+
+        private float arrowXOffset = 1f;
+        private float arrowYOffset = 0.5f;
+        public void SetupPortalUpArrow(Transform portal)
+        {
+            var position = portalUpArrow.transform.position;
+            position = new Vector3(portal.position.x + arrowXOffset, portal.position.y + arrowYOffset, position.z);
+            portalUpArrow.transform.position = position;
+        }
+
+        public void SetupPortalDownArrow(Transform portal)
+        {
+            var position = portalDownArrow.transform.position;
+            position = new Vector3(portal.position.x + arrowXOffset, portal.position.y - arrowYOffset, position.z);
+            portalDownArrow.transform.position = position;
+        }
+
+        public void ShowPortalUpText()
+        {
+            portalUpArrow.SetActive(true);
+        }
+
+        public void HidePortalUpText()
+        {
+            portalUpArrow.SetActive(false);
+        }
+
+        public void ShowPortalDownText()
+        {
+            portalDownArrow.SetActive(true);
+        }
+
+        public void HidePortalDownText()
+        {
+            portalDownArrow.SetActive(false);
         }
 
         public void ShowThrowText()

@@ -10,6 +10,7 @@ TagManager:
   - RoofJumpSite
   - Interactible
   - InteractibleRoot
+  - Ground
   layers:
   - Default
   - TransparentFX
