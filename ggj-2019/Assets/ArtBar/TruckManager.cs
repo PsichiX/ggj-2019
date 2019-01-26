@@ -23,9 +23,15 @@ namespace GaryMoveOut
                 {
                     if (TruckDatabase.truckPrefabs.Count > 0)
                     {
+                        //truck = Object.Instantiate(TruckDatabase.truckPrefabs[0], truckOutPosition, parent.rotation, parent);
                         truck = Object.Instantiate(TruckDatabase.truckPrefabs[0], truckOutPosition, parent.rotation, parent);
-                        this.truckInPosition = truckInPosition;
-                        return truck!=null;
+                        if( truck != null)
+                        {
+                            truck.transform.Rotate(Vector3.up, 180f);
+                            this.truckInPosition = truckInPosition;
+                            return true;
+                        }
+                        return false;
                     }
                 }
                 return false;
@@ -36,9 +42,9 @@ namespace GaryMoveOut
             return true;
         }
 
-        public void StartTruckMovement()
+        public void StartTruckMovement(float duration)
         {
-
+            truck.transform.DOMove(truckInPosition, duration).SetEase(Ease.InOutQuad);
         }
     }
 }
