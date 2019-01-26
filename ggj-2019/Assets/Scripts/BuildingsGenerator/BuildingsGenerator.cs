@@ -74,7 +74,6 @@ namespace GaryMoveOut
         }
 
 
-        // to do:
         public Building GenerateBuildingWithItems(Transform root, int floorSegmentsCount, int buildingFloorsCount, int stairsSegmentIndex, Dictionary<int, List<Item>> items)
         {
             var building = ConstructBuilding(root, floorSegmentsCount, buildingFloorsCount, stairsSegmentIndex);
