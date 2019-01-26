@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3580685068768485671}
   - component: {fileID: 8863498170721025006}
   - component: {fileID: 2675093910443667104}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: VaseRed
   m_TagString: Untagged
   m_Icon: {fileID: 0}

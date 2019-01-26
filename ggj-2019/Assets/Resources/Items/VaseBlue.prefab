@@ -178,7 +178,7 @@ GameObject:
   - component: {fileID: 1213700001673363124}
   - component: {fileID: 6892175596512896500}
   - component: {fileID: 6940605139507985721}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: VaseBlue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
