@@ -3,15 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public class Building
+namespace GaryMoveOut
 {
-    public Dictionary<int, Floor> floors;
-    public List<DoorPortal> stairs;
-
-
-    public Building()
+    public class Building
     {
-        floors = new Dictionary<int, Floor>();
-        stairs = new List<DoorPortal>();
+        public Dictionary<int, Floor> floors;
+        public List<DoorPortal> stairs;
+
+
+        public Building()
+        {
+            floors = new Dictionary<int, Floor>();
+            stairs = new List<DoorPortal>();
+        }
     }
+
 }

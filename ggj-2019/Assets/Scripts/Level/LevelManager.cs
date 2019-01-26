@@ -1,31 +1,35 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LevelManager : MonoBehaviour
+namespace GaryMoveOut
 {
-    [SerializeField] private Transform homeRoot;
-    [SerializeField] private int floorSegmentsCount;
-    [SerializeField] private int buildingFloorsCount;
-    [SerializeField] private int stairsSegmentIndex;
-
-
-    private BuildingsGenerator buildingsGenerator;
-
-
-    // Use this for initialization
-    void Start()
+    public class LevelManager : MonoBehaviour
     {
-        buildingsGenerator = new BuildingsGenerator();
+        [SerializeField] private Transform homeRoot;
+        [SerializeField] private int floorSegmentsCount;
+        [SerializeField] private int buildingFloorsCount;
+        [SerializeField] private int stairsSegmentIndex;
 
-        if (homeRoot != null)
+
+        private BuildingsGenerator buildingsGenerator;
+
+
+        // Use this for initialization
+        void Start()
         {
-            buildingsGenerator.GenerateBuilding(homeRoot, floorSegmentsCount, buildingFloorsCount, stairsSegmentIndex);
+            buildingsGenerator = new BuildingsGenerator();
+
+            if (homeRoot != null)
+            {
+                buildingsGenerator.GenerateBuilding(homeRoot, floorSegmentsCount, buildingFloorsCount, stairsSegmentIndex);
+            }
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 }
