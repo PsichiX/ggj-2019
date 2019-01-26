@@ -9,6 +9,7 @@ namespace GaryMoveOut
         public TruckDatabase TruckDatabase { get; private set; }
         private GameObject truck;
         private Vector3 truckInPosition;
+        private Animator anim;
 
         public TruckManager()
         {
@@ -24,8 +25,14 @@ namespace GaryMoveOut
                     if (TruckDatabase.truckPrefabs.Count > 0)
                     {
                         truck = Object.Instantiate(TruckDatabase.truckPrefabs[0], truckOutPosition, parent.rotation, parent);
-                        this.truckInPosition = truckInPosition;
-                        return truck!=null;
+                        if( truck != null)
+                        {
+                            truck.transform.Rotate(Vector3.up, 180f);
+                            this.truckInPosition = truckInPosition;
+                            anim = truck.GetComponent<Animator>();
+                            return true;
+                        }
+                        return false;
                     }
                 }
                 return false;
@@ -36,9 +43,11 @@ namespace GaryMoveOut
             return true;
         }
 
-        public void StartTruckMovement()
+        public void StartTruckMovement(float duration)
         {
-
+            //anim.SetFloat("Forward", 1f);
+            truck.transform.DOMove(truckInPosition, duration).SetEase(Ease.InOutQuad);
+            //DOVirtual.DelayedCall(duration - 0.2f, () => { anim.SetFloat("Forward", 0f); });
         }
     }
 }
