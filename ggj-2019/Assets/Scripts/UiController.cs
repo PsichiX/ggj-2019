@@ -10,41 +10,69 @@ namespace GaryMoveOut
         [SerializeField] private RectTransform m_canvasRect;
         [SerializeField] private Vector2 m_arrowScaleMapFrom = new Vector2(0, 1);
         [SerializeField] private Vector2 m_arrowScaleMapTo = new Vector2(0, 1);
-		[SerializeField] private GameObject pressToPickText;
-		[SerializeField] private GameObject pressToThrowText;
+        [SerializeField] private GameObject pressToPickText;
+        [SerializeField] private GameObject pressToThrowText;
 
-		private PlayerController[] m_players;
+        private PlayerController[] m_players;
 
-        private void Start()
+        private void Awake()
         {
             m_players = new PlayerController[m_aims.Count];
         }
 
-        public bool RegisterAim(PlayerController player)
+        public bool RegisterPlayer(PlayerController player)
         {
-            for (int i = 0; i < m_aims.Count; ++i)
+            for (var i = 0; i < m_players.Length; ++i)
             {
                 if (m_players[i] == null)
                 {
                     m_players[i] = player;
-                    m_aims[i].gameObject.SetActive(true);
-					m_players[i].CollidesWithPickable += ShowPickupText;
-					m_players[i].CollidesWithPickableEnd += HidePickupText;
-					m_players[i].CarryItemStart += ShowThrowText;
-					m_players[i].CarryItemEnd += HideThrowText;
-					return true;
+                    player.CollidesWithPickable += ShowPickupText;
+                    player.CollidesWithPickableEnd += HidePickupText;
+                    player.CarryItemStart += ShowThrowText;
+                    player.CarryItemEnd += HideThrowText;
+                    return true;
                 }
             }
             return false;
         }
 
-        public bool UnregisterAim(PlayerController player)
+        public bool UnregisterPlayer(PlayerController player)
         {
             for (int i = 0; i < m_players.Length; ++i)
             {
                 if (m_players[i] == player)
                 {
                     m_players[i] = null;
+                    player.CollidesWithPickable -= ShowPickupText;
+                    player.CollidesWithPickableEnd -= HidePickupText;
+                    player.CarryItemStart -= ShowThrowText;
+                    player.CarryItemEnd -= HideThrowText;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool ActivateAim(PlayerController player)
+        {
+            for (int i = 0; i < m_aims.Count; ++i)
+            {
+                if (m_players[i] == player)
+                {
+                    m_aims[i].gameObject.SetActive(true);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool DeactivateAim(PlayerController player)
+        {
+            for (int i = 0; i < m_players.Length; ++i)
+            {
+                if (m_players[i] == player)
+                {
                     m_aims[i].gameObject.SetActive(false);
                     return true;
                 }
@@ -73,25 +101,25 @@ namespace GaryMoveOut
             }
         }
 
-		public void ShowPickupText()
-		{
-			pressToPickText.SetActive(true);
-		}
+        public void ShowPickupText()
+        {
+            pressToPickText.SetActive(true);
+        }
 
-		public void HidePickupText()
-		{
-			pressToPickText.SetActive(false);
-		}
+        public void HidePickupText()
+        {
+            pressToPickText.SetActive(false);
+        }
 
-		public void ShowThrowText()
-		{
-			pressToPickText.SetActive(false);
-			pressToThrowText.SetActive(true);
-		}
+        public void ShowThrowText()
+        {
+            pressToPickText.SetActive(false);
+            pressToThrowText.SetActive(true);
+        }
 
-		public void HideThrowText()
-		{
-			pressToThrowText.SetActive(false);
-		}
-	}
+        public void HideThrowText()
+        {
+            pressToThrowText.SetActive(false);
+        }
+    }
 }

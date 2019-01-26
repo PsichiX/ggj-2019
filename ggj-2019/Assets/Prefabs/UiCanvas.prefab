@@ -65,7 +65,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: Press CTRL or A to start throwing
+  m_text: Press ACTION to start throwing
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d71e647ffff70174a87cd11970e2fde8, type: 2}
   m_sharedMaterial: {fileID: 21077895775203602, guid: d71e647ffff70174a87cd11970e2fde8,
