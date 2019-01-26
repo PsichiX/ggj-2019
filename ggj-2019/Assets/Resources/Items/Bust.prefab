@@ -166,6 +166,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   value: 100
   weight: 2
+  vertical: 1
   type: 1
 --- !u!1001 &7932433971727844272
 PrefabInstance:
