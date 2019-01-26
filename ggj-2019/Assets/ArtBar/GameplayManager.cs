@@ -16,6 +16,8 @@ namespace GaryMoveOut
         private GameplayEvents events;
         private BuildingsGenerator buildingsGenerator;
         private BuildingConfigurator buildingConfigurator;
+        private TruckManager truckManager;
+
 
         [SerializeField] private GameObject placeBuildingOut;
         private Building buildingOut;
@@ -37,6 +39,7 @@ namespace GaryMoveOut
             events = new GameplayEvents();
             buildingsGenerator = new BuildingsGenerator();
             buildingConfigurator = new BuildingConfigurator();
+            truckManager = new TruckManager();
         }
 
         private void Start()
@@ -71,10 +74,20 @@ namespace GaryMoveOut
         private void PhaseStartGame()
         {
             SetupBuildingOut();
+            SetupTruck();
             events.CallEvent(GamePhases.GameplayPhase.FadeIn, null);
             float fadeDealy = 1f;
             DOVirtual.DelayedCall(fadeDealy, PhaseBadEventStart);
             Debug.Log("PhaseStart");
+        }
+
+        private void SetupTruck()
+        {
+            var truckOutPosition = placeBuildingOut.transform.position;
+            truckOutPosition.x += 10f;
+            var truckInPosition = placeBuildingIn.transform.position;
+            truckInPosition.x -= 10f;
+            truckManager.CreateTruck(gameObject.transform, truckOutPosition, truckInPosition);
         }
 
         private void SetupBuildingOut()
