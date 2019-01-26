@@ -243,4 +243,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   value: 12
   weight: 5
+  vertical: 1
   type: 2

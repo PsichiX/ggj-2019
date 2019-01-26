@@ -6,10 +6,10 @@ namespace GaryMoveOut
     {
         public enum Layout
         {
-            None,
-            Wsad,
-            Arrows,
-            Gamepad
+            None = 0,
+            Wsad = 1,
+            Arrows = 2,
+            Gamepad = 3
         }
 
         public bool Left { get; private set; }
@@ -18,12 +18,11 @@ namespace GaryMoveOut
         public bool Down { get; private set; }
         public bool Action { get; private set; }
 
-        [SerializeField]
-        private Layout m_layout = Layout.None;
+        public Layout InputLayout = Layout.None;
 
         private void Update()
         {
-            if (m_layout == Layout.Wsad)
+            if (InputLayout == Layout.Wsad)
             {
                 Up = Input.GetKey(KeyCode.W);
                 Down = Input.GetKey(KeyCode.S);
@@ -31,15 +30,15 @@ namespace GaryMoveOut
                 Right = Input.GetKey(KeyCode.D);
                 Action = Input.GetKey(KeyCode.LeftControl);
             }
-            else if (m_layout == Layout.Arrows)
+            else if (InputLayout == Layout.Arrows)
             {
                 Up = Input.GetKey(KeyCode.UpArrow);
                 Down = Input.GetKey(KeyCode.DownArrow);
                 Left = Input.GetKey(KeyCode.LeftArrow);
                 Right = Input.GetKey(KeyCode.RightArrow);
-                Action = Input.GetKey(KeyCode.KeypadEnter);
+                Action = Input.GetKey(KeyCode.RightControl);
             }
-            else if (m_layout == Layout.Gamepad)
+            else if (InputLayout == Layout.Gamepad)
             {
                 Up = Input.GetAxis("GamepadVertical") > 0.5;
                 Down = Input.GetAxis("GamepadVertical") < -0.5;

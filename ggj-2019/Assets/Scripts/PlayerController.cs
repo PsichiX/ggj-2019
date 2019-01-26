@@ -15,14 +15,19 @@ namespace GaryMoveOut
 
         public float Velocity { get; private set; }
         public Side TurnToSide { get; private set; }
-		public event Action CollidesWithPickable;
-		public event Action CollidesWithPickableEnd;
-		public event Action CarryItemStart;
-		public event Action CarryItemEnd;
-        public event Action CollidesWithPortalUp;
-        public event Action CollidesWithPortalUpEnd;
-        public event Action CollidesWithPortalDown;
-        public event Action CollidesWithPortalDownEnd;
+        public InputHandler.Layout InputLayout
+        {
+            get { return m_inputHandler == null ? InputHandler.Layout.None : m_inputHandler.InputLayout; }
+            set { if (m_inputHandler != null) m_inputHandler.InputLayout = value; }
+        }
+        public event Action CollidesWithPickable;
+        public event Action CollidesWithPickableEnd;
+        public event Action CarryItemStart;
+        public event Action CarryItemEnd;
+            public event Action CollidesWithPortalUp;
+            public event Action CollidesWithPortalUpEnd;
+            public event Action CollidesWithPortalDown;
+            public event Action CollidesWithPortalDownEnd;
 
         [SerializeField]
         private InputHandler m_inputHandler;
@@ -50,7 +55,7 @@ namespace GaryMoveOut
         private GameplayEvents m_gameplayEvents;
         private bool m_inputBlocked = false;
         private Animator m_animator;
-		private bool isCarryingItem;
+        private bool isCarryingItem;
 
         private void Start()
         {
@@ -217,6 +222,7 @@ namespace GaryMoveOut
             if (other.tag == "Interactible")
             {
                 m_interactibles.Add(other.transform.parent.gameObject);
+              }
 				if (isCarryingItem == false)
 				{
 					CollidesWithPickable?.Invoke();
@@ -299,11 +305,12 @@ namespace GaryMoveOut
             if (pickable != null)
             {
                 m_pickedUp = pickable;
-                m_pickedUp.PickUp();
+                m_pickedUp.PickUp(TurnToSide);
                 m_animator?.SetBool("PickedUp", true);
-				isCarryingItem = true;
-				CarryItemStart?.Invoke();
-			}
+                isCarryingItem = true;
+                CarryItemStart?.Invoke();
+
+            }
         }
 
         private void PutDown()
@@ -313,9 +320,9 @@ namespace GaryMoveOut
                 m_pickedUp.PutDown();
                 m_pickedUp = null;
                 m_animator?.SetBool("PickedUp", false);
-				isCarryingItem = false;
-				CarryItemEnd?.Invoke();
-			}
+                isCarryingItem = false;
+                CarryItemEnd?.Invoke();
+            }
         }
 
         private void Aim()
@@ -341,9 +348,9 @@ namespace GaryMoveOut
                 var force = Quaternion.Euler(0, 0, angle) * Vector2.right * m_aimStrength;
                 m_pickedUp.Throw(force);
                 m_animator?.SetBool("PickedUp", false);
-				isCarryingItem = false;
-				CarryItemEnd?.Invoke();
-				m_pickedUp = null;
+                isCarryingItem = false;
+                CarryItemEnd?.Invoke();
+                m_pickedUp = null;
             }
             if (m_ui != null)
             {

@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: TruckDatabase
   m_EditorClassIdentifier: 
   truckPrefabs:
-  - {fileID: 7574422142836153429, guid: fb3f14f1a5f53934b972e577805eb346, type: 3}
+  - {fileID: 7574422142836153429, guid: e376e74567f412345b5f2c55a214b134, type: 3}

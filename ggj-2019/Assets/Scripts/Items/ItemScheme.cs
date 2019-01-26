@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 namespace GaryMoveOut
 {
@@ -15,6 +14,7 @@ namespace GaryMoveOut
     {
         public float value;
         public float weight;
+        public bool vertical;
         public ItemType type;
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-
 namespace GaryMoveOut
 {
     public class Building
@@ -19,6 +18,15 @@ namespace GaryMoveOut
 
         private List<int> segmentIndices = new List<int>();
 
+        public Vector3? GetSpawnPosition()
+        {
+            if (stairs.TryGetValue(1, out DoorPortal door))
+            {
+                return door.transform.position;
+            }
+            return null;
+        }
+
         public void SpawnItemsInside(List<ItemScheme> items)
         {
             if (this.floors.Count == 0)
@@ -30,7 +38,7 @@ namespace GaryMoveOut
 
             int i = 0;
             int itemsPlaced = 0;
-            foreach(var floor in this.floors.Values)
+            foreach (var floor in this.floors.Values)
             {
                 if (floor.Type == FloorType.GroundFloor)
                 {
@@ -63,7 +71,7 @@ namespace GaryMoveOut
             }
 
             i = 0;
-            while(itemsPlaced < items.Count && i < this.floors.Count)
+            while (itemsPlaced < items.Count && i < this.floors.Count)
             {
                 if (this.floors[i].Type == FloorType.GroundFloor)
                 {
@@ -71,7 +79,7 @@ namespace GaryMoveOut
                     continue;
                 }
                 var floor = this.floors[i];
-                foreach(var segment in floor.segments)
+                foreach (var segment in floor.segments)
                 {
                     var itemSlot = segment.GetComponentInChildren<ItemSlot>();
                     if (itemSlot != null && !itemSlot.isOccupied)
@@ -155,7 +163,7 @@ namespace GaryMoveOut
         public Dictionary<int, List<Item>> GetItems()
         {
             Dictionary<int, List<Item>> itemsByFloorsId = new Dictionary<int, List<Item>>();
-            foreach(var floor in floors)
+            foreach (var floor in floors)
             {
                 itemsByFloorsId.Add(floor.Key, new List<Item>(floor.Value.items));
             }
