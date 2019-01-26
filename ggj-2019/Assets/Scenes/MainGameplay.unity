@@ -234,6 +234,24 @@ PrefabInstance:
       propertyPath: m_camera
       value: 
       objectReference: {fileID: 2089546006}
+    - target: {fileID: 1481339694, guid: 68081029321b2ce438cc755b7fd3f758, type: 3}
+      propertyPath: m_havePropertiesChanged
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1481339694, guid: 68081029321b2ce438cc755b7fd3f758, type: 3}
+      propertyPath: m_isInputParsingRequired
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6522420495505995920, guid: 68081029321b2ce438cc755b7fd3f758,
+        type: 3}
+      propertyPath: m_havePropertiesChanged
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6522420495505995920, guid: 68081029321b2ce438cc755b7fd3f758,
+        type: 3}
+      propertyPath: m_isInputParsingRequired
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 68081029321b2ce438cc755b7fd3f758, type: 3}
 --- !u!1001 &1077209371
@@ -302,6 +320,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5846282614914395930, guid: 1adb29c132ea7414cac6302374c1c4d4,
+        type: 3}
+      propertyPath: playersCount
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1adb29c132ea7414cac6302374c1c4d4, type: 3}
