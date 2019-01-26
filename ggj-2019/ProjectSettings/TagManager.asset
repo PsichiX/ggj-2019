@@ -9,6 +9,7 @@ TagManager:
   - Window
   - RoofJumpSite
   - Interactible
+  - Ground
   layers:
   - Default
   - TransparentFX
