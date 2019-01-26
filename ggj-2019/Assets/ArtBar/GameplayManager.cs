@@ -62,7 +62,7 @@ public class GameplayManager : MonoBehaviour
     {
         if(eventDict.ContainsKey(gamePhase))
         {
-            eventDict[gamePhase].Invoke(param);
+            eventDict[gamePhase]?.Invoke(param);
         }
     }
 
