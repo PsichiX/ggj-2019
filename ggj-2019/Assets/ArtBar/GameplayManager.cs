@@ -23,7 +23,9 @@ namespace GaryMoveOut
         private Building buildingOut;
         [SerializeField] private GameObject placeBuildingIn;
         private Building buildingIn;
-        
+
+        private Dictionary<int, List<Item>> itemsFromLastInBuilding;
+
         void Awake()
         {
             if (_instance != null && _instance != this)
@@ -110,11 +112,22 @@ namespace GaryMoveOut
                 var itemsCount = UnityEngine.Random.Range(minItemsCount, maxFreeSegments);
                 var items = buildingsGenerator.ItemsDatabase.GetRandomItems(itemsCount);
 
-                buildingOut = buildingsGenerator.GenerateBuildingWithItems(placeBuildingOut.transform,
-                                                                           buildingConfig.floorSegmentsCount,
-                                                                           buildingConfig.buildingFloorsCount,
-                                                                           buildingConfig.stairsSegmentIndex,
-                                                                           items);
+                if (itemsFromLastInBuilding != null)
+                {
+                    buildingOut = buildingsGenerator.GenerateBuildingWithItems(placeBuildingOut.transform,
+                                                                               buildingConfig.floorSegmentsCount,
+                                                                               buildingConfig.buildingFloorsCount,
+                                                                               buildingConfig.stairsSegmentIndex,
+                                                                               itemsFromLastInBuilding);
+                }
+                else
+                {
+                    buildingOut = buildingsGenerator.GenerateBuildingWithItems(placeBuildingOut.transform,
+                                                           buildingConfig.floorSegmentsCount,
+                                                           buildingConfig.buildingFloorsCount,
+                                                           buildingConfig.stairsSegmentIndex,
+                                                           items);
+                }
                 buildingFloorNumber = buildingConfig.buildingFloorsCount;
             }
         }
@@ -286,6 +299,7 @@ namespace GaryMoveOut
         private void PhaseFewDaysLater()
         {
             events.CallEvent(GamePhases.GameplayPhase.FewDaysLater, null);
+            itemsFromLastInBuilding = buildingIn.GetItems();
             buildingsGenerator.DestroyBuildingOut(ref buildingIn);
             float delay = 1f;
             DOVirtual.DelayedCall(delay, PhaseStartGame);
