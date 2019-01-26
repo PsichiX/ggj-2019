@@ -19,8 +19,12 @@ namespace GaryMoveOut
 		public event Action CollidesWithPickableEnd;
 		public event Action CarryItemStart;
 		public event Action CarryItemEnd;
+        public event Action CollidesWithPortalUp;
+        public event Action CollidesWithPortalUpEnd;
+        public event Action CollidesWithPortalDown;
+        public event Action CollidesWithPortalDownEnd;
 
-		[SerializeField]
+        [SerializeField]
         private InputHandler m_inputHandler;
         [SerializeField]
         private float m_speed;
@@ -218,6 +222,36 @@ namespace GaryMoveOut
 					CollidesWithPickable?.Invoke();
 				}
 			}
+            else if (other.tag == "Portal")
+            {
+                var portal = other.gameObject.GetComponentInChildren<DoorPortal>();
+                if (portal != null)
+                {
+                    switch (m_ui.CurrentEvecuationDirection)
+                    {
+                        case GameplayManager.EvecuationDirection.Up:
+                            if (portal.floorIndexAbove != DoorPortal.MaxIndex)
+                            {
+                                CollidesWithPortalUp?.Invoke();
+                            }
+                            if (portal.floorIndexBelow > m_ui.CurrentFloorBadEvent)
+                            {
+                                CollidesWithPortalDown?.Invoke();
+                            }
+                            break;
+                        case GameplayManager.EvecuationDirection.Down:
+                            if (portal.floorIndexAbove < m_ui.CurrentFloorBadEvent)
+                            {
+                                CollidesWithPortalUp?.Invoke();
+                            }
+                            if (portal.floorIndexBelow > DoorPortal.MinIndex)
+                            {
+                                CollidesWithPortalDown?.Invoke();
+                            }
+                            break;
+                    }
+                }
+            }
         }
 
         private void OnTriggerExit2D(Collider2D other)
@@ -226,7 +260,37 @@ namespace GaryMoveOut
             {
                 m_interactibles.Remove(other.transform.parent.gameObject);
 				CollidesWithPickableEnd?.Invoke();
-			}
+            }
+            else if (other.tag == "Portal")
+            {
+                var portal = other.gameObject.GetComponentInChildren<DoorPortal>();
+                if (portal != null)
+                {
+                    switch (m_ui.CurrentEvecuationDirection)
+                    {
+                        case GameplayManager.EvecuationDirection.Up:
+                            if (portal.floorIndexAbove != DoorPortal.MaxIndex)
+                            {
+                                CollidesWithPortalUpEnd?.Invoke();
+                            }
+                            if (portal.floorIndexBelow > m_ui.CurrentFloorBadEvent)
+                            {
+                                CollidesWithPortalDownEnd?.Invoke();
+                            }
+                            break;
+                        case GameplayManager.EvecuationDirection.Down:
+                            if (portal.floorIndexAbove < m_ui.CurrentFloorBadEvent)
+                            {
+                                CollidesWithPortalUpEnd?.Invoke();
+                            }
+                            if (portal.floorIndexBelow > DoorPortal.MinIndex)
+                            {
+                                CollidesWithPortalDownEnd?.Invoke();
+                            }
+                            break;
+                    }
+                }
+            }
         }
 
         private void PickUp()

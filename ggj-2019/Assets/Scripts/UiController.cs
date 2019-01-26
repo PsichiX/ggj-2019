@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using static GaryMoveOut.GameplayManager;
 
 namespace GaryMoveOut
 {
@@ -17,7 +18,11 @@ namespace GaryMoveOut
 		[SerializeField] private TextMeshProUGUI buildingCounter;
 		[SerializeField] private TextMeshProUGUI pointsCounter;
 
-		private PlayerController[] m_players;
+        public int CurrentFloorBadEvent { get { return gameplayManager.currentFloorBadEvent; } }
+        public EvecuationDirection CurrentEvecuationDirection { get { return gameplayManager.currentEvacuationDirection; } }
+
+
+        private PlayerController[] m_players;
 
 		public void UpdateCounter()
 		{
@@ -51,6 +56,10 @@ namespace GaryMoveOut
                     player.CollidesWithPickableEnd += HidePickupText;
                     player.CarryItemStart += ShowThrowText;
                     player.CarryItemEnd += HideThrowText;
+                    player.CollidesWithPortalUp += ShowPortalUpText;
+                    player.CollidesWithPortalUpEnd += HidePortalUpText;
+                    player.CollidesWithPortalDown += ShowPortalDownText;
+                    player.CollidesWithPortalDownEnd += HidePortalDownText;
                     return true;
                 }
             }
@@ -68,6 +77,10 @@ namespace GaryMoveOut
                     player.CollidesWithPickableEnd -= HidePickupText;
                     player.CarryItemStart -= ShowThrowText;
                     player.CarryItemEnd -= HideThrowText;
+                    player.CollidesWithPortalUp -= ShowPortalUpText;
+                    player.CollidesWithPortalUpEnd -= HidePortalUpText;
+                    player.CollidesWithPortalDown -= ShowPortalDownText;
+                    player.CollidesWithPortalDownEnd -= HidePortalDownText;
                     return true;
                 }
             }
@@ -129,6 +142,26 @@ namespace GaryMoveOut
         public void HidePickupText()
         {
             pressToPickText.SetActive(false);
+        }
+
+        public void ShowPortalUpText()
+        {
+            //pressToPickText.SetActive(true);
+        }
+
+        public void HidePortalUpText()
+        {
+            //pressToPickText.SetActive(false);
+        }
+
+        public void ShowPortalDownText()
+        {
+            //pressToPickText.SetActive(true);
+        }
+
+        public void HidePortalDownText()
+        {
+            //pressToPickText.SetActive(false);
         }
 
         public void ShowThrowText()
