@@ -31,35 +31,35 @@ namespace GaryMoveOut
 		private float m_aimAngle;
 		private float m_aimStrength;
 		private UiController m_ui;
-		private GameplayManager m_gameplay;
+		private GameplayEvents m_gameplayEvents;
 		private bool m_inputBlocked = false;
 
 		private void Start()
 		{
 			m_rigidBody = GetComponent<Rigidbody2D>();
 			m_ui = FindObjectOfType<UiController>();
-			m_gameplay = GameplayManager.GetGameplayManager();
+			m_gameplayEvents = GameplayEvents.GetGameplayEvents();
 
-			if (m_gameplay != null)
+			if (m_gameplayEvents != null)
 			{
-				m_gameplay.AttachToEvent(GamePhases.GameplayPhase.Evacuation, OnEvacuation);
-				m_gameplay.AttachToEvent(GamePhases.GameplayPhase.PlayerJump, OnPlayerJump);
-				m_gameplay.AttachToEvent(GamePhases.GameplayPhase.DeEvacuation, OnDeEvacuation);
-				m_gameplay.AttachToEvent(GamePhases.GameplayPhase.LastItemShot, OnLastItemShot);
+				m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.Evacuation, OnEvacuation);
+				m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.PlayerJump, OnPlayerJump);
+				m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.DeEvacuation, OnDeEvacuation);
+				m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.LastItemShot, OnLastItemShot);
 				m_inputBlocked = true;
 			}
 		}
 
 		private void OnDestroy()
 		{
-			if (m_gameplay != null)
+			if (m_gameplayEvents != null)
 			{
 				//m_gameplay.DetachToEvent(GamePhases.GameplayPhase.Evacuation, OnEvacuation);
 				//m_gameplay.DetachToEvent(GamePhases.GameplayPhase.PlayerJump, OnPlayerJump);
 				//m_gameplay.DetachToEvent(GamePhases.GameplayPhase.DeEvacuation, OnDeEvacuation);
 				//m_gameplay.DetachToEvent(GamePhases.GameplayPhase.LastItemShot, OnLastItemShot);
 			}
-			m_gameplay = null;
+			m_gameplayEvents = null;
 		}
 
 		private void FixedUpdate()
