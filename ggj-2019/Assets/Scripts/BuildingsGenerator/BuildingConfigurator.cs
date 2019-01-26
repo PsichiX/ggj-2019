@@ -13,6 +13,7 @@ namespace GaryMoveOut
             buildingConfig.floorSegmentsCount = 5;
             buildingConfig.buildingFloorsCount = 4;
             buildingConfig.stairsSegmentIndex = 2;
+            buildingConfig.minItemsCountToMaxFreeSegmentsRatio = 0.8f;
             return buildingConfig;
         }
     }

@@ -103,10 +103,13 @@ namespace GaryMoveOut
 
             if (placeBuildingOut != null)
             {
-                var itemsCount = UnityEngine.Random.Range(5, 8);
+                var buildingConfig = buildingConfigurator.BuildingParameterGenerator(currentBuildingId);
+
+                var maxFreeSegments = (buildingConfig.floorSegmentsCount - 1) * buildingConfig.buildingFloorsCount;
+                var minItemsCount = (int)(buildingConfig.minItemsCountToMaxFreeSegmentsRatio * maxFreeSegments);
+                var itemsCount = UnityEngine.Random.Range(minItemsCount, maxFreeSegments);
                 var items = buildingsGenerator.ItemsDatabase.GetRandomItems(itemsCount);
 
-                var buildingConfig = buildingConfigurator.BuildingParameterGenerator(currentBuildingId);
                 buildingOut = buildingsGenerator.GenerateBuildingWithItems(placeBuildingOut.transform,
                                                                            buildingConfig.floorSegmentsCount,
                                                                            buildingConfig.buildingFloorsCount,
