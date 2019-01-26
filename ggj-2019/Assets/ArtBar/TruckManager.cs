@@ -9,6 +9,7 @@ namespace GaryMoveOut
         public TruckDatabase TruckDatabase { get; private set; }
         private GameObject truck;
         private Vector3 truckInPosition;
+        private Animator anim;
 
         public TruckManager()
         {
@@ -29,6 +30,7 @@ namespace GaryMoveOut
                         {
                             truck.transform.Rotate(Vector3.up, 180f);
                             this.truckInPosition = truckInPosition;
+                            anim = truck.GetComponent<Animator>();
                             return true;
                         }
                         return false;
@@ -44,7 +46,9 @@ namespace GaryMoveOut
 
         public void StartTruckMovement(float duration)
         {
+            anim.SetFloat("Forward", 1f);
             truck.transform.DOMove(truckInPosition, duration).SetEase(Ease.InOutQuad);
+            DOVirtual.DelayedCall(duration - 0.2f, () => { anim.SetFloat("Forward", 0f); });
         }
     }
 }
