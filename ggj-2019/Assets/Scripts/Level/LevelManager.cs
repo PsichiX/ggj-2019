@@ -23,14 +23,10 @@ namespace GaryMoveOut
             if (homeRoot != null)
             {
 
-                var itemsCount = Random.Range(0, 8);
+                var itemsCount = Random.Range(5, 8);
                 var items = buildingsGenerator.ItemsDatabase.GetRandomItems(itemsCount);
 
-                //building = buildingsGenerator.GenerateBuilding(homeRoot, floorSegmentsCount, buildingFloorsCount, stairsSegmentIndex);
                 building = buildingsGenerator.GenerateBuildingWithItems(homeRoot, floorSegmentsCount, buildingFloorsCount, stairsSegmentIndex, items);
-
-                //buildingsGenerator.DebugGenerateItems(ref building);
-                //building.RelocateItems2();
             }
         }
     }

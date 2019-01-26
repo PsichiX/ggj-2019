@@ -25,8 +25,6 @@ namespace GaryMoveOut
                 return;
             }
 
-
-
             var itemsPerFloor = items.Count / this.floors.Count;
 
             int i = 0;
@@ -50,85 +48,32 @@ namespace GaryMoveOut
                     {
                         var item = new Item(items[itemsPlaced++]);
                         var itemGO = GameObject.Instantiate(item.prefab, itemSlot.gameObject.transform);
+                        floor.items.Add(item);
                         itemSlot.isOccupied = true;
                         i++;
-                        break;
                     }
                 }
             }
 
             i = 0;
-            while(itemsPlaced < items.Count)
+            while(itemsPlaced < items.Count && i < this.floors.Count)
             {
                 var floor = this.floors[i];
                 foreach(var segment in floor.segments)
                 {
                     var itemSlot = segment.GetComponentInChildren<ItemSlot>();
-                    if (itemSlot != null && itemSlot.isOccupied)
+                    if (itemSlot != null && !itemSlot.isOccupied)
                     {
                         var item = new Item(items[itemsPlaced++]);
                         var itemGO = GameObject.Instantiate(item.prefab, itemSlot.gameObject.transform);
+                        floor.items.Add(item);
                         itemSlot.isOccupied = true;
                         itemsPlaced++;
                         break;
                     }
                 }
+                i++;
             }
-
-
-
-
-
-            //var floors = new List<Floor>(this.floors.Values);
-            //floors.Sort(new FloorMaxToMinItemsComparer());
-
-            //for (int fi = 0; fi < floors.Count; fi++)
-            //{
-            //    segmentIndices.Clear();
-            //    for (i = 0; i < floors[fi].segments.Count; i++)
-            //    {
-            //        segmentIndices.Add(i);
-            //    }
-
-            //    for (i = 0; i < floors[fi].items.Count && segmentIndices.Count > 0;)
-            //    {
-            //        var item = floors[fi].items[i];
-            //        while (segmentIndices.Count > 0)
-            //        {
-            //            var index = Random.Range(0, segmentIndices.Count);
-            //            var si = segmentIndices[index];
-            //            segmentIndices.RemoveAt(index);
-
-            //            var itemSlot = floors[fi].segments[si].GetComponentInChildren<ItemSlot>();
-            //            if (itemSlot != null)
-            //            {
-
-
-            //                i++;
-            //                break;
-            //            }
-            //        }
-            //    }
-
-            //    // move the rest items to another floor:
-            //    int nfi = fi + 1;
-            //    if (nfi < floors.Count)
-            //    {
-            //        for (; i < floors[fi].items.Count; i++)
-            //        {
-            //            floors[nfi].items.Add(floors[fi].items[i]);
-            //            floors[fi].items.RemoveAt(i);
-            //            i--;
-            //        }
-            //    }
-
-
-
-            //}
-
-
-
-
         }
 
 
