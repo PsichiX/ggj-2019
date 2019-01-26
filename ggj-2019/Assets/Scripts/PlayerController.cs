@@ -36,12 +36,11 @@ namespace GaryMoveOut
                     m_lastAction = action;
                     if (action)
                     {
-                        // TODO: perform aim.
+                        Aim();
                     }
                     else
                     {
-
-                        // TODO: perform throw.
+                        Throw();
                     }
                 }
                 if (up != m_lastUp)
@@ -73,7 +72,6 @@ namespace GaryMoveOut
             if (other.tag == "Interactible")
             {
                 m_interactibles.Add(other.transform.parent.gameObject);
-                Debug.Log("TRIGGER ENTER: " + other.transform.parent.gameObject.name);
             }
         }
 
@@ -82,7 +80,6 @@ namespace GaryMoveOut
             if (other.tag == "Interactible")
             {
                 m_interactibles.Remove(other.transform.parent.gameObject);
-                Debug.Log("TRIGGER EXIT: " + other.transform.parent.gameObject.name);
             }
         }
 
@@ -94,6 +91,16 @@ namespace GaryMoveOut
                 m_pickedUp = pickable;
                 m_pickedUp.PickUp();
             }
+        }
+
+        private void Aim()
+        {
+
+        }
+
+        private void Throw()
+        {
+
         }
 
         private T GetInteractible<T>() where T : MonoBehaviour
