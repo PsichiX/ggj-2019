@@ -84,9 +84,12 @@ namespace GaryMoveOut
         private void SetupTruck()
         {
             var truckOutPosition = placeBuildingOut.transform.position;
-            truckOutPosition.x += 10f;
+            truckOutPosition.x += 20f;
+            truckOutPosition.z += -2.65f;
+
             var truckInPosition = placeBuildingIn.transform.position;
-            truckInPosition.x -= 10f;
+            truckInPosition.x -= 7f;
+            truckInPosition.z += -2.65f;
             truckManager.CreateTruck(gameObject.transform, truckOutPosition, truckInPosition);
         }
 
@@ -240,6 +243,7 @@ namespace GaryMoveOut
             SetupBuildingIn();
 
             float delay = 2f;
+            truckManager.StartTruckMovement(delay);
             DOVirtual.DelayedCall(delay, PhaseTruckStop);
             Debug.Log("PhaseTruckStart");
         }
