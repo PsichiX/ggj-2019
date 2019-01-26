@@ -18,6 +18,11 @@ namespace GaryMoveOut
             itemsInTruck.Clear();
         }
 
+        public List<ItemScheme> GetItemList()
+        {
+            return itemsInTruck;
+        }
+
         private void OnTriggerEnter2D(Collider2D other)
         {
             var obj = other.gameObject;
