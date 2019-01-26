@@ -16,9 +16,8 @@ namespace GaryMoveOut
         [SerializeField] private GameObject pressToThrowText;
         [SerializeField] private GameObject portalUpArrow;
         [SerializeField] private GameObject portalDownArrow;
-        [SerializeField] private GameplayManager gameplayManager;
-		[SerializeField] private TextMeshProUGUI buildingCounter;
-		[SerializeField] private TextMeshProUGUI pointsCounter;
+        [SerializeField] private TextMeshProUGUI buildingCounter;
+        [SerializeField] private TextMeshProUGUI pointsCounter;
 
         public int CurrentFloorBadEvent { get { return gameplayManager.currentFloorBadEvent; } }
         public EvecuationDirection CurrentEvecuationDirection { get { return gameplayManager.currentEvacuationDirection; } }
@@ -48,8 +47,12 @@ namespace GaryMoveOut
 
         private void Awake()
         {
-            gameplayManager = GameplayManager.GetGameplayManager();
             m_players = new PlayerController[m_aims.Count];
+        }
+
+        private void Start()
+        {
+            gameplayManager = GameplayManager.GetGameplayManager();
         }
 
         public bool RegisterPlayer(PlayerController player)

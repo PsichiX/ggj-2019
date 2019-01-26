@@ -1080,9 +1080,8 @@ MonoBehaviour:
   m_arrowScaleMapTo: {x: 0.5, y: 3.5}
   pressToPickText: {fileID: 1171887317}
   pressToThrowText: {fileID: 444511730}
-  portalUpArrow: {fileID: 0}
-  portalDownArrow: {fileID: 0}
-  gameplayManager: {fileID: 0}
+  portalUpArrow: {fileID: 99787321172008185}
+  portalDownArrow: {fileID: 1912658079222930240}
   buildingCounter: {fileID: 1481339694}
   pointsCounter: {fileID: 6522420495505995920}
 --- !u!1 &4362939247411464674
