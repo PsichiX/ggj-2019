@@ -2,6 +2,7 @@
 
 namespace GaryMoveOut
 {
+    [RequireComponent(typeof(ItemScheme))]
     [RequireComponent(typeof(Rigidbody2D))]
     public class Pickable : MonoBehaviour
     {

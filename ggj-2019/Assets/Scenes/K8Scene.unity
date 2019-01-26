@@ -142,8 +142,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   homeRoot: {fileID: 1646089298}
-  floorSegmentsCount: 5
-  buildingFloorsCount: 2
+  floorSegmentsCount: 4
+  buildingFloorsCount: 3
   stairsSegmentIndex: 2
 --- !u!4 &612435730
 Transform:

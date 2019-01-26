@@ -5,5 +5,6 @@ namespace GaryMoveOut
 {
     public class ItemSlot : MonoBehaviour
     {
+        public bool isOccupied = false;
     }
 }

@@ -2,21 +2,19 @@
 
 namespace GaryMoveOut
 {
-    public class Item : MonoBehaviour
+    public class Item
     {
         public float value;
+        public float weight;
+        public ItemType type;
+        public GameObject prefab;
 
-        private Collider coll;
-        private Bounds bounds;
-
-
-        private void Start()
+        public Item(ItemScheme scheme)
         {
-            coll = GetComponent<Collider>();
-            if (coll != null)
-            {
-                bounds = coll.bounds;
-            }
+            value = scheme.value;
+            weight = scheme.weight;
+            type = scheme.type;
+            prefab = scheme.gameObject;
         }
     }
 }
