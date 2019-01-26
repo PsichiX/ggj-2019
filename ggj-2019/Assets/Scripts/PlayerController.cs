@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace GaryMoveOut
@@ -14,8 +15,12 @@ namespace GaryMoveOut
 
         public float Velocity { get; private set; }
         public Side TurnToSide { get; private set; }
+		public event Action CollidesWithPickable;
+		public event Action CollidesWithPickableEnd;
+		public event Action CarryItemStart;
+		public event Action CarryItemEnd;
 
-        [SerializeField]
+		[SerializeField]
         private InputHandler m_inputHandler;
         [SerializeField]
         private float m_speed;
@@ -41,6 +46,7 @@ namespace GaryMoveOut
         private GameplayEvents m_gameplayEvents;
         private bool m_inputBlocked = false;
         private Animator m_animator;
+		private bool isCarryingItem;
 
         private void Start()
         {
@@ -207,7 +213,11 @@ namespace GaryMoveOut
             if (other.tag == "Interactible")
             {
                 m_interactibles.Add(other.transform.parent.gameObject);
-            }
+				if (isCarryingItem == false)
+				{
+					CollidesWithPickable?.Invoke();
+				}
+			}
         }
 
         private void OnTriggerExit2D(Collider2D other)
@@ -215,7 +225,8 @@ namespace GaryMoveOut
             if (other.tag == "Interactible")
             {
                 m_interactibles.Remove(other.transform.parent.gameObject);
-            }
+				CollidesWithPickableEnd?.Invoke();
+			}
         }
 
         private void PickUp()
@@ -226,7 +237,9 @@ namespace GaryMoveOut
                 m_pickedUp = pickable;
                 m_pickedUp.PickUp();
                 m_animator?.SetBool("PickedUp", true);
-            }
+				isCarryingItem = true;
+				CarryItemStart?.Invoke();
+			}
         }
 
         private void PutDown()
@@ -236,7 +249,9 @@ namespace GaryMoveOut
                 m_pickedUp.PutDown();
                 m_pickedUp = null;
                 m_animator?.SetBool("PickedUp", false);
-            }
+				isCarryingItem = false;
+				CarryItemEnd?.Invoke();
+			}
         }
 
         private void Aim()
@@ -262,7 +277,9 @@ namespace GaryMoveOut
                 var force = Quaternion.Euler(0, 0, angle) * Vector2.right * m_aimStrength;
                 m_pickedUp.Throw(force);
                 m_animator?.SetBool("PickedUp", false);
-                m_pickedUp = null;
+				isCarryingItem = false;
+				CarryItemEnd?.Invoke();
+				m_pickedUp = null;
             }
             if (m_ui != null)
             {
