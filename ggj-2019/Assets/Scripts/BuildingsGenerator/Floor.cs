@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace GaryMoveOut
@@ -14,6 +15,20 @@ namespace GaryMoveOut
     {
         public FloorType Type;
         public List<GameObject> segments = new List<GameObject>();
-    }
+        public List<Item> items = new List<Item>();
 
+
+        public void AddItem(Item item)
+        {
+            if (!items.Contains(item))
+            {
+                items.Add(item);
+            }
+        }
+
+        public void RemoveItem(Item item)
+        {
+            items.Remove(item);
+        }
+    }
 }

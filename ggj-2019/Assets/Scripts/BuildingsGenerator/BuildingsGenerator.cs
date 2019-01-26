@@ -52,16 +52,14 @@ namespace GaryMoveOut
                                    int floorIndex,
                                    FloorType type)
         {
-            Floor floor = null;
-            if (!building.floors.TryGetValue(floorIndex, out floor))
+            if (!building.floors.TryGetValue(floorIndex, out Floor floor))
             {
-                floor = GameObject.Instantiate<Floor>(buildingsDatabase.floorPrefab, floorParent.position, floorParent.rotation);
+                floor = Object.Instantiate(buildingsDatabase.floorPrefab, floorParent.position, floorParent.rotation);
                 building.floors.Add(floorIndex, floor);
             }
             floor.Type = type;
             floor.transform.SetParent(floorParent);
             GameObject prefab = null;
-
 
             // add the right side:
             switch (floor.Type)
@@ -76,7 +74,13 @@ namespace GaryMoveOut
                     prefab = scheme.SideWindow;
                     break;
             }
-            floor.segments.Add(GameObject.Instantiate(prefab, position, rotation, floor.transform) as GameObject);
+            var segment = GameObject.Instantiate(prefab, position, rotation, floor.transform) as GameObject;
+            var itemCatcher = segment.GetComponent<ItemCatcher>();
+            if (itemCatcher != null)
+            {
+                itemCatcher.Setup(floor);
+            }
+            floor.segments.Add(segment);
 
             // add floor middle segments:
             for (int i = 0; i < floorSegmentsCount; i++)
@@ -107,7 +111,30 @@ namespace GaryMoveOut
                     prefab = scheme.GetRandomSideWall(rightSide: false);
                     break;
             }
-            floor.segments.Add(GameObject.Instantiate(prefab, position, rotation, floor.transform) as GameObject);
+            segment = GameObject.Instantiate(prefab, position, rotation, floor.transform) as GameObject;
+            itemCatcher = segment.GetComponent<ItemCatcher>();
+            if (itemCatcher != null)
+            {
+                itemCatcher.Setup(floor);
+            }
+            floor.segments.Add(segment);
+        }
+
+
+        public void DebugGenerateItems(ref Building building)
+        {
+            if (building != null)
+            {
+                for(int i = 0; i < building.floors.Count; i++)
+                {
+                    int rnd = Random.Range(3, 7);
+                    for(int j = 0; j < rnd; j++)
+                    {
+                        var go = new GameObject().AddComponent<Item>();
+                        building.floors[i].AddItem(go.GetComponent<Item>());
+                    }
+                }
+            }
         }
     }
 

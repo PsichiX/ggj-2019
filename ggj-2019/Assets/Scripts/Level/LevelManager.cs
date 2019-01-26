@@ -12,6 +12,7 @@ namespace GaryMoveOut
 
 
         private BuildingsGenerator buildingsGenerator;
+        private Building building;
 
 
         // Use this for initialization
@@ -21,7 +22,11 @@ namespace GaryMoveOut
 
             if (homeRoot != null)
             {
-                buildingsGenerator.GenerateBuilding(homeRoot, floorSegmentsCount, buildingFloorsCount, stairsSegmentIndex);
+                building = buildingsGenerator.GenerateBuilding(homeRoot, floorSegmentsCount, buildingFloorsCount, stairsSegmentIndex);
+
+                buildingsGenerator.DebugGenerateItems(ref building);
+
+                building.RelocateItems();
             }
         }
 
