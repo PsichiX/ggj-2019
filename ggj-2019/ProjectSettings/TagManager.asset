@@ -9,6 +9,7 @@ TagManager:
   - Window
   - RoofJumpSite
   - Interactible
+  - InteractibleRoot
   layers:
   - Default
   - TransparentFX
@@ -24,7 +25,7 @@ TagManager:
   - FurnitureInUse
   - Background
   - Player
-  - 
+  - CharacterInUse
   - 
   - 
   - 

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 namespace GaryMoveOut
 {
@@ -13,30 +13,34 @@ namespace GaryMoveOut
         [SerializeField] private Vector2 m_arrowScaleMapTo = new Vector2(0, 1);
         [SerializeField] private GameObject pressToPickText;
         [SerializeField] private GameObject pressToThrowText;
-		[SerializeField] private GameplayManager gameplayManager;
-		[SerializeField] private TextMeshProUGUI buildingCounter;
-		[SerializeField] private TextMeshProUGUI pointsCounter;
+        [SerializeField] private TextMeshProUGUI buildingCounter;
+        [SerializeField] private TextMeshProUGUI pointsCounter;
 
-		private PlayerController[] m_players;
+        private PlayerController[] m_players;
+        private GameplayManager gameplayManager;
 
-		public void UpdateCounter()
-		{
-			buildingCounter.text = gameplayManager.currentBuildingId.ToString("0");
-		}
+        public void UpdateCounter()
+        {
+            if (gameplayManager != null)
+            {
+                buildingCounter.text = gameplayManager.currentBuildingId.ToString("0");
+            }
+        }
 
-		public void UpdatePoints(int pointsCount)
-		{
-			pointsCounter.text = pointsCount.ToString("0");
-		}
+        public void UpdatePoints(int pointsCount)
+        {
+            pointsCounter.text = pointsCount.ToString("0");
+        }
 
-		// FixMe:
-		public void Update()
-		{
-			UpdateCounter();
-		}
+        // FixMe:
+        public void Update()
+        {
+            UpdateCounter();
+        }
 
         private void Awake()
         {
+            gameplayManager = GameplayManager.GetGameplayManager();
             m_players = new PlayerController[m_aims.Count];
         }
 
