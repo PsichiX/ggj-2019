@@ -25,7 +25,7 @@ namespace GaryMoveOut
         [SerializeField]
         private float m_speed;
         [SerializeField]
-        private Vector3 m_pickableOffset;
+        private Transform m_pickableOrigin;
         [SerializeField]
         private Vector2 m_aimStrengthRange = new Vector2(1, 10);
         [SerializeField]
@@ -109,21 +109,43 @@ namespace GaryMoveOut
                     {
                         m_aimAngle -= m_aimingAngleSpeed * dt;
                     }
-                    if (m_inputHandler.Right)
+                    if (TurnToSide == Side.Left)
                     {
-                        m_aimStrength = Mathf.Clamp(
-                            m_aimStrength + dt * m_aimingStrengthSpeed,
-                            m_aimStrengthRange.x,
-                            m_aimStrengthRange.y
-                        );
+                        if (m_inputHandler.Left)
+                        {
+                            m_aimStrength = Mathf.Clamp(
+                                m_aimStrength + dt * m_aimingStrengthSpeed,
+                                m_aimStrengthRange.x,
+                                m_aimStrengthRange.y
+                            );
+                        }
+                        else if (m_inputHandler.Right)
+                        {
+                            m_aimStrength = Mathf.Clamp(
+                                m_aimStrength - dt * m_aimingStrengthSpeed,
+                                m_aimStrengthRange.x,
+                                m_aimStrengthRange.y
+                            );
+                        }
                     }
-                    else if (m_inputHandler.Left)
+                    else
                     {
-                        m_aimStrength = Mathf.Clamp(
-                            m_aimStrength - dt * m_aimingStrengthSpeed,
-                            m_aimStrengthRange.x,
-                            m_aimStrengthRange.y
-                        );
+                        if (m_inputHandler.Right)
+                        {
+                            m_aimStrength = Mathf.Clamp(
+                                m_aimStrength + dt * m_aimingStrengthSpeed,
+                                m_aimStrengthRange.x,
+                                m_aimStrengthRange.y
+                            );
+                        }
+                        else if (m_inputHandler.Left)
+                        {
+                            m_aimStrength = Mathf.Clamp(
+                                m_aimStrength - dt * m_aimingStrengthSpeed,
+                                m_aimStrengthRange.x,
+                                m_aimStrengthRange.y
+                            );
+                        }
                     }
                 }
                 else
@@ -161,13 +183,19 @@ namespace GaryMoveOut
                 }
             }
 
+            var handPos = m_pickableOrigin == null ? transform.position : m_pickableOrigin.position;
             if (m_pickedUp != null && m_pickedUp.IsPickedUp)
             {
-                m_pickedUp.transform.position = transform.position + m_pickableOffset;
+                m_pickedUp.transform.position = handPos;
             }
             if (m_pickedUp != null && m_pickedUp.IsPickedUp && m_ui != null)
             {
-                m_ui.UpdateAim(this, transform.position + m_pickableOffset, m_aimAngle, m_aimStrength);
+                m_ui.UpdateAim(
+                    this,
+                    handPos,
+                    TurnToSide == Side.Left ? 180 - m_aimAngle : m_aimAngle,
+                    m_aimStrength
+                );
             }
         }
 
@@ -236,7 +264,8 @@ namespace GaryMoveOut
             if (m_pickedUp != null && m_isAiming)
             {
                 m_isAiming = false;
-                var force = Quaternion.Euler(0, 0, m_aimAngle) * Vector2.right * m_aimStrength;
+                var angle = TurnToSide == Side.Left ? 180 - m_aimAngle : m_aimAngle;
+                var force = Quaternion.Euler(0, 0, angle) * Vector2.right * m_aimStrength;
                 m_pickedUp.Throw(force);
                 m_animator?.SetBool("PickedUp", false);
 				isCarryingItem = false;

@@ -13,6 +13,7 @@ namespace GaryMoveOut
         {
             BuildingsDatabase = Resources.Load<BuildingSegmentsDatabase>("Databases/BuildingSegmentsDatabase");
             ItemsDatabase = Resources.Load<ItemsDatabase>("Databases/ItemsDatabase");
+            ItemsDatabase.LoadItemsFromAssets();
         }
 
 
