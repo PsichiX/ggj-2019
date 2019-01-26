@@ -24,7 +24,6 @@ namespace GaryMoveOut
                 {
                     if (TruckDatabase.truckPrefabs.Count > 0)
                     {
-                        //truck = Object.Instantiate(TruckDatabase.truckPrefabs[0], truckOutPosition, parent.rotation, parent);
                         truck = Object.Instantiate(TruckDatabase.truckPrefabs[0], truckOutPosition, parent.rotation, parent);
                         if( truck != null)
                         {
