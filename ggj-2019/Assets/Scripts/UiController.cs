@@ -18,18 +18,43 @@ namespace GaryMoveOut
 
         private PlayerController[] m_players;
 
-        private void Start()
+        private void Awake()
         {
             m_players = new PlayerController[m_aims.Count];
         }
 
-        public bool RegisterAim(PlayerController player)
+        public bool RegisterPlayer(PlayerController player)
         {
-            for (int i = 0; i < m_aims.Count; ++i)
+            for (var i = 0; i < m_players.Length; ++i)
             {
                 if (m_players[i] == null)
                 {
                     m_players[i] = player;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool UnregisterPlayer(PlayerController player)
+        {
+            for (int i = 0; i < m_players.Length; ++i)
+            {
+                if (m_players[i] == player)
+                {
+                    m_players[i] = null;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool ActivateAim(PlayerController player)
+        {
+            for (int i = 0; i < m_aims.Count; ++i)
+            {
+                if (m_players[i] == player)
+                {
                     m_aims[i].gameObject.SetActive(true);
                     return true;
                 }
@@ -37,13 +62,12 @@ namespace GaryMoveOut
             return false;
         }
 
-        public bool UnregisterAim(PlayerController player)
+        public bool DeactivateAim(PlayerController player)
         {
             for (int i = 0; i < m_players.Length; ++i)
             {
                 if (m_players[i] == player)
                 {
-                    m_players[i] = null;
                     m_aims[i].gameObject.SetActive(false);
                     return true;
                 }

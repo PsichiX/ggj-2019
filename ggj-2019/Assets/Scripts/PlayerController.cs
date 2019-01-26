@@ -49,6 +49,10 @@ namespace GaryMoveOut
             m_gameplayEvents = GameplayEvents.GetGameplayEvents();
             m_animator = GetComponentInChildren<Animator>();
 
+            if (m_ui != null)
+            {
+                m_ui.RegisterPlayer(this);
+            }
             if (m_gameplayEvents != null)
             {
                 m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.Evacuation, OnEvacuation);
@@ -61,6 +65,11 @@ namespace GaryMoveOut
 
         private void OnDestroy()
         {
+            if (m_ui != null)
+            {
+                m_ui.UnregisterPlayer(this);
+            }
+            m_ui = null;
             if (m_gameplayEvents != null)
             {
                 m_gameplayEvents.DetachFromEvent(GamePhases.GameplayPhase.Evacuation, OnEvacuation);
@@ -238,7 +247,7 @@ namespace GaryMoveOut
             }
             if (m_ui != null)
             {
-                m_ui.RegisterAim(this);
+                m_ui.ActivateAim(this);
             }
             m_aimAngle = 0;
             m_aimStrength = m_aimStrengthRange.x;
@@ -257,7 +266,7 @@ namespace GaryMoveOut
             }
             if (m_ui != null)
             {
-                m_ui.UnregisterAim(this);
+                m_ui.DeactivateAim(this);
             }
         }
 
