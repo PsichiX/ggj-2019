@@ -415,6 +415,8 @@ namespace GaryMoveOut
                     // game over
                     float delay = 1f;
                     DOVirtual.DelayedCall(delay, () => events.CallEvent(GamePhases.GameplayPhase.GameOver, null));
+                    float delay2 = 4f;
+                    DOVirtual.DelayedCall(delay2, LoadMainMenu);
                 }
 
                 return true;
