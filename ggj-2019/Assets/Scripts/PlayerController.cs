@@ -249,15 +249,15 @@ namespace GaryMoveOut
                     }
                     if (m_inputHandler.Left)
                     {
-                        m_rigidBody.AddForce((Vector2.left * m_speed + Vector2.up) * dt * m_rigidBody.mass, ForceMode2D.Impulse);
-                        //m_rigidBody.MovePosition(m_rigidBody.position + Vector2.left * m_speed * dt);
+                        //m_rigidBody.AddForce((Vector2.left * m_speed + Vector2.up) * dt * m_rigidBody.mass, ForceMode2D.Impulse);
+                        m_rigidBody.MovePosition(m_rigidBody.position + Vector2.left * m_speed * dt);
                         Velocity = -m_speed;
                         TurnToSide = Side.Left;
                     }
                     else if (m_inputHandler.Right)
                     {
-                        m_rigidBody.AddForce((Vector2.right * m_speed + Vector2.up) * dt * m_rigidBody.mass, ForceMode2D.Impulse);
-                        //m_rigidBody.MovePosition(m_rigidBody.position + Vector2.right * m_speed * dt);
+                        //m_rigidBody.AddForce((Vector2.right * m_speed + Vector2.up) * dt * m_rigidBody.mass, ForceMode2D.Impulse);
+                        m_rigidBody.MovePosition(m_rigidBody.position + Vector2.right * m_speed * dt);
                         Velocity = m_speed;
                         TurnToSide = Side.Right;
                     }
@@ -288,7 +288,7 @@ namespace GaryMoveOut
                 );
             }
         }
-
+        
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (other.tag == "Ground" && m_isAlive)
