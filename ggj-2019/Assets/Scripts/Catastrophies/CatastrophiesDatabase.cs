@@ -25,7 +25,7 @@ namespace GaryMoveOut
 
         public BaseCatastrophy GetRandomCatastrophy()
         {
-            return defaultCatastrophy;
+            //return defaultCatastrophy;
 
             if (database.Count > 0)
             {
