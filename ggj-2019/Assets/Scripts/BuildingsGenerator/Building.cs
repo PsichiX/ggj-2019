@@ -84,9 +84,7 @@ namespace GaryMoveOut
                     if (itemSlot != null)
                     {
                         var item = new Item(items[itemsPlaced++]);
-                        var itemGO = GameObject.Instantiate(item.prefab, itemSlot.gameObject.transform);
-                        floor.items.Add(item);
-                        itemSlot.isOccupied = true;
+                        SpawnItem(item, itemSlot, ref floor.items);
                         i++;
                     }
                 }
@@ -107,9 +105,7 @@ namespace GaryMoveOut
                     if (itemSlot != null && !itemSlot.isOccupied)
                     {
                         var item = new Item(items[itemsPlaced++]);
-                        var itemGO = GameObject.Instantiate(item.prefab, itemSlot.gameObject.transform);
-                        floor.items.Add(item);
-                        itemSlot.isOccupied = true;
+                        SpawnItem(item, itemSlot, ref floor.items);
                         itemsPlaced++;
                         break;
                     }
@@ -146,9 +142,7 @@ namespace GaryMoveOut
                     {
                         var item = itemsByFloorIndex[floor.Key][0];
                         itemsByFloorIndex[floor.Key].RemoveAt(0);
-                        var itemGO = GameObject.Instantiate(item.prefab, itemSlot.gameObject.transform);
-                        floor.Value.items.Add(item);
-                        itemSlot.isOccupied = true;
+                        SpawnItem(item, itemSlot, ref floor.Value.items);
                     }
                 }
                 if (itemsByFloorIndex[floor.Key].Count > 0)
@@ -170,16 +164,21 @@ namespace GaryMoveOut
                     {
                         var item = unstackedItems[0];
                         unstackedItems.RemoveAt(0);
-                        var itemGO = GameObject.Instantiate(item.prefab, itemSlot.gameObject.transform);
-                        floor.items.Add(item);
-                        itemSlot.isOccupied = true;
-
+                        SpawnItem(item, itemSlot, ref floor.items);
                         break;
                     }
                 }
                 index = (++index == floorsList.Count) ? 0 : index;
             }
 
+        }
+
+        private void SpawnItem(Item item, ItemSlot itemSlot, ref List<Item> items)
+        {
+            var itemGO = GameObject.Instantiate(item.prefab, itemSlot.gameObject.transform);
+            itemGO.transform.SetParent(null);
+            items.Add(item);
+            itemSlot.isOccupied = true;
         }
 
         public Dictionary<int, List<Item>> GetItems()
