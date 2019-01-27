@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using DG.Tweening;
+using System;
+using UnityEngine;
 
 namespace GaryMoveOut
 {
@@ -12,22 +14,46 @@ namespace GaryMoveOut
 
     public class ItemScheme : MonoBehaviour
     {
-        public float value;
+		public event Action<ItemScheme> NewItemInTruck;
+		[SerializeField] private GameObject explosion;
+		[SerializeField] private AudioSource ausource;
+
+		public float value;
         public float weight;
         public bool vertical;
         public ItemType type;
 
         private bool isAlive = true;
-        public void DestroyOnGround()
+
+		private void Start()
+		{
+			if (ausource == null)
+			{
+				ausource = GetComponent<AudioSource>();
+			}
+		}
+		public void DestroyOnGround()
         {
             isAlive = false;
+			var ex = Instantiate(explosion, transform);
+
+			ex.transform.localPosition = Vector3.zero;
+			ausource.Play();
+			DOVirtual.DelayedCall(0.6f, KillMe);
             // TODO: destroy viz
         }
 
+		private void KillMe()
+		{
+			Destroy(gameObject);
+		}
+
         public void InTruck()
         {
-            // TODO: hide object
-        }
+			NewItemInTruck?.Invoke(this);
+			ausource.PlayOneShot(Resources.Load("Audio/Points") as AudioClip);
+			// TODO: hide object
+		}
 
         public bool IsItemAlive()
         {
