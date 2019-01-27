@@ -35,7 +35,10 @@ namespace GaryMoveOut
 
         private Dictionary<int, List<Item>> itemsFromLastInBuilding;
         [SerializeField] private GameObject prefabPlayer;
-        [SerializeField] private int playersCount = 1;
+        private int playersCount = 1;
+
+        private int currentPlayersInTruck = 0;
+        private int currentPlayersDead = 0;
 
         public List<ItemScheme> DeEvacuationTruckItemList;
         private CatastrophiesDatabase catastrophiesDatabase;
@@ -52,6 +55,8 @@ namespace GaryMoveOut
                 _instance = this;
             }
 
+            SetupPlayerCounter();
+
             events = new GameplayEvents();
             buildingsGenerator = new BuildingsGenerator();
             buildingConfigurator = new BuildingConfigurator();
@@ -60,6 +65,30 @@ namespace GaryMoveOut
 
             catastrophiesDatabase = Resources.Load<CatastrophiesDatabase>("Databases/CatastrophiesDatabase");
             catastrophiesDatabase.LoadDataFromResources();
+        }
+
+        private List<int> playerInputs = new List<int>();
+        private void SetupPlayerCounter()
+        {
+            playerInputs.Clear();
+            var playerConfig = StartConfig.GetStartConfig();
+            if(playerConfig != null )
+            {
+                for(int i=0; i<playerConfig.GetMaxPlayerNumber(); i++)
+                {
+                    if (playerConfig.IsPlayerActive(i + 1))
+                    {
+                        playerInputs.Add(i+1);
+                    }
+                }
+                playersCount = playerInputs.Count;
+            }
+
+            if(playersCount == 0)
+            {
+                playersCount = 1;
+                playerInputs.Add(1);
+            }
         }
 
         private void Start()
@@ -263,9 +292,27 @@ namespace GaryMoveOut
             PhaseFloorEvacuationStart(currentFloorBadEvent);
         }
 
-        private void EndEvacuation()
+        private bool EndEvacuation()
         {
-            isEvacuation = false;
+            if (currentPlayersDead + currentPlayersInTruck == playersCount)
+            {
+                isEvacuation = false;
+
+                if(currentPlayersInTruck > 0)
+                {
+                    // go go go
+                    PhaseTruckStart();
+                }
+                else
+                {
+                    // game over
+                    float delay = 1f;
+                    DOVirtual.DelayedCall(delay, () => events.CallEvent(GamePhases.GameplayPhase.GameOver, null));
+                }
+
+                return true;
+            }
+            return false;
         }
 
         private void ReactionFadeIn(object param)
@@ -278,7 +325,7 @@ namespace GaryMoveOut
                 instance.transform.position = pos + playerSpawnOffset;
                 instance.transform.rotation = Quaternion.identity;
                 var player = players[i] = instance.GetComponent<PlayerController>();
-                player.InputLayout = (InputHandler.Layout)(1 + i);
+                player.InputLayout = (InputHandler.Layout)(playerInputs[i]);
             }
         }
 
@@ -293,15 +340,13 @@ namespace GaryMoveOut
 
         private void ReactionPlayerDie(object param)
         {
+            currentPlayersDead++;
             EndEvacuation();
-
-            float delay = 1f;
-            DOVirtual.DelayedCall(delay, () => events.CallEvent(GamePhases.GameplayPhase.GameOver, null));
         }
 
         private void ReactionPlayerJump(object param)
         {
-            EndEvacuation();
+            //EndEvacuation();
         }
 
         private void ReactionGameOver(object param)
@@ -311,7 +356,8 @@ namespace GaryMoveOut
 
         private void ReactionPlayerInTruck(object param)
         {
-            PhaseTruckStart();
+            currentPlayersInTruck++;
+            EndEvacuation();
         }
 
         private void ReactionEvacuationEnd(object obj)
