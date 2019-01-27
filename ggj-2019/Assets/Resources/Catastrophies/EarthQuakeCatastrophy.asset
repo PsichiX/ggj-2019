@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5d684b0eaf0c0844a5253702d36100a, type: 3}
   m_Name: EarthQuakeCatastrophy
   m_EditorClassIdentifier: 
+  floorFallTime: 0.3

@@ -6,6 +6,8 @@ namespace GaryMoveOut
     {
         public abstract CatastrophyType Type { get; }
 
+        public abstract void Initialize();
+
         public abstract void DestroyFloor(Building building, int floorIndex);
     }
 }
