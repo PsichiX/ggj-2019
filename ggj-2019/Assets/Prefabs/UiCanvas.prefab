@@ -1646,6 +1646,7 @@ MonoBehaviour:
   buildingCounter: {fileID: 1481339694}
   pointsCounter: {fileID: 6522420495505995920}
   m_portalArrowsOffset: {x: 1, y: 2.5, z: 0}
+  youLostText: {fileID: 2889504342810672891}
 --- !u!82 &1057877604
 AudioSource:
   m_ObjectHideFlags: 0
