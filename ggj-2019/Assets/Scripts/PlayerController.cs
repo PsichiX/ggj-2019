@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DG.Tweening;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,6 +21,7 @@ namespace GaryMoveOut
             get { return m_inputHandler == null ? InputHandler.Layout.None : m_inputHandler.InputLayout; }
             set { if (m_inputHandler != null) m_inputHandler.InputLayout = value; }
         }
+
         public event Action CollidesWithPickable;
         public event Action CollidesWithPickableEnd;
         public event Action CarryItemStart;
@@ -28,6 +30,9 @@ namespace GaryMoveOut
         public event Action CollidesWithPortalUpEnd;
         public event Action CollidesWithPortalDown;
         public event Action CollidesWithPortalDownEnd;
+
+        public int FloorIndex = 1;
+
 
         [SerializeField]
         private InputHandler m_inputHandler;
@@ -85,7 +90,29 @@ namespace GaryMoveOut
                 m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.PlayerJump, OnPlayerJump);
                 m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.DeEvacuation, OnDeEvacuation);
                 m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.LastItemShot, OnLastItemShot);
+                m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.PlayerDie, OnPlayerDie);
+                m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.FloorEvacuationEnd, OnEvacuationEnd);
+                m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.GameOver, OnGameOver);
                 m_inputBlocked = true;
+            }
+        }
+
+        private void OnGameOver(object obj)
+        {
+            OnPlayerDie(this);
+        }
+
+        private void OnPlayerDie(object obj)
+        {
+            if (obj is PlayerController && obj as PlayerController == this)
+            {
+                m_inputBlocked = true;
+                InputLayout = InputHandler.Layout.None;
+
+                DOVirtual.DelayedCall(1f, () =>
+                {
+                    Destroy(this.gameObject);
+                });
             }
         }
 
@@ -101,6 +128,17 @@ namespace GaryMoveOut
                 m_gameplayEvents.DetachFromEvent(GamePhases.GameplayPhase.PlayerJump, OnPlayerJump);
                 m_gameplayEvents.DetachFromEvent(GamePhases.GameplayPhase.DeEvacuation, OnDeEvacuation);
                 m_gameplayEvents.DetachFromEvent(GamePhases.GameplayPhase.LastItemShot, OnLastItemShot);
+                m_gameplayEvents.DetachFromEvent(GamePhases.GameplayPhase.PlayerDie, OnPlayerDie);
+                m_gameplayEvents.DetachFromEvent(GamePhases.GameplayPhase.FloorEvacuationEnd, OnEvacuationEnd);
+                m_gameplayEvents.DetachFromEvent(GamePhases.GameplayPhase.GameOver, OnGameOver);
+            }
+        }
+
+        private void OnEvacuationEnd(object obj)
+        {
+            if (obj is int && (int)obj == FloorIndex)
+            {
+                m_gameplayEvents.CallEvent(GamePhases.GameplayPhase.PlayerDie, this);
             }
         }
 
@@ -256,7 +294,7 @@ namespace GaryMoveOut
             if (other.tag == "Ground" && m_isAlive)
             {
                 m_isAlive = false;
-                m_gameplayEvents.CallEvent(GamePhases.GameplayPhase.PlayerDie, null);
+                m_gameplayEvents.CallEvent(GamePhases.GameplayPhase.PlayerDie, this);
                 Debug.Log("player hit the ground");
             }
 
@@ -371,6 +409,8 @@ namespace GaryMoveOut
                 var portalAbove = portal.building.stairs[portal.floorIndexAbove];
                 var pos = portalAbove.transform.position;
                 transform.position = new Vector3(pos.x, pos.y, transform.position.z);
+
+                FloorIndex = portal.floorIndexAbove;
             }
         }
 
@@ -382,6 +422,8 @@ namespace GaryMoveOut
                 var portalBelow = portal.building.stairs[portal.floorIndexBelow];
                 var pos = portalBelow.transform.position;
                 transform.position = new Vector3(pos.x, pos.y, transform.position.z);
+
+                FloorIndex = portal.floorIndexBelow;
             }
         }
 

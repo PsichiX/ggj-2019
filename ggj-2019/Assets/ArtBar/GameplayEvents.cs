@@ -57,5 +57,13 @@ namespace GaryMoveOut
                 eventDict[gamePhase]?.Invoke(param);
             }
         }
+
+        public event System.Action<GameObject> PlayerDied;
+        public void CallPlayerDied(GameObject go)
+        {
+            PlayerDied?.Invoke(go);
+        }
+
+
     }
 }
