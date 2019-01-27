@@ -291,6 +291,7 @@ namespace GaryMoveOut
         private void ReactionPlayerDie(object param)
         {
             EndEvacuation();
+
             float delay = 1f;
             DOVirtual.DelayedCall(delay, () => events.CallEvent(GamePhases.GameplayPhase.GameOver, null));
         }
