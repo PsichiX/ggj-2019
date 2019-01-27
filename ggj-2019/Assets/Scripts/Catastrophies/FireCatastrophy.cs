@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using static GaryMoveOut.GameplayManager;
 
 namespace GaryMoveOut
 {
@@ -8,6 +9,15 @@ namespace GaryMoveOut
         public GameObject firePrefab;
 
         public override CatastrophyType Type { get { return CatastrophyType.Fire; } }
+        public override EvecuationDirection EvacuationDirection
+        {
+            get
+            {
+                //return EvecuationDirection.Down;
+                var rnd = Random.Range(0, 3);
+                return (EvecuationDirection)rnd;
+            }
+        }
 
         public override void Initialize()
         {
