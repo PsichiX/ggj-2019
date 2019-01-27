@@ -516,7 +516,7 @@ namespace GaryMoveOut
         private void GameSummary()
         {
             events.CallEvent(GamePhases.GameplayPhase.Summary, null);
-            float delay = 1f;
+            float delay = 4f;
 
             DOVirtual.DelayedCall(delay, LoadMainMenu);
         }
