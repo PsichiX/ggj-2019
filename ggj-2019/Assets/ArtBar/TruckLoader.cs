@@ -30,6 +30,7 @@ namespace GaryMoveOut
             if(itemScheme != null)
             {
                 itemsInTruck.Add(itemScheme);
+                itemScheme.InTruck();
             }
         }
     }
