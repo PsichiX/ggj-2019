@@ -7,7 +7,7 @@ namespace GaryMoveOut
     public class TruckManager
     {
         public TruckDatabase TruckDatabase { get; private set; }
-        private GameObject truck;
+        public GameObject Truck { get; private set; }
         private Vector3 truckInPosition;
         private Animator anim;
         private TruckLoader truckLoader;
@@ -19,19 +19,19 @@ namespace GaryMoveOut
 
         public bool CreateTruck(Transform parent, Vector3 truckOutPosition, Vector3 truckInPosition)
         {
-            if (truck == null)
+            if (Truck == null)
             {
                 if (TruckDatabase != null)
                 {
                     if (TruckDatabase.truckPrefabs.Count > 0)
                     {
-                        truck = Object.Instantiate(TruckDatabase.truckPrefabs[0], truckOutPosition, parent.rotation, parent);
-                        if( truck != null)
+                        Truck = Object.Instantiate(TruckDatabase.truckPrefabs[0], truckOutPosition, parent.rotation, parent);
+                        if( Truck != null)
                         {
-                            truck.transform.Rotate(Vector3.up, 180f);
+                            Truck.transform.Rotate(Vector3.up, 180f);
                             this.truckInPosition = truckInPosition;
-                            anim = truck.GetComponent<Animator>();
-                            truckLoader = truck.GetComponentInChildren<TruckLoader>();
+                            anim = Truck.GetComponent<Animator>();
+                            truckLoader = Truck.GetComponentInChildren<TruckLoader>();
                             if(truckLoader == null)
                             {
                                 Debug.LogError("Truck Loader not found!");
@@ -44,7 +44,7 @@ namespace GaryMoveOut
                 return false;
             }
 
-            truck.transform.position = truckOutPosition;
+            Truck.transform.position = truckOutPosition;
             this.truckInPosition = truckInPosition;
             return true;
         }
@@ -62,7 +62,7 @@ namespace GaryMoveOut
         public void StartTruckMovement(float duration)
         {
             //anim.SetFloat("Forward", 1f);
-            truck.transform.DOMove(truckInPosition, duration).SetEase(Ease.InOutQuad);
+            Truck.transform.DOMove(truckInPosition, duration).SetEase(Ease.InOutQuad);
             //DOVirtual.DelayedCall(duration - 0.2f, () => { anim.SetFloat("Forward", 0f); });
         }
     }

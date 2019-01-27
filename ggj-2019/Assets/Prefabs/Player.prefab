@@ -99,7 +99,7 @@ MonoBehaviour:
   m_speed: 10
   m_pickableOrigin: {fileID: 406794870914967185}
   m_aimStrengthRange: {x: 4, y: 20}
-  m_aimingAngleSpeed: 180
+  m_aimingAngleSpeed: 90
   m_aimingStrengthSpeed: 16
 --- !u!114 &8141853408582077107
 MonoBehaviour:

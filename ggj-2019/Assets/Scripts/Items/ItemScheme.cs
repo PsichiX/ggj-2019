@@ -22,6 +22,7 @@ namespace GaryMoveOut
         public float weight;
         public bool vertical;
         public ItemType type;
+        public Item assignedItem;
 
         private bool isAlive = true;
 

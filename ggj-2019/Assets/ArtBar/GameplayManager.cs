@@ -45,6 +45,9 @@ namespace GaryMoveOut
         public List<ItemScheme> DeEvacuationTruckItemList;
         private CatastrophiesDatabase catastrophiesDatabase;
 
+        private CameraMultiTarget multiTargetCamera;
+        [SerializeField] private List<GameObject> cameraTargets;
+
         void Awake()
         {
             if (_instance != null && _instance != this)
@@ -67,6 +70,12 @@ namespace GaryMoveOut
 
             catastrophiesDatabase = Resources.Load<CatastrophiesDatabase>("Databases/CatastrophiesDatabase");
             catastrophiesDatabase.LoadDataFromResources();
+
+
+            var camera = Camera.main;
+            multiTargetCamera = camera.gameObject.AddComponent<CameraMultiTarget>();
+            cameraTargets.Clear();
+            //multiTargetCamera.SetTargets(cameraTargets.ToArray());
         }
 
         private List<int> playerInputs = new List<int>();
@@ -120,6 +129,27 @@ namespace GaryMoveOut
         }
 
 
+        public void AddMultiCameraTarget(GameObject target)
+        {
+            if (target == null)
+            {
+                return;
+            }
+            cameraTargets.Add(target);
+            multiTargetCamera.SetTargets(cameraTargets.ToArray());
+        }
+
+        public void RemoveMultiCameraTarget(GameObject target)
+        {
+            if (target == null)
+            {
+                return;
+            }
+            cameraTargets.Remove(target);
+            multiTargetCamera.SetTargets(cameraTargets.ToArray());
+        }
+
+
         private void PhaseStartNewGame(object param)
         {
             PhaseStartGame();
@@ -130,6 +160,9 @@ namespace GaryMoveOut
             SetupBuildingOut();
             SetupTruck();
             SetupCatastrophy();
+
+            multiTargetCamera.SetTargets(cameraTargets.ToArray());
+
             events.CallEvent(GamePhases.GameplayPhase.FadeIn, null);
             float fadeDealy = 1f;
             DOVirtual.DelayedCall(fadeDealy, PhaseBadEventStart);
@@ -146,7 +179,15 @@ namespace GaryMoveOut
             truckInPosition.x -= 7f;
 			//truckInPosition.z += -3.5f;
 			truckInPosition.z = 0;
-            truckManager.CreateTruck(gameObject.transform, truckOutPosition, truckInPosition);
+            if (truckManager.CreateTruck(gameObject.transform, truckOutPosition, truckInPosition))
+            {
+                AddMultiCameraTarget(truckManager.Truck.gameObject);
+                var cameraMocap = truckManager.Truck.GetComponentInChildren<CameraMocap>();
+                if (cameraMocap != null)
+                {
+                    AddMultiCameraTarget(cameraMocap.gameObject);
+                }
+            }
         }
 
         private void SetupBuildingOut()
@@ -373,7 +414,10 @@ namespace GaryMoveOut
                 instance.transform.position = pos + playerSpawnOffset;
                 instance.transform.rotation = Quaternion.identity;
                 var player = players[i] = instance.GetComponent<PlayerController>();
+
+                AddMultiCameraTarget(instance.gameObject);
                 player.InputLayout = (InputHandler.Layout)(playerInputs[i]);
+
             }
         }
 
@@ -388,6 +432,12 @@ namespace GaryMoveOut
 
         private void ReactionPlayerDie(object param)
         {
+            if (param is PlayerController)
+            {
+                PlayerController pc = param as PlayerController;
+                RemoveMultiCameraTarget(pc.gameObject);
+            }
+
             currentPlayersDead++;
             EndEvacuation();
         }
