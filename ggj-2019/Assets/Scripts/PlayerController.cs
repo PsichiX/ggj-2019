@@ -259,6 +259,13 @@ namespace GaryMoveOut
                 m_gameplayEvents.CallEvent(GamePhases.GameplayPhase.PlayerDie, null);
                 Debug.Log("player hit the ground");
             }
+
+            if (other.tag == "TruckLoader" && m_isAlive)
+            {
+                m_gameplayEvents.CallEvent(GamePhases.GameplayPhase.PlayerInTruck, null);
+                Debug.Log("player in truck");
+            }
+
             if (other.tag == "Interactible")
             {
                 m_interactibles.Add(other.transform.parent.gameObject);
