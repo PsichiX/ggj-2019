@@ -38,12 +38,12 @@ MonoBehaviour:
     segmentDepth: 3
     EmptyWall: {fileID: 5650563294753579848, guid: c4dc0365659476f4cbfb723e46398787,
       type: 3}
-    Stairs: {fileID: 2227411561322223352, guid: a9814a19a5b2ff647aaade0ba97b5fe3,
+    Stairs: {fileID: 4812971954328237314, guid: c91070e7def05a843a689656597f7b06,
       type: 3}
     SideWall: {fileID: 0}
-    sideWallRight: {fileID: 46571895524148536, guid: 473c58d6ca69da74abd59ed00a05fc05,
+    sideWallRight: {fileID: 7449705830998257530, guid: fefd2871ec32eab43bd865146f4a7c1f,
       type: 3}
-    sideWallLeft: {fileID: 46571895524148536, guid: bbf88b18a844c744b9644485fdaa6b6f,
+    sideWallLeft: {fileID: 7449705830998257530, guid: fefd2871ec32eab43bd865146f4a7c1f,
       type: 3}
     SideDoor: {fileID: 0}
     SideWindowR: {fileID: 0}
