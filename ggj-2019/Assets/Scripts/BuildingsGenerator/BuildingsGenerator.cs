@@ -50,6 +50,13 @@ namespace GaryMoveOut
             Debug.Log($"Generated building with {floorSegmentsCount} segments width, {buildingFloorsCount} floors and stairs at each {stairsSegmentIndex} floor segment");
             return building;
         }
+        public Building GenerateBuildingWithItems(Transform root, int floorSegmentsCount, int buildingFloorsCount, int stairsSegmentIndex, List<Item> items)
+        {
+            var building = ConstructBuilding(root, floorSegmentsCount, buildingFloorsCount, stairsSegmentIndex);
+            building.SpawnItemsInside(items);
+            Debug.Log($"Generated building with {floorSegmentsCount} segments width, {buildingFloorsCount} floors and stairs at each {stairsSegmentIndex} floor segment");
+            return building;
+        }
 
         private Building ConstructBuilding(Transform root, int floorSegmentsCount, int buildingFloorsCount, int stairsSegmentIndex)
         {
