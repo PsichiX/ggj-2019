@@ -26,11 +26,17 @@ namespace GaryMoveOut
         private void OnTriggerEnter2D(Collider2D other)
         {
             var obj = other.gameObject;
-            var itemScheme = obj.transform.parent.GetComponent<ItemScheme>();
-            if(itemScheme != null)
+            if (obj != null)
             {
-                itemsInTruck.Add(itemScheme);
-                itemScheme.InTruck();
+                if (obj.transform.parent != null)
+                {
+                    var itemScheme = obj.transform.parent.GetComponent<ItemScheme>();
+                    if (itemScheme != null)
+                    {
+                        itemsInTruck.Add(itemScheme);
+                        itemScheme.InTruck();
+                    }
+                }
             }
         }
     }

@@ -130,7 +130,7 @@ namespace GaryMoveOut
             // add floor middle segments:
             for (int i = 0; i < floorSegmentsCount; i++)
             {
-                if (i == stairsSegmentIndex)
+                if (type != FloorType.Roof && i == stairsSegmentIndex)
                 {
                     prefab = scheme.Stairs;
                 }
