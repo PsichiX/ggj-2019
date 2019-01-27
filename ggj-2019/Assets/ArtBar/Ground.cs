@@ -18,12 +18,12 @@ namespace GaryMoveOut
                     //itemsInTruck.Add(itemScheme);
                     Debug.Log("item hit the ground");
                 }
-
+                /*
                 var playerController = obj.transform.parent.GetComponent<PlayerController>();
                 if(playerController != null)
                 {
                     Debug.Log("player hit the ground");
-                }
+                }*/
             }
         }
     }
