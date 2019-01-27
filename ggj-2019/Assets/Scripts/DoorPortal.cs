@@ -5,7 +5,7 @@ namespace GaryMoveOut
     public class DoorPortal : MonoBehaviour
     {
         public const int MaxIndex = 999;
-        public const int MinIndex = -999;
+        public const int MinIndex = 0;
 
         public bool CanGoUp
         {
