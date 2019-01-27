@@ -60,6 +60,7 @@ namespace GaryMoveOut
         private bool m_isNearPortal = false;
         private bool m_canTeleportUp = false;
         private bool m_canTeleportDown = false;
+        private bool m_isAlive = true;
 
         private void Start()
         {
@@ -257,6 +258,12 @@ namespace GaryMoveOut
 
         private void OnTriggerEnter2D(Collider2D other)
         {
+            if (other.tag == "Ground" && m_isAlive)
+            {
+                m_isAlive = false;
+                m_gameplayEvents.CallEvent(GamePhases.GameplayPhase.PlayerDie, null);
+                Debug.Log("player hit the ground");
+            }
             if (other.tag == "Interactible")
             {
                 m_interactibles.Add(other.transform.parent.gameObject);
