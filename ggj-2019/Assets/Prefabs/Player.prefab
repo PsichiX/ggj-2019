@@ -95,6 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbdfa6e9bddc9254992b2185f4c43cc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FloorIndex: 1
   m_inputHandler: {fileID: 8141853408582077107}
   m_speed: 10
   m_pickableOrigin: {fileID: 406794870914967185}
