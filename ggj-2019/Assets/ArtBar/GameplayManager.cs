@@ -507,8 +507,14 @@ namespace GaryMoveOut
             buildingsGenerator.DestroyBuildingOut(ref buildingOut);
 
             float delay = 1f;
-            DOVirtual.DelayedCall(delay, PhaseDeEvacuation);
+            //DOVirtual.DelayedCall(delay, PhaseDeEvacuation);
+            GameSummary();
             Debug.Log("PhaseTruckStop");
+        }
+
+        private void GameSummary()
+        {
+            events.CallEvent(GamePhases.GameplayPhase.Summary, null);
         }
 
         private void PhaseDeEvacuation()
