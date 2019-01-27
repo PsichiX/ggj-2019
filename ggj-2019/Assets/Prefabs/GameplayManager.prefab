@@ -78,12 +78,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   placeBuildingOut: {fileID: 5846282614756491481}
   placeBuildingIn: {fileID: 5846282615503035421}
-  playerSpawnOffset: {x: 0, y: 0, z: -2.75}
+  playerSpawnOffset: {x: 0, y: 0, z: 0}
   prefabPlayer: {fileID: 8141853408582077109, guid: b1a4ca32a7a67514bb17d94f369601ff,
     type: 3}
   playersCount: 1
+  DeEvacuationTruckItemList: []
   currentFloorBadEvent: 0
   currentBuildingId: 0
+  currentEvacuationDirection: 0
 --- !u!114 &5846282614914395909
 MonoBehaviour:
   m_ObjectHideFlags: 0

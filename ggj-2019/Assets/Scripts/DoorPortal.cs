@@ -65,7 +65,7 @@ namespace GaryMoveOut
             }
         }
 
-        private void Start()
+        private void Awake()
         {
             m_ui = FindObjectOfType<UiController>();
             if (m_ui != null)
@@ -80,9 +80,7 @@ namespace GaryMoveOut
             if (m_ui != null)
             {
                 m_ui.UnregisterPortal(this);
-                m_ui = null;
             }
-            m_gameplay = null;
         }
     }
 }

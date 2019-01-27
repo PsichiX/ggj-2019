@@ -18,7 +18,7 @@ namespace GaryMoveOut
         [SerializeField] private List<RectTransform> portalDownArrows;
         [SerializeField] private TextMeshProUGUI buildingCounter;
         [SerializeField] private TextMeshProUGUI pointsCounter;
-        [SerializeField] private float m_portalArrowPadding;
+        [SerializeField] private Vector3 m_portalArrowsOffset;
 
         public int CurrentFloorBadEvent { get { return gameplayManager.currentFloorBadEvent; } }
         public EvecuationDirection CurrentEvecuationDirection { get { return gameplayManager.currentEvacuationDirection; } }
@@ -206,14 +206,17 @@ namespace GaryMoveOut
                 var down = portalDownArrows[i];
                 if (up.gameObject.activeSelf || down.gameObject.activeSelf)
                 {
-                    var sp = RectTransformUtility.WorldToScreenPoint(m_camera, portal.transform.position);
+                    var sp = RectTransformUtility.WorldToScreenPoint(
+                        m_camera,
+                        portal.transform.position + m_portalArrowsOffset
+                    );
                     if (up.gameObject.activeSelf)
                     {
-                        up.anchoredPosition = sp + Vector2.up * m_portalArrowPadding;
+                        up.anchoredPosition = sp;
                     }
                     if (down.gameObject.activeSelf)
                     {
-                        down.anchoredPosition = sp - Vector2.up * m_portalArrowPadding;
+                        down.anchoredPosition = sp;
                     }
                 }
             }
