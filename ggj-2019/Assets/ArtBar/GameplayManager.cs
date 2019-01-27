@@ -170,6 +170,9 @@ namespace GaryMoveOut
         private void SetupCatastrophy()
         {
             currentCatastrophy = catastrophiesDatabase.GetRandomCatastrophy();
+
+            // debug:
+            ProcessCatastrophy();
         }
 
 
