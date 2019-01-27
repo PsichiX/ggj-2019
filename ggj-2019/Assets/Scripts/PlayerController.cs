@@ -473,6 +473,7 @@ namespace GaryMoveOut
 
         private void ThrowMe()
         {
+			GetComponent<AudioSource>().Play();
             if (m_window != null && m_isAiming)
             {
                 m_isAiming = false;

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace GaryMoveOut
 {
@@ -507,8 +508,22 @@ namespace GaryMoveOut
             buildingsGenerator.DestroyBuildingOut(ref buildingOut);
 
             float delay = 1f;
-            DOVirtual.DelayedCall(delay, PhaseDeEvacuation);
+            //DOVirtual.DelayedCall(delay, PhaseDeEvacuation);
+            GameSummary();
             Debug.Log("PhaseTruckStop");
+        }
+
+        private void GameSummary()
+        {
+            events.CallEvent(GamePhases.GameplayPhase.Summary, null);
+            float delay = 1f;
+
+            DOVirtual.DelayedCall(delay, LoadMainMenu);
+        }
+
+        private void LoadMainMenu()
+        {
+            SceneManager.LoadScene(0, LoadSceneMode.Single);
         }
 
         private void PhaseDeEvacuation()

@@ -41,9 +41,9 @@ namespace GaryMoveOut
                     if (itemScheme != null)
                     {
                         itemsInTruck.Add(itemScheme);
+                        //itemsInTruck2.Add(new Item(itemScheme.assignedItem));
                         itemScheme.InTruck();
 
-                        itemsInTruck2.Add(new Item(itemScheme.assignedItem));
                     }
                 }
             }

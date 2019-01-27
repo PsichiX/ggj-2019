@@ -54,8 +54,10 @@ namespace GaryMoveOut
 			//NewItemInTruck?.Invoke(this);
 			GameplayManager.CallNewItemInTruckEvent(this);
             ausource.PlayOneShot(Resources.Load("Audio/Points") as AudioClip);
-			// TODO: hide object
-		}
+            // TODO: hide object
+            KillMe();
+
+        }
 
         public bool IsItemAlive()
         {

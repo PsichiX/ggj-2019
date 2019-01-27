@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1821650907}
   - component: {fileID: 1821650909}
   - component: {fileID: 1821650908}
+  - component: {fileID: 251756075811424808}
   m_Layer: 0
   m_Name: TruckLoader
   m_TagString: TruckLoader
@@ -71,6 +72,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemsInTruck: []
+--- !u!61 &251756075811424808
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1821650906}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.50312185, y: -0.34526062}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 3.8493328, y: 0.30947876}
+  m_EdgeRadius: 0
 --- !u!1 &598981835745855250
 GameObject:
   m_ObjectHideFlags: 0

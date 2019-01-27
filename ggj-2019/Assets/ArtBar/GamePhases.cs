@@ -20,6 +20,7 @@
         GameOver = 15,      // summary
         PlayerDie = 16,
         StartNewGame = 17,
+        Summary = 18,
     }
 
 
