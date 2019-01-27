@@ -1,5 +1,6 @@
 ﻿using DG.Tweening;
 using UnityEngine;
+using static GaryMoveOut.GameplayManager;
 
 namespace GaryMoveOut
 {
@@ -9,6 +10,8 @@ namespace GaryMoveOut
         public float floorFallTime = 0.4f;
 
         public override CatastrophyType Type { get { return CatastrophyType.EarthQuake; } }
+        public override EvecuationDirection EvacuationDirection { get { return EvecuationDirection.Up; } }
+
         private BuildingSegmentsDatabase buildingsDatabase;
 
 
