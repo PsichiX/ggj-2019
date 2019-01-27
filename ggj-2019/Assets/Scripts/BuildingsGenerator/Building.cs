@@ -83,7 +83,9 @@ namespace GaryMoveOut
                     var itemSlot = floor.segments[si].GetComponentInChildren<ItemSlot>();
                     if (itemSlot != null)
                     {
-                        var item = new Item(items[itemsPlaced++]);
+                        var scheme = items[itemsPlaced++];
+                        var item = new Item(scheme);
+                        scheme.assignedItem = item;
                         SpawnItem(item, itemSlot, floor);
                         i++;
                     }
@@ -104,7 +106,9 @@ namespace GaryMoveOut
                     var itemSlot = segment.GetComponentInChildren<ItemSlot>();
                     if (itemSlot != null && !itemSlot.isOccupied)
                     {
-                        var item = new Item(items[itemsPlaced++]);
+                        var scheme = items[itemsPlaced++];
+                        var item = new Item(scheme);
+                        scheme.assignedItem = item;
                         SpawnItem(item, itemSlot, floor);
                         itemsPlaced++;
                         break;

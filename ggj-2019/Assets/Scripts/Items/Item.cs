@@ -25,5 +25,19 @@ namespace GaryMoveOut
 
             scheme.assignedItem = this;
         }
+
+        public Item(Item scheme)
+        {
+            if (scheme == null)
+            {
+                Debug.LogError("Could not create Item out of empty Item!");
+                return;
+            }
+            value = scheme.value;
+            weight = scheme.weight;
+            vertical = scheme.vertical;
+            type = scheme.type;
+            prefab = scheme.prefab;
+        }
     }
 }
