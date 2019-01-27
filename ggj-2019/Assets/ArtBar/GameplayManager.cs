@@ -72,6 +72,7 @@ namespace GaryMoveOut
         private void SetupPlayerCounter()
         {
             playerInputs.Clear();
+            playersCount = 0;
             var playerConfig = StartConfig.GetStartConfig();
             if(playerConfig != null )
             {
