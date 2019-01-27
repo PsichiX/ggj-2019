@@ -16,27 +16,27 @@ MonoBehaviour:
     type: 3}
   defaultFloor:
     segmentWidth: 2
-    segmentHeight: 2.95
+    segmentHeight: 4.2295
     segmentDepth: 3
-    EmptyWall: {fileID: 6609838129568284721, guid: f169d6b9c77a45e4a8fd2676e8e0e195,
+    EmptyWall: {fileID: 719717464079549139, guid: 8044d6ec5cb8c7a4da91c12228da6523,
       type: 3}
-    Stairs: {fileID: 5189282402832524550, guid: 2818c3817612d2d4f9d8508923f29b34,
+    Stairs: {fileID: 7567535869190320488, guid: 63821a31f617b064a9fa52dcb402126a,
       type: 3}
-    SideWall: {fileID: 9134690517315506629, guid: 6632d3d3837f0d541ba5c8592efea41d,
+    SideWall: {fileID: 1260884910945934317, guid: 34cbe44f8254b6046b4179ac7514158c,
       type: 3}
     sideWallRight: {fileID: 0}
     sideWallLeft: {fileID: 0}
-    SideDoor: {fileID: 653785589163784278, guid: aa56266f68d05bf42ba004c2935d8dae,
+    SideDoor: {fileID: 1482805047591935893, guid: 58893be9b9184474e894abc2e295de2a,
       type: 3}
-    SideWindowR: {fileID: 9134690517315506629, guid: 489d6bd688c52ce47a789a01d7f35475,
+    SideWindowR: {fileID: 3794140939795954155, guid: 1f27c181fc10eab4298575bb270d8e35,
       type: 3}
-    SideWindowL: {fileID: 9134690517315506629, guid: bfd0b1b56420e5546873bbae6c6d8f8a,
+    SideWindowL: {fileID: 332191374962602392, guid: 9616648eca9d2a14b85fb48789cf59fa,
       type: 3}
   defaultRoof:
     segmentWidth: 2
-    segmentHeight: 2.95
+    segmentHeight: 4
     segmentDepth: 3
-    EmptyWall: {fileID: 46571895524148536, guid: 20a8188f0a976de4298e1172c8ca8a4c,
+    EmptyWall: {fileID: 5650563294753579848, guid: c4dc0365659476f4cbfb723e46398787,
       type: 3}
     Stairs: {fileID: 2227411561322223352, guid: a9814a19a5b2ff647aaade0ba97b5fe3,
       type: 3}

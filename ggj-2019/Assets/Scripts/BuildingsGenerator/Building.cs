@@ -1,18 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace GaryMoveOut
 {
     public class Building
     {
+        public Transform root;
         public Dictionary<int, Floor> floors;
         public Dictionary<int, DoorPortal> stairs;
 
+        public float SegmentWidth { get; private set; }
+        public float SegmentHeight { get; private set; }
+        public float SegmentDepth { get; private set; }
 
-        public Building()
+
+        public Building(float segmentWidth, float segmentHeight, float segmentDepth)
         {
             floors = new Dictionary<int, Floor>();
             stairs = new Dictionary<int, DoorPortal>();
+
+            SegmentWidth = segmentWidth;
+            SegmentHeight = segmentHeight;
+            SegmentDepth = segmentDepth;
         }
 
 
@@ -25,6 +35,18 @@ namespace GaryMoveOut
                 return door.transform.position;
             }
             return null;
+        }
+
+        public void DestroyFloor(int floorIndex)
+        {
+            if (floors.TryGetValue(floorIndex, out Floor floor))
+            {
+                foreach(var segment in floor.segments)
+                {
+                    GameObject.Destroy(segment);
+                }
+                floor.items.Clear();
+            }
         }
 
         public void SpawnItemsInside(List<ItemScheme> items)
@@ -54,7 +76,7 @@ namespace GaryMoveOut
 
                 for (i = 0; i < itemsPerFloor && segmentIndices.Count > 0;)
                 {
-                    var index = Random.Range(0, segmentIndices.Count);
+                    var index = UnityEngine.Random.Range(0, segmentIndices.Count);
                     var si = segmentIndices[index];
                     segmentIndices.RemoveAt(index);
 
@@ -62,9 +84,7 @@ namespace GaryMoveOut
                     if (itemSlot != null)
                     {
                         var item = new Item(items[itemsPlaced++]);
-                        var itemGO = GameObject.Instantiate(item.prefab, itemSlot.gameObject.transform);
-                        floor.items.Add(item);
-                        itemSlot.isOccupied = true;
+                        SpawnItem(item, itemSlot, ref floor.items);
                         i++;
                     }
                 }
@@ -85,9 +105,7 @@ namespace GaryMoveOut
                     if (itemSlot != null && !itemSlot.isOccupied)
                     {
                         var item = new Item(items[itemsPlaced++]);
-                        var itemGO = GameObject.Instantiate(item.prefab, itemSlot.gameObject.transform);
-                        floor.items.Add(item);
-                        itemSlot.isOccupied = true;
+                        SpawnItem(item, itemSlot, ref floor.items);
                         itemsPlaced++;
                         break;
                     }
@@ -115,7 +133,7 @@ namespace GaryMoveOut
 
                 while (itemsByFloorIndex[floor.Key].Count > 0 && indices.Count > 0)
                 {
-                    var rnd = Random.Range(0, indices.Count);
+                    var rnd = UnityEngine.Random.Range(0, indices.Count);
                     index = indices[rnd];
                     indices.RemoveAt(rnd);
 
@@ -124,9 +142,7 @@ namespace GaryMoveOut
                     {
                         var item = itemsByFloorIndex[floor.Key][0];
                         itemsByFloorIndex[floor.Key].RemoveAt(0);
-                        var itemGO = GameObject.Instantiate(item.prefab, itemSlot.gameObject.transform);
-                        floor.Value.items.Add(item);
-                        itemSlot.isOccupied = true;
+                        SpawnItem(item, itemSlot, ref floor.Value.items);
                     }
                 }
                 if (itemsByFloorIndex[floor.Key].Count > 0)
@@ -148,16 +164,21 @@ namespace GaryMoveOut
                     {
                         var item = unstackedItems[0];
                         unstackedItems.RemoveAt(0);
-                        var itemGO = GameObject.Instantiate(item.prefab, itemSlot.gameObject.transform);
-                        floor.items.Add(item);
-                        itemSlot.isOccupied = true;
-
+                        SpawnItem(item, itemSlot, ref floor.items);
                         break;
                     }
                 }
                 index = (++index == floorsList.Count) ? 0 : index;
             }
 
+        }
+
+        private void SpawnItem(Item item, ItemSlot itemSlot, ref List<Item> items)
+        {
+            var itemGO = GameObject.Instantiate(item.prefab, itemSlot.gameObject.transform);
+            itemGO.transform.SetParent(null);
+            items.Add(item);
+            itemSlot.isOccupied = true;
         }
 
         public Dictionary<int, List<Item>> GetItems()

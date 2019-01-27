@@ -16,5 +16,16 @@ namespace GaryMoveOut
         public float weight;
         public bool vertical;
         public ItemType type;
+
+        private bool isAlive = true;
+        public void DestroyOnGround()
+        {
+            isAlive = false;
+        }
+
+        public bool IsItemAlive()
+        {
+            return isAlive;
+        }
     }
 }

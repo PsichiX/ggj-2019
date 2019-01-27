@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -37,6 +38,7 @@ namespace GaryMoveOut
         [SerializeField] private int playersCount = 1;
 
         public List<ItemScheme> DeEvacuationTruckItemList;
+        private CatastrophiesDatabase catastrophiesDatabase;
 
         void Awake()
         {
@@ -55,6 +57,9 @@ namespace GaryMoveOut
             buildingConfigurator = new BuildingConfigurator();
             truckManager = new TruckManager();
             players = new PlayerController[playersCount];
+
+            catastrophiesDatabase = Resources.Load<CatastrophiesDatabase>("Databases/CatastrophiesDatabase");
+            catastrophiesDatabase.LoadDataFromResources();
         }
 
         private void Start()
@@ -73,6 +78,8 @@ namespace GaryMoveOut
             events.AttachToEvent(GamePhases.GameplayPhase.PlayerDie, ReactionPlayerDie);
             events.AttachToEvent(GamePhases.GameplayPhase.GameOver, ReactionGameOver);
             events.AttachToEvent(GamePhases.GameplayPhase.StartNewGame, PhaseStartNewGame);
+
+            events.AttachToEvent(GamePhases.GameplayPhase.FloorEvacuationEnd, ReactionEvacuationEnd);
         }
 
         void Update()
@@ -90,6 +97,7 @@ namespace GaryMoveOut
         {
             SetupBuildingOut();
             SetupTruck();
+            SetupCatastrophy();
             events.CallEvent(GamePhases.GameplayPhase.FadeIn, null);
             float fadeDealy = 1f;
             DOVirtual.DelayedCall(fadeDealy, PhaseBadEventStart);
@@ -100,11 +108,12 @@ namespace GaryMoveOut
         {
             var truckOutPosition = placeBuildingOut.transform.position;
             truckOutPosition.x += 20f;
-            truckOutPosition.z += -3.5f;
+            //truckOutPosition.z += -3.5f;
 
             var truckInPosition = placeBuildingIn.transform.position;
             truckInPosition.x -= 7f;
-            truckInPosition.z += -3.5f;
+			//truckInPosition.z += -3.5f;
+			truckInPosition.z = 0;
             truckManager.CreateTruck(gameObject.transform, truckOutPosition, truckInPosition);
         }
 
@@ -159,6 +168,13 @@ namespace GaryMoveOut
                 buildingIn = buildingsGenerator.GenerateBuilding(placeBuildingIn.transform, buildingConfig.floorSegmentsCount, buildingConfig.buildingFloorsCount, buildingConfig.stairsSegmentIndex);
             }
         }
+
+        private BaseCatastrophy currentCatastrophy;
+        private void SetupCatastrophy()
+        {
+            currentCatastrophy = catastrophiesDatabase.GetRandomCatastrophy();
+        }
+
 
         private void PhaseBadEventStart()
         {
@@ -278,6 +294,7 @@ namespace GaryMoveOut
         private void ReactionPlayerDie(object param)
         {
             EndEvacuation();
+
             float delay = 1f;
             DOVirtual.DelayedCall(delay, () => events.CallEvent(GamePhases.GameplayPhase.GameOver, null));
         }
@@ -295,6 +312,19 @@ namespace GaryMoveOut
         private void ReactionPlayerInTruck(object param)
         {
             PhaseTruckStart();
+        }
+
+        private void ReactionEvacuationEnd(object obj)
+        {
+            ProcessCatastrophy();
+        }
+
+        private void ProcessCatastrophy()
+        {
+            if(currentCatastrophy != null)
+            {
+                currentCatastrophy.DestroyFloor(buildingOut, currentFloorBadEvent);
+            }
         }
 
         private void PhaseTruckStart()

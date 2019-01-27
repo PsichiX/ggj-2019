@@ -10,19 +10,25 @@ namespace GaryMoveOut
         {
             //if (other.tag == "Interactible")
             {
-
                 var obj = other.gameObject;
-                var itemScheme = obj.transform.parent.GetComponent<ItemScheme>();
-                if (itemScheme != null)
+                if (obj != null && obj.transform.parent != null)
                 {
-                    //itemsInTruck.Add(itemScheme);
-                    Debug.Log("item hit the ground");
-                }
-
-                var playerController = obj.transform.parent.GetComponent<PlayerController>();
-                if(playerController != null)
-                {
-                    Debug.Log("player hit the ground");
+                    var itemScheme = obj.transform.parent.GetComponent<ItemScheme>();
+                    if (itemScheme != null)
+                    {
+                        if (itemScheme.IsItemAlive())
+                        {
+                            var rb = obj.transform.parent.GetComponent<Rigidbody2D>();
+                            if (rb != null)
+                            {
+                                if (rb.velocity.magnitude > 1f)
+                                {
+                                    Debug.Log("item hit the ground");
+                                    itemScheme.DestroyOnGround();
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
