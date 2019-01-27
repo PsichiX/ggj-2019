@@ -1,14 +1,13 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 namespace GaryMoveOut
 {
     public class ItemCatcher : MonoBehaviour
     {
         [SerializeField] private bool isInside = true;
-		[SerializeField] private AddForce addForce;
-		[SerializeField] private GameObject glassSheet;
-		private Collider coll;
+        [SerializeField] private AddForce addForce;
+        [SerializeField] private GameObject glassSheet;
+        private Collider coll;
 
         private Floor floor;
 
@@ -20,7 +19,11 @@ namespace GaryMoveOut
         private void OnTriggerEnter2D(Collider2D other)
         {
             var item = other.GetComponent<ItemScheme>();
-			var item2 = new Item(item);
+            if (item == null)
+            {
+                return;
+            }
+            var item2 = new Item(item);
             if (item != null && floor != null)
             {
                 if (isInside)
@@ -32,29 +35,29 @@ namespace GaryMoveOut
                     floor.RemoveItem(item2);
                 }
             }
-			if (addForce != null)
-			{
-				var rigid = other.GetComponent<Rigidbody2D>();
-				if (rigid)
-				{
-					if (rigid.velocity.x > 0)
-					{
-						Pekaj(true);
-					}
-					else
-					{
-						Pekaj(false);
-					}
-				}
-			}
+            if (addForce != null)
+            {
+                var rigid = other.GetComponent<Rigidbody2D>();
+                if (rigid)
+                {
+                    if (rigid.velocity.x > 0)
+                    {
+                        Pekaj(true);
+                    }
+                    else
+                    {
+                        Pekaj(false);
+                    }
+                }
+            }
         }
 
-		private void Pekaj(bool wPrawo)
-		{
-			glassSheet.SetActive(false);
-			addForce.gameObject.SetActive(true);
-			addForce.right = wPrawo;
-			addForce.Peknij();
-		}
+        private void Pekaj(bool wPrawo)
+        {
+            glassSheet.SetActive(false);
+            addForce.gameObject.SetActive(true);
+            addForce.right = wPrawo;
+            addForce.Peknij();
+        }
     }
 }
