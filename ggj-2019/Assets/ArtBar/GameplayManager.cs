@@ -9,8 +9,9 @@ namespace GaryMoveOut
     {
         public enum EvecuationDirection
         {
-            Up,
-            Down
+            Up = 0,
+            Down =1,
+            Both = 2
         }
 
         private static GameplayManager _instance;
@@ -202,6 +203,9 @@ namespace GaryMoveOut
         private void SetupCatastrophy()
         {
             currentCatastrophy = catastrophiesDatabase.GetRandomCatastrophy();
+
+            // debug:
+            //DOVirtual.DelKayedCall(1f, () => { ProcessCatastrophy(); });
         }
 
 
@@ -218,8 +222,24 @@ namespace GaryMoveOut
             events.CallEvent(GamePhases.GameplayPhase.Evacuation, null);
             Debug.Log("PhaseStartEvacuation");
             isEvacuation = true;
-            currentEvacuationDirection = EvecuationDirection.Up;
-            currentFloorBadEvent = -1;
+            if (currentCatastrophy != null)
+            {
+                currentEvacuationDirection = currentCatastrophy.EvacuationDirection;
+                switch (currentEvacuationDirection)
+                {
+                    case EvecuationDirection.Down:
+                        currentFloorBadEvent = buildingOut.floors.Count;
+                        break;
+                    default:
+                        currentFloorBadEvent = -1;
+                        break;
+                }
+            }
+            else
+            {
+                currentEvacuationDirection = EvecuationDirection.Up;
+                currentFloorBadEvent = -1;
+            }
             NextFloorBadEvent();
         }
 
@@ -278,8 +298,25 @@ namespace GaryMoveOut
 
         private void NextFloorBadEvent()
         {
-            currentFloorBadEvent++;
-            if (currentFloorBadEvent > buildingFloorNumber)
+            bool isGameOver = false;
+            switch (currentEvacuationDirection)
+            {
+                case EvecuationDirection.Down:
+                    currentFloorBadEvent--;
+                    if (currentFloorBadEvent < 1)
+                    {
+                        isGameOver = true;
+                    }
+                    break;
+                default:
+                    currentFloorBadEvent++;
+                    if (currentFloorBadEvent > buildingFloorNumber)
+                    {
+                        isGameOver = true;
+                    }
+                    break;
+            }
+            if (isGameOver)
             {
                 isEvacuation = false;
                 events.CallEvent(GamePhases.GameplayPhase.GameOver, null);

@@ -28,9 +28,9 @@ MonoBehaviour:
     sideWallLeft: {fileID: 0}
     SideDoor: {fileID: 1482805047591935893, guid: 58893be9b9184474e894abc2e295de2a,
       type: 3}
-    SideWindowR: {fileID: 3794140939795954155, guid: 1f27c181fc10eab4298575bb270d8e35,
+    SideWindowR: {fileID: 8558976584836231972, guid: 2b49dbd4ae8ddbd47b02af1791a3b184,
       type: 3}
-    SideWindowL: {fileID: 332191374962602392, guid: 9616648eca9d2a14b85fb48789cf59fa,
+    SideWindowL: {fileID: 3745520441282229227, guid: bab7ab1877dac7549b12688f4a1b8b97,
       type: 3}
   defaultRoof:
     segmentWidth: 2
@@ -38,7 +38,7 @@ MonoBehaviour:
     segmentDepth: 3
     EmptyWall: {fileID: 5650563294753579848, guid: c4dc0365659476f4cbfb723e46398787,
       type: 3}
-    Stairs: {fileID: 4812971954328237314, guid: c91070e7def05a843a689656597f7b06,
+    Stairs: {fileID: 5189282402832524550, guid: 2818c3817612d2d4f9d8508923f29b34,
       type: 3}
     SideWall: {fileID: 0}
     sideWallRight: {fileID: 7449705830998257530, guid: fefd2871ec32eab43bd865146f4a7c1f,
