@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using static GaryMoveOut.GameplayManager;
@@ -52,6 +53,14 @@ namespace GaryMoveOut
         {
             m_players = new PlayerController[m_aims.Count];
             m_portals = new DoorPortal[Mathf.Min(portalUpArrows.Count, portalDownArrows.Count)];
+
+
+            GameplayManager.PointsCollectedUpdate += UpdatePointsOnItemAdd;
+        }
+
+        private void UpdatePointsOnItemAdd(int points)
+        {
+            UpdatePoints(points);
         }
 
         private void Start()

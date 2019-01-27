@@ -14,6 +14,14 @@ namespace GaryMoveOut
             Both = 2
         }
 
+        public static event System.Action<int> PointsCollectedUpdate;
+        public static event System.Action<ItemScheme> NewItemInTruck;
+        public static void CallNewItemInTruckEvent(ItemScheme scheme)
+        {
+            NewItemInTruck?.Invoke(scheme);
+        }
+        public int pointsCollected = 0;
+
         private static GameplayManager _instance;
         public static GameplayManager GetGameplayManager()
         {
@@ -76,7 +84,14 @@ namespace GaryMoveOut
             var camera = Camera.main;
             multiTargetCamera = camera.gameObject.AddComponent<CameraMultiTarget>();
             cameraTargets.Clear();
-            //multiTargetCamera.SetTargets(cameraTargets.ToArray());
+
+            NewItemInTruck += OnNewItemInTruck;
+        }
+
+        private void OnNewItemInTruck(ItemScheme scheme)
+        {
+            pointsCollected += (int)scheme.value;
+            PointsCollectedUpdate?.Invoke(pointsCollected);
         }
 
         private List<int> playerInputs = new List<int>();
@@ -208,13 +223,13 @@ namespace GaryMoveOut
                 var itemsCount = UnityEngine.Random.Range(minItemsCount, maxFreeSegments);
                 var items = buildingsGenerator.ItemsDatabase.GetRandomItems(itemsCount);
 
-                if (DeEvacuationTruckItemList != null)
+                if (DeEvacuationTruckItemList == null || DeEvacuationTruckItemList.Count == 0)
                 {
                     buildingOut = buildingsGenerator.GenerateBuildingWithItems(placeBuildingOut.transform,
                                                                                buildingConfig.floorSegmentsCount,
                                                                                buildingConfig.buildingFloorsCount,
                                                                                buildingConfig.stairsSegmentIndex,
-                                                                               DeEvacuationTruckItemList);
+                                                                               items);
                 }
                 else
                 {
@@ -222,7 +237,7 @@ namespace GaryMoveOut
                                                            buildingConfig.floorSegmentsCount,
                                                            buildingConfig.buildingFloorsCount,
                                                            buildingConfig.stairsSegmentIndex,
-                                                           items);
+                                                           DeEvacuationTruckItemList);
                 }
                 buildingFloorNumber = buildingConfig.buildingFloorsCount;
             }
