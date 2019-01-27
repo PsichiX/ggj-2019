@@ -18,6 +18,8 @@ namespace GaryMoveOut
             return _instance;
         }
 
+        public Vector3 PlayerSpawnOffset => playerSpawnOffset;
+
         private GameplayEvents events;
         private BuildingsGenerator buildingsGenerator;
         private BuildingConfigurator buildingConfigurator;
