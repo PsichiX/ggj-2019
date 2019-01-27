@@ -208,13 +208,13 @@ namespace GaryMoveOut
                 var itemsCount = UnityEngine.Random.Range(minItemsCount, maxFreeSegments);
                 var items = buildingsGenerator.ItemsDatabase.GetRandomItems(itemsCount);
 
-                if (DeEvacuationTruckItemList != null)
+                if (DeEvacuationTruckItemList == null || DeEvacuationTruckItemList.Count == 0)
                 {
                     buildingOut = buildingsGenerator.GenerateBuildingWithItems(placeBuildingOut.transform,
                                                                                buildingConfig.floorSegmentsCount,
                                                                                buildingConfig.buildingFloorsCount,
                                                                                buildingConfig.stairsSegmentIndex,
-                                                                               DeEvacuationTruckItemList);
+                                                                               items);
                 }
                 else
                 {
@@ -222,7 +222,7 @@ namespace GaryMoveOut
                                                            buildingConfig.floorSegmentsCount,
                                                            buildingConfig.buildingFloorsCount,
                                                            buildingConfig.stairsSegmentIndex,
-                                                           items);
+                                                           DeEvacuationTruckItemList);
                 }
                 buildingFloorNumber = buildingConfig.buildingFloorsCount;
             }
