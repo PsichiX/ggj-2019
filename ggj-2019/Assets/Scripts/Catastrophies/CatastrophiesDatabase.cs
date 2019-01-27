@@ -12,10 +12,11 @@ namespace GaryMoveOut
         {
             database.Clear();
 
-            var items = Resources.LoadAll<BaseCatastrophy>("Catastrophies");
-            foreach (var item in items)
+            var catastrophies = Resources.LoadAll<BaseCatastrophy>("Catastrophies");
+            foreach (var catastrophy in catastrophies)
             {
-                database.Add(item);
+                catastrophy.Initialize();
+                database.Add(catastrophy);
             }
         }
 

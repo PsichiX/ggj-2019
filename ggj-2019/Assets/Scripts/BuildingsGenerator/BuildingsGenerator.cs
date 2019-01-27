@@ -19,16 +19,18 @@ namespace GaryMoveOut
 
         public void DestroyBuildingOut(ref Building buildingOut)
         {
-            foreach(var floor in buildingOut.floors.Values)
+            foreach(var floor in buildingOut.floors)
             {
-                foreach(var segment in floor.segments)
-                {
-                    GameObject.Destroy(segment);
-                }
-                floor.segments.Clear();
+                buildingOut.DestroyFloor(floor.Key);
+                //foreach(var segment in floor.segments)
+                //{
+                //    GameObject.Destroy(segment);
+                //}
+                //floor.segments.Clear();
 
-                floor.items.Clear();
-                GameObject.Destroy(floor.gameObject);
+                //floor.items.Clear();
+
+                GameObject.Destroy(floor.Value.gameObject);
             }
             buildingOut.floors.Clear();
         }
@@ -51,8 +53,11 @@ namespace GaryMoveOut
 
         private Building ConstructBuilding(Transform root, int floorSegmentsCount, int buildingFloorsCount, int stairsSegmentIndex)
         {
-            var building = new Building();
             var floorScheme = BuildingsDatabase.GetRandomFloorScheme();
+            var building = new Building(floorScheme.segmentWidth, floorScheme.segmentHeight, floorScheme.segmentDepth)
+            {
+                root = root
+            };
 
             Vector3 position = root.position;
             Quaternion rotation = root.rotation;

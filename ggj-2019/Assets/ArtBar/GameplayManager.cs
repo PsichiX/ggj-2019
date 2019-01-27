@@ -319,7 +319,7 @@ namespace GaryMoveOut
         {
             if(currentCatastrophy != null)
             {
-                currentCatastrophy.DestroyFloor(buildingIn, currentFloorBadEvent);
+                currentCatastrophy.DestroyFloor(buildingOut, currentFloorBadEvent);
             }
         }
 
