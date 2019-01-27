@@ -1,11 +1,11 @@
-﻿using DG.Tweening;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace GaryMoveOut
 {
     [RequireComponent(typeof(Rigidbody2D))]
+    [RequireComponent(typeof(BoxCollider2D))]
     public class PlayerController : MonoBehaviour
     {
         public enum Side
@@ -48,6 +48,7 @@ namespace GaryMoveOut
         private float m_aimingStrengthSpeed = 1;
 
         private Rigidbody2D m_rigidBody;
+        private BoxCollider2D m_collider;
         private HashSet<GameObject> m_interactibles = new HashSet<GameObject>();
         private bool m_lastAction = false;
         private bool m_lastUp = false;
@@ -78,6 +79,7 @@ namespace GaryMoveOut
         private void Start()
         {
             m_rigidBody = GetComponent<Rigidbody2D>();
+            m_collider = GetComponent<BoxCollider2D>();
             m_animator = GetComponentInChildren<Animator>();
 
             if (m_ui != null)
@@ -108,11 +110,7 @@ namespace GaryMoveOut
             {
                 m_inputBlocked = true;
                 InputLayout = InputHandler.Layout.None;
-
-                DOVirtual.DelayedCall(1f, () =>
-                {
-                    Destroy(this.gameObject);
-                });
+                Destroy(this.gameObject);
             }
         }
 
@@ -288,7 +286,7 @@ namespace GaryMoveOut
                 );
             }
         }
-        
+
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (other.tag == "Ground" && m_isAlive)
@@ -404,9 +402,8 @@ namespace GaryMoveOut
         private void TeleportUp()
         {
             var portal = GetInteractible<DoorPortal>();
-            if (portal != null && portal.CanGoUp)
+            if (portal != null && portal.CanGoUp && portal.building.stairs.TryGetValue(portal.floorIndexAbove, out DoorPortal portalAbove))
             {
-                var portalAbove = portal.building.stairs[portal.floorIndexAbove];
                 var pos = portalAbove.transform.position;
                 transform.position = new Vector3(pos.x, pos.y, transform.position.z);
 
@@ -480,10 +477,14 @@ namespace GaryMoveOut
             if (m_window != null && m_isAiming)
             {
                 m_isAiming = false;
+                InputLayout = InputHandler.Layout.None;
                 var angle = TurnToSide == Side.Left ? 180 - m_aimAngle : m_aimAngle;
                 var force = Quaternion.Euler(0, 0, angle) * Vector2.right * m_aimStrength;
                 m_rigidBody.AddForce(force, ForceMode2D.Impulse);
                 m_rigidBody.constraints = RigidbodyConstraints2D.None;
+                m_rigidBody.MovePosition(m_rigidBody.position + new Vector2(0, 1));
+                m_collider.size = new Vector2(0.5f, 0.5f);
+                m_animator.SetFloat("Jump", 0.2f);
                 m_window = null;
             }
             if (m_ui != null)

@@ -28,7 +28,7 @@ namespace GaryMoveOut
                 Down = Input.GetKey(KeyCode.S);
                 Left = Input.GetKey(KeyCode.A);
                 Right = Input.GetKey(KeyCode.D);
-                Action = Input.GetKey(KeyCode.LeftControl);
+                Action = Input.GetKey(KeyCode.LeftShift);
             }
             else if (InputLayout == Layout.Arrows)
             {
