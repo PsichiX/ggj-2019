@@ -37,6 +37,7 @@ namespace GaryMoveOut
 
         private Dictionary<int, List<Item>> itemsFromLastInBuilding;
         private List<ItemScheme> itemsFromTruck;
+        private List<Item> itemsFormTruck2;
         [SerializeField] private GameObject prefabPlayer;
         private int playersCount = 1;
 
@@ -208,7 +209,7 @@ namespace GaryMoveOut
                 var itemsCount = UnityEngine.Random.Range(minItemsCount, maxFreeSegments);
                 var items = buildingsGenerator.ItemsDatabase.GetRandomItems(itemsCount);
 
-                if (DeEvacuationTruckItemList == null || DeEvacuationTruckItemList.Count == 0)
+                if (itemsFormTruck2 == null || itemsFormTruck2.Count == 0)
                 {
                     buildingOut = buildingsGenerator.GenerateBuildingWithItems(placeBuildingOut.transform,
                                                                                buildingConfig.floorSegmentsCount,
@@ -222,7 +223,7 @@ namespace GaryMoveOut
                                                            buildingConfig.floorSegmentsCount,
                                                            buildingConfig.buildingFloorsCount,
                                                            buildingConfig.stairsSegmentIndex,
-                                                           DeEvacuationTruckItemList);
+                                                           itemsFormTruck2);
                 }
                 buildingFloorNumber = buildingConfig.buildingFloorsCount;
             }
@@ -498,6 +499,7 @@ namespace GaryMoveOut
         private void PhaseDeEvacuation()
         {
             DeEvacuationTruckItemList = truckManager.GetTruckItemList();
+            itemsFormTruck2 = truckManager.GetTruckItemList2();
             float delay = 0.2f;
             DOVirtual.DelayedCall(delay, PhaseStartGame);
             //itemsFromTruck = truckManager.GetTruckItemList();

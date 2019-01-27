@@ -7,20 +7,27 @@ namespace GaryMoveOut
     public class TruckLoader : MonoBehaviour
     {
         public List<ItemScheme> itemsInTruck;
+        public List<Item> itemsInTruck2;
 
         void Start()
         {
             itemsInTruck = new List<ItemScheme>();
+            itemsInTruck2 = new List<Item>();
         }
 
         public void ResetTruckItemList()
         {
             itemsInTruck.Clear();
+            itemsInTruck2.Clear();
         }
 
         public List<ItemScheme> GetItemList()
         {
             return itemsInTruck;
+        }
+        public List<Item> GetItemList2()
+        {
+            return itemsInTruck2;
         }
 
         private void OnTriggerEnter2D(Collider2D other)
@@ -35,6 +42,8 @@ namespace GaryMoveOut
                     {
                         itemsInTruck.Add(itemScheme);
                         itemScheme.InTruck();
+
+                        itemsInTruck2.Add(new Item(itemScheme.assignedItem));
                     }
                 }
             }
