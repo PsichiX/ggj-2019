@@ -106,11 +106,12 @@ namespace GaryMoveOut
         {
             var truckOutPosition = placeBuildingOut.transform.position;
             truckOutPosition.x += 20f;
-            truckOutPosition.z += -3.5f;
+            //truckOutPosition.z += -3.5f;
 
             var truckInPosition = placeBuildingIn.transform.position;
             truckInPosition.x -= 7f;
-            truckInPosition.z += -3.5f;
+			//truckInPosition.z += -3.5f;
+			truckInPosition.z = 0;
             truckManager.CreateTruck(gameObject.transform, truckOutPosition, truckInPosition);
         }
 
