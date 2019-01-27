@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace GaryMoveOut
 {
@@ -515,6 +516,14 @@ namespace GaryMoveOut
         private void GameSummary()
         {
             events.CallEvent(GamePhases.GameplayPhase.Summary, null);
+            float delay = 1f;
+
+            DOVirtual.DelayedCall(delay, LoadMainMenu);
+        }
+
+        private void LoadMainMenu()
+        {
+            SceneManager.LoadScene(0, LoadSceneMode.Single);
         }
 
         private void PhaseDeEvacuation()
