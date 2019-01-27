@@ -173,6 +173,9 @@ namespace GaryMoveOut
         private void SetupCatastrophy()
         {
             currentCatastrophy = catastrophiesDatabase.GetRandomCatastrophy();
+
+            // debug:
+            DOVirtual.DelayedCall(1f, () => { ProcessCatastrophy(); });
         }
 
 
