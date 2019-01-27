@@ -114,6 +114,71 @@ namespace GaryMoveOut
             }
         }
 
+        public void SpawnItemsInside(List<Item> items)
+        {
+            if (this.floors.Count == 0)
+            {
+                return;
+            }
+
+            var itemsPerFloor = items.Count / (this.floors.Count - 1);
+
+            int i = 0;
+            int itemsPlaced = 0;
+            foreach (var floor in this.floors.Values)
+            {
+                if (floor.Type == FloorType.GroundFloor)
+                {
+                    i++;
+                    continue;
+                }
+
+                segmentIndices.Clear();
+                for (i = 0; i < floor.segments.Count; i++)
+                {
+                    segmentIndices.Add(i);
+                }
+
+                for (i = 0; i < itemsPerFloor && segmentIndices.Count > 0;)
+                {
+                    var index = UnityEngine.Random.Range(0, segmentIndices.Count);
+                    var si = segmentIndices[index];
+                    segmentIndices.RemoveAt(index);
+
+                    var itemSlot = floor.segments[si].GetComponentInChildren<ItemSlot>();
+                    if (itemSlot != null)
+                    {
+                        var item = items[itemsPlaced++];
+                        SpawnItem(item, itemSlot, floor);
+                        i++;
+                    }
+                }
+            }
+
+            i = 0;
+            while (itemsPlaced < items.Count && i < this.floors.Count)
+            {
+                if (this.floors[i].Type == FloorType.GroundFloor)
+                {
+                    i++;
+                    continue;
+                }
+                var floor = this.floors[i];
+                foreach (var segment in floor.segments)
+                {
+                    var itemSlot = segment.GetComponentInChildren<ItemSlot>();
+                    if (itemSlot != null && !itemSlot.isOccupied)
+                    {
+                        var item = items[itemsPlaced++];
+                        SpawnItem(item, itemSlot, floor);
+                        itemsPlaced++;
+                        break;
+                    }
+                }
+                i++;
+            }
+        }
+
         public void SpawnItemsInside(Dictionary<int, List<Item>> itemsByFloorIndex)
         {
             if (this.floors.Count == 0)

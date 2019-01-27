@@ -14,6 +14,14 @@ namespace GaryMoveOut
             Both = 2
         }
 
+        public static event System.Action<int> PointsCollectedUpdate;
+        public static event System.Action<ItemScheme> NewItemInTruck;
+        public static void CallNewItemInTruckEvent(ItemScheme scheme)
+        {
+            NewItemInTruck?.Invoke(scheme);
+        }
+        public int pointsCollected = 0;
+
         private static GameplayManager _instance;
         public static GameplayManager GetGameplayManager()
         {
@@ -28,13 +36,15 @@ namespace GaryMoveOut
         private TruckManager truckManager;
         private PlayerController[] players;
 
-        [SerializeField] private GameObject placeBuildingOut;
+		[SerializeField] private GameObject dustStorm;
+		[SerializeField] private GameObject placeBuildingOut;
         private Building buildingOut;
         [SerializeField] private GameObject placeBuildingIn;
         private Building buildingIn;
         [SerializeField] private Vector3 playerSpawnOffset;
 
         private Dictionary<int, List<Item>> itemsFromLastInBuilding;
+        private List<ItemScheme> itemsFromTruck;
         [SerializeField] private GameObject prefabPlayer;
         private int playersCount = 1;
 
@@ -74,7 +84,14 @@ namespace GaryMoveOut
             var camera = Camera.main;
             multiTargetCamera = camera.gameObject.AddComponent<CameraMultiTarget>();
             cameraTargets.Clear();
-            //multiTargetCamera.SetTargets(cameraTargets.ToArray());
+
+            NewItemInTruck += OnNewItemInTruck;
+        }
+
+        private void OnNewItemInTruck(ItemScheme scheme)
+        {
+            pointsCollected += (int)scheme.value;
+            PointsCollectedUpdate?.Invoke(pointsCollected);
         }
 
         private List<int> playerInputs = new List<int>();
@@ -206,13 +223,13 @@ namespace GaryMoveOut
                 var itemsCount = UnityEngine.Random.Range(minItemsCount, maxFreeSegments);
                 var items = buildingsGenerator.ItemsDatabase.GetRandomItems(itemsCount);
 
-                if (itemsFromLastInBuilding != null)
+                if (DeEvacuationTruckItemList == null || DeEvacuationTruckItemList.Count == 0)
                 {
                     buildingOut = buildingsGenerator.GenerateBuildingWithItems(placeBuildingOut.transform,
                                                                                buildingConfig.floorSegmentsCount,
                                                                                buildingConfig.buildingFloorsCount,
                                                                                buildingConfig.stairsSegmentIndex,
-                                                                               itemsFromLastInBuilding);
+                                                                               items);
                 }
                 else
                 {
@@ -220,7 +237,7 @@ namespace GaryMoveOut
                                                            buildingConfig.floorSegmentsCount,
                                                            buildingConfig.buildingFloorsCount,
                                                            buildingConfig.stairsSegmentIndex,
-                                                           items);
+                                                           DeEvacuationTruckItemList);
                 }
                 buildingFloorNumber = buildingConfig.buildingFloorsCount;
             }
@@ -299,8 +316,17 @@ namespace GaryMoveOut
 
         private void PhaseFloorEvacuationEnd(int floor)
         {
-            events.CallEvent(GamePhases.GameplayPhase.FloorEvacuationEnd, floor);
+			events.CallEvent(GamePhases.GameplayPhase.FloorEvacuationEnd, floor);
             Debug.Log($"PhaseFloorEvacuationEnd Floor [{floor}]");
+			if (currentCatastrophy.Type == CatastrophyType.EarthQuake)
+			{
+				var dust = Instantiate(dustStorm);
+				//dust.transform.localRotation.eulerAngles = new Vector3(0)
+				var pos = placeBuildingOut.transform.position;
+				pos.z = -6;
+				dust.transform.position = pos;
+				Destroy(dust.gameObject, 5f);
+			}
         }
 
         private int buildingFloorNumber = 0;
@@ -487,7 +513,10 @@ namespace GaryMoveOut
         private void PhaseDeEvacuation()
         {
             DeEvacuationTruckItemList = truckManager.GetTruckItemList();
-            events.CallEvent(GamePhases.GameplayPhase.DeEvacuation, null);
+            float delay = 0.2f;
+            DOVirtual.DelayedCall(delay, PhaseStartGame);
+            //itemsFromTruck = truckManager.GetTruckItemList();
+            //events.CallEvent(GamePhases.GameplayPhase.DeEvacuation, null);
             Debug.Log("PhaseDeEvacuation");
         }
 
@@ -503,7 +532,7 @@ namespace GaryMoveOut
         private void PhaseFewDaysLater()
         {
             events.CallEvent(GamePhases.GameplayPhase.FewDaysLater, null);
-            itemsFromLastInBuilding = buildingIn.GetItems();
+            //itemsFromLastInBuilding = buildingIn.GetItems();
             buildingsGenerator.DestroyBuildingOut(ref buildingIn);
             float delay = 1f;
             DOVirtual.DelayedCall(delay, PhaseStartGame);
