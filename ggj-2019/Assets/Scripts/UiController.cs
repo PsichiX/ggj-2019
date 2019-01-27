@@ -14,16 +14,18 @@ namespace GaryMoveOut
         [SerializeField] private Vector2 m_arrowScaleMapTo = new Vector2(0, 1);
         [SerializeField] private GameObject pressToPickText;
         [SerializeField] private GameObject pressToThrowText;
-        [SerializeField] private GameObject portalUpArrow;
-        [SerializeField] private GameObject portalDownArrow;
+        [SerializeField] private List<RectTransform> portalUpArrows;
+        [SerializeField] private List<RectTransform> portalDownArrows;
         [SerializeField] private TextMeshProUGUI buildingCounter;
         [SerializeField] private TextMeshProUGUI pointsCounter;
+        [SerializeField] private Vector3 m_portalArrowsOffset;
 
         public int CurrentFloorBadEvent { get { return gameplayManager.currentFloorBadEvent; } }
         public EvecuationDirection CurrentEvecuationDirection { get { return gameplayManager.currentEvacuationDirection; } }
 
 
         private PlayerController[] m_players;
+        private DoorPortal[] m_portals;
         private GameplayManager gameplayManager;
 
         public void UpdateCounter()
@@ -43,11 +45,13 @@ namespace GaryMoveOut
         public void Update()
         {
             UpdateCounter();
+            UpdatePortals();
         }
 
         private void Awake()
         {
             m_players = new PlayerController[m_aims.Count];
+            m_portals = new DoorPortal[Mathf.Min(portalUpArrows.Count, portalDownArrows.Count)];
         }
 
         private void Start()
@@ -66,10 +70,6 @@ namespace GaryMoveOut
                     player.CollidesWithPickableEnd += HidePickupText;
                     player.CarryItemStart += ShowThrowText;
                     player.CarryItemEnd += HideThrowText;
-                    player.CollidesWithPortalUp += ShowPortalUpText;
-                    player.CollidesWithPortalUpEnd += HidePortalUpText;
-                    player.CollidesWithPortalDown += ShowPortalDownText;
-                    player.CollidesWithPortalDownEnd += HidePortalDownText;
                     return true;
                 }
             }
@@ -82,15 +82,12 @@ namespace GaryMoveOut
             {
                 if (m_players[i] == player)
                 {
+                    m_aims[i].gameObject.SetActive(false);
                     m_players[i] = null;
                     player.CollidesWithPickable -= ShowPickupText;
                     player.CollidesWithPickableEnd -= HidePickupText;
                     player.CarryItemStart -= ShowThrowText;
                     player.CarryItemEnd -= HideThrowText;
-                    player.CollidesWithPortalUp -= ShowPortalUpText;
-                    player.CollidesWithPortalUpEnd -= HidePortalUpText;
-                    player.CollidesWithPortalDown -= ShowPortalDownText;
-                    player.CollidesWithPortalDownEnd -= HidePortalDownText;
                     return true;
                 }
             }
@@ -144,6 +141,87 @@ namespace GaryMoveOut
             }
         }
 
+        public bool RegisterPortal(DoorPortal portal)
+        {
+            for (var i = 0; i < m_portals.Length; ++i)
+            {
+                if (m_portals[i] == null)
+                {
+                    m_portals[i] = portal;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool UnregisterPortal(DoorPortal portal)
+        {
+            for (int i = 0; i < m_portals.Length; ++i)
+            {
+                if (m_portals[i] == portal)
+                {
+                    portalUpArrows[i].gameObject.SetActive(false);
+                    portalDownArrows[i].gameObject.SetActive(false);
+                    m_portals[i] = null;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool ActivatePortal(DoorPortal portal)
+        {
+            for (int i = 0; i < m_portals.Length; ++i)
+            {
+                if (m_portals[i] == portal)
+                {
+                    portalUpArrows[i].gameObject.SetActive(portal.CanGoUp);
+                    portalDownArrows[i].gameObject.SetActive(portal.CanGoDown);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool DeactivatePortal(DoorPortal portal)
+        {
+            for (int i = 0; i < m_portals.Length; ++i)
+            {
+                if (m_portals[i] == portal)
+                {
+                    portalUpArrows[i].gameObject.SetActive(false);
+                    portalDownArrows[i].gameObject.SetActive(false);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void UpdatePortals()
+        {
+            for (var i = 0; i < m_portals.Length; ++i)
+            {
+                var portal = m_portals[i];
+                var up = portalUpArrows[i];
+                var down = portalDownArrows[i];
+                if (up.gameObject.activeSelf || down.gameObject.activeSelf)
+                {
+                    var sp = RectTransformUtility.WorldToScreenPoint(
+                        m_camera,
+                        portal.transform.position + m_portalArrowsOffset
+                    );
+                    if (up.gameObject.activeSelf)
+                    {
+                        up.anchoredPosition = sp;
+                    }
+                    if (down.gameObject.activeSelf)
+                    {
+                        down.anchoredPosition = sp;
+                    }
+                }
+            }
+        }
+
         public void ShowPickupText()
         {
             pressToPickText.SetActive(true);
@@ -152,42 +230,6 @@ namespace GaryMoveOut
         public void HidePickupText()
         {
             pressToPickText.SetActive(false);
-        }
-
-        private float arrowXOffset = 1f;
-        private float arrowYOffset = 0.5f;
-        public void SetupPortalUpArrow(Transform portal)
-        {
-            var position = portalUpArrow.transform.position;
-            position = new Vector3(portal.position.x + arrowXOffset, portal.position.y + arrowYOffset, position.z);
-            portalUpArrow.transform.position = position;
-        }
-
-        public void SetupPortalDownArrow(Transform portal)
-        {
-            var position = portalDownArrow.transform.position;
-            position = new Vector3(portal.position.x + arrowXOffset, portal.position.y - arrowYOffset, position.z);
-            portalDownArrow.transform.position = position;
-        }
-
-        public void ShowPortalUpText()
-        {
-            portalUpArrow.SetActive(true);
-        }
-
-        public void HidePortalUpText()
-        {
-            portalUpArrow.SetActive(false);
-        }
-
-        public void ShowPortalDownText()
-        {
-            portalDownArrow.SetActive(true);
-        }
-
-        public void HidePortalDownText()
-        {
-            portalDownArrow.SetActive(false);
         }
 
         public void ShowThrowText()

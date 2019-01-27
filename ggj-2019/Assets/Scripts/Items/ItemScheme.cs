@@ -21,6 +21,12 @@ namespace GaryMoveOut
         public void DestroyOnGround()
         {
             isAlive = false;
+            // TODO: destroy viz
+        }
+
+        public void InTruck()
+        {
+            // TODO: hide object
         }
 
         public bool IsItemAlive()
