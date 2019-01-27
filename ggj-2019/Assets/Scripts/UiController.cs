@@ -21,8 +21,9 @@ namespace GaryMoveOut
 		[SerializeField] private TextMeshProUGUI pointsCounter;
 		[SerializeField] private Vector3 m_portalArrowsOffset;
 		[SerializeField] private GameObject youLostText;
+		[SerializeField] private GameObject youWonText;
 
-		public int CurrentFloorBadEvent { get { return gameplayManager.currentFloorBadEvent; } }
+        public int CurrentFloorBadEvent { get { return gameplayManager.currentFloorBadEvent; } }
 		public EvecuationDirection CurrentEvecuationDirection { get { return gameplayManager.currentEvacuationDirection; } }
 
 
@@ -68,12 +69,15 @@ namespace GaryMoveOut
 		private void Start()
 		{
 			youLostText.SetActive(false);
-			gameplayManager = GameplayManager.GetGameplayManager();
+            youWonText.SetActive(false);
+            gameplayManager = GameplayManager.GetGameplayManager();
 			gameplayEvents = GameplayEvents.GetGameplayEvents();
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.GameOver, ShowGameOverText);
-		}
+            gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.Summary, ShowWinText);
 
-		private void OnDestroy()
+        }
+
+        private void OnDestroy()
 		{
 			gameplayEvents.DetachFromEvent(GamePhases.GameplayPhase.GameOver, ShowGameOverText);
 		}
@@ -83,7 +87,12 @@ namespace GaryMoveOut
 			youLostText.SetActive(true);
 		}
 
-		public bool RegisterPlayer(PlayerController player)
+        private void ShowWinText(object obj)
+        {
+            youWonText.SetActive(true);
+        }
+
+        public bool RegisterPlayer(PlayerController player)
 		{
 			for (var i = 0; i < m_players.Length; ++i)
 			{
