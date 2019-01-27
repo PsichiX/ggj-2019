@@ -28,7 +28,8 @@ namespace GaryMoveOut
         private TruckManager truckManager;
         private PlayerController[] players;
 
-        [SerializeField] private GameObject placeBuildingOut;
+		[SerializeField] private GameObject dustStorm;
+		[SerializeField] private GameObject placeBuildingOut;
         private Building buildingOut;
         [SerializeField] private GameObject placeBuildingIn;
         private Building buildingIn;
@@ -300,8 +301,17 @@ namespace GaryMoveOut
 
         private void PhaseFloorEvacuationEnd(int floor)
         {
-            events.CallEvent(GamePhases.GameplayPhase.FloorEvacuationEnd, floor);
+			events.CallEvent(GamePhases.GameplayPhase.FloorEvacuationEnd, floor);
             Debug.Log($"PhaseFloorEvacuationEnd Floor [{floor}]");
+			if (currentCatastrophy.Type == CatastrophyType.EarthQuake)
+			{
+				var dust = Instantiate(dustStorm);
+				//dust.transform.localRotation.eulerAngles = new Vector3(0)
+				var pos = placeBuildingOut.transform.position;
+				pos.z = -6;
+				dust.transform.position = pos;
+				Destroy(dust.gameObject, 5f);
+			}
         }
 
         private int buildingFloorNumber = 0;
