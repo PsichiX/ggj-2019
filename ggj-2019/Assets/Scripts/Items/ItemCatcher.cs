@@ -25,7 +25,7 @@ namespace GaryMoveOut
             {
                 if (isInside)
                 {
-                    floor.AddItem(item2);
+                    floor.AddItem(item2, other.gameObject);
                 }
                 else
                 {

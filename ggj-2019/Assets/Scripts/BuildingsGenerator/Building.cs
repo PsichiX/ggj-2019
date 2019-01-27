@@ -84,7 +84,7 @@ namespace GaryMoveOut
                     if (itemSlot != null)
                     {
                         var item = new Item(items[itemsPlaced++]);
-                        SpawnItem(item, itemSlot, ref floor.items);
+                        SpawnItem(item, itemSlot, floor);
                         i++;
                     }
                 }
@@ -105,7 +105,7 @@ namespace GaryMoveOut
                     if (itemSlot != null && !itemSlot.isOccupied)
                     {
                         var item = new Item(items[itemsPlaced++]);
-                        SpawnItem(item, itemSlot, ref floor.items);
+                        SpawnItem(item, itemSlot, floor);
                         itemsPlaced++;
                         break;
                     }
@@ -142,7 +142,7 @@ namespace GaryMoveOut
                     {
                         var item = itemsByFloorIndex[floor.Key][0];
                         itemsByFloorIndex[floor.Key].RemoveAt(0);
-                        SpawnItem(item, itemSlot, ref floor.Value.items);
+                        SpawnItem(item, itemSlot, floor.Value);
                     }
                 }
                 if (itemsByFloorIndex[floor.Key].Count > 0)
@@ -164,7 +164,7 @@ namespace GaryMoveOut
                     {
                         var item = unstackedItems[0];
                         unstackedItems.RemoveAt(0);
-                        SpawnItem(item, itemSlot, ref floor.items);
+                        SpawnItem(item, itemSlot, floor);
                         break;
                     }
                 }
@@ -173,11 +173,12 @@ namespace GaryMoveOut
 
         }
 
-        private void SpawnItem(Item item, ItemSlot itemSlot, ref List<Item> items)
+        private void SpawnItem(Item item, ItemSlot itemSlot, Floor floor)
         {
             var itemGO = GameObject.Instantiate(item.prefab, itemSlot.gameObject.transform);
             itemGO.transform.SetParent(null);
-            items.Add(item);
+            //floor.items.Add(item);
+            floor.AddItem(item, itemGO);
             itemSlot.isOccupied = true;
         }
 

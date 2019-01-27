@@ -21,15 +21,41 @@ namespace GaryMoveOut
         {
             Debug.LogWarning($"Eaaaarthhhh Quuuuaaaakeeeee on the {floorIndex} floor!");
 
-            if (building.floors.TryGetValue(floorIndex, out Floor floor))
+
+            var endPos = building.root.transform.position - new Vector3(0f, building.SegmentHeight, 0f);
+            building.root.transform.DOMove(endPos, floorFallTime).SetEase(Ease.OutBounce);
+
+            DOVirtual.DelayedCall(0.1f, () =>
             {
-                var endPos = building.root.transform.position - new Vector3(0f, building.SegmentHeight, 0f);
-                building.root.transform.DOMove(endPos, floorFallTime).SetEase(Ease.OutBounce);
-                DOVirtual.DelayedCall(floorFallTime, () =>
-                {
-                    building.DestroyFloor(floorIndex);
-                });
-            }
+                // to do: fix me 
+
+                //var yOffset = 3f;
+                //if (building.floors.TryGetValue(floorIndex, out Floor floor))
+                //{
+                //    // apply force to all items:
+                //    foreach (var floorObj in building.floors.Values)
+                //    {
+                //        foreach (var item in floorObj.itemGOs.Values)
+                //        {
+                //            if (item != null)
+                //            {
+                //                //item.transform.position += new Vector3(0f, yOffset, 0f);
+
+
+                //                var rigidBody = item.GetComponent<Rigidbody2D>();
+                //                if (rigidBody != null)
+                //                {
+                //                    rigidBody.AddForce(new Vector2(0f, -yOffset * rigidBody.mass), ForceMode2D.Impulse);
+                //                }
+                //            }
+                //        }
+                //    }
+                //}
+            });
+            DOVirtual.DelayedCall(floorFallTime, () =>
+            {
+                building.DestroyFloor(floorIndex);
+            });
         }
     }
 }
