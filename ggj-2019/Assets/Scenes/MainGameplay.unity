@@ -470,6 +470,36 @@ PrefabInstance:
       propertyPath: m_Name
       value: MainCam
       objectReference: {fileID: 0}
+    - target: {fileID: 1273908118861250167, guid: 28885ec302d3549448493b29744b9e30,
+        type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 1273908118861250167, guid: 28885ec302d3549448493b29744b9e30,
+        type: 3}
+      propertyPath: m_ClearFlags
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1273908118861250167, guid: 28885ec302d3549448493b29744b9e30,
+        type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0.33922213
+      objectReference: {fileID: 0}
+    - target: {fileID: 1273908118861250167, guid: 28885ec302d3549448493b29744b9e30,
+        type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0.80848676
+      objectReference: {fileID: 0}
+    - target: {fileID: 1273908118861250167, guid: 28885ec302d3549448493b29744b9e30,
+        type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0.9339623
+      objectReference: {fileID: 0}
+    - target: {fileID: 1273908118861250167, guid: 28885ec302d3549448493b29744b9e30,
+        type: 3}
+      propertyPath: m_AllowMSAA
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1273908118861250164, guid: 28885ec302d3549448493b29744b9e30,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -525,45 +555,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1273908118861250167, guid: 28885ec302d3549448493b29744b9e30,
+    - target: {fileID: 1273908118205437221, guid: 28885ec302d3549448493b29744b9e30,
         type: 3}
-      propertyPath: m_CullingMask.m_Bits
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 1273908118861250167, guid: 28885ec302d3549448493b29744b9e30,
-        type: 3}
-      propertyPath: m_ClearFlags
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1273908118861250167, guid: 28885ec302d3549448493b29744b9e30,
-        type: 3}
-      propertyPath: m_BackGroundColor.r
-      value: 0.33922213
-      objectReference: {fileID: 0}
-    - target: {fileID: 1273908118861250167, guid: 28885ec302d3549448493b29744b9e30,
-        type: 3}
-      propertyPath: m_BackGroundColor.g
-      value: 0.80848676
-      objectReference: {fileID: 0}
-    - target: {fileID: 1273908118861250167, guid: 28885ec302d3549448493b29744b9e30,
-        type: 3}
-      propertyPath: m_BackGroundColor.b
-      value: 0.9339623
-      objectReference: {fileID: 0}
-    - target: {fileID: 1273908118861250167, guid: 28885ec302d3549448493b29744b9e30,
-        type: 3}
-      propertyPath: m_AllowMSAA
-      value: 1
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1273908118205437240, guid: 28885ec302d3549448493b29744b9e30,
         type: 3}
       propertyPath: m_CullingMask.m_Bits
       value: 4919
-      objectReference: {fileID: 0}
-    - target: {fileID: 1273908118205437221, guid: 28885ec302d3549448493b29744b9e30,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 28885ec302d3549448493b29744b9e30, type: 3}
