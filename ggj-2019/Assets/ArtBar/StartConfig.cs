@@ -38,11 +38,12 @@ public class StartConfig : MonoBehaviour
         }
     }
 
+	private int lastPlayer;
     public void ActivePlayer(int playerNumber)
     {
         if( playerNumber > 0 && playerNumber <= playerMaxNumber)
         {
-            players[playerNumber-1] = true;
+            players[playerNumber-1] = !players[playerNumber - 1];
         }
     }
 

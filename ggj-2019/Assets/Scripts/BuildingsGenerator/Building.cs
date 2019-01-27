@@ -176,7 +176,7 @@ namespace GaryMoveOut
         private void SpawnItem(Item item, ItemSlot itemSlot, Floor floor)
         {
             var itemGO = GameObject.Instantiate(item.prefab, itemSlot.gameObject.transform);
-            itemGO.transform.SetParent(null);
+            //itemGO.transform.SetParent(null);
             //floor.items.Add(item);
             floor.AddItem(item, itemGO);
             itemSlot.isOccupied = true;
