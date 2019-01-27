@@ -288,17 +288,7 @@ namespace GaryMoveOut
                 );
             }
         }
-
-        public void OnPlayerDie(object param)
-        {
-            if (param is PlayerController && param as PlayerController == this)
-            {
-                m_inputBlocked = true;
-                InputLayout = InputHandler.Layout.None; // just to make sure
-                DOVirtual.DelayedCall(1, () => Destroy(gameObject));
-            }
-        }
-
+        
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (other.tag == "Ground" && m_isAlive)
