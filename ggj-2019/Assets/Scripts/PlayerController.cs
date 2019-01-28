@@ -69,6 +69,8 @@ namespace GaryMoveOut
         private bool m_canTeleportDown = false;
         private bool m_isAlive = true;
 
+		private AudioSource aus;
+
         private void Awake()
         {
             m_ui = FindObjectOfType<UiController>();
@@ -78,7 +80,8 @@ namespace GaryMoveOut
 
         private void Start()
         {
-            m_rigidBody = GetComponent<Rigidbody2D>();
+			aus = GameObject.FindGameObjectsWithTag("Audio")[0].GetComponent<AudioSource>();
+			m_rigidBody = GetComponent<Rigidbody2D>();
             m_collider = GetComponent<BoxCollider2D>();
             m_animator = GetComponentInChildren<Animator>();
 
@@ -300,6 +303,8 @@ namespace GaryMoveOut
             {
                 m_gameplayEvents.CallEvent(GamePhases.GameplayPhase.PlayerInTruck, null);
                 Debug.Log("player in truck");
+				aus.PlayOneShot(Resources.Load("Sounds/gain") as AudioClip);
+				Destroy(gameObject);
             }
 
             if (other.tag == "Interactible")

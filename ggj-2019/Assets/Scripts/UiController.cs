@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DG.Tweening;
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -22,8 +23,10 @@ namespace GaryMoveOut
 		[SerializeField] private Vector3 m_portalArrowsOffset;
 		[SerializeField] private GameObject youLostText;
 		[SerializeField] private GameObject youWonText;
+		[SerializeField] private UnityEngine.UI.Image black;
 
-        public int CurrentFloorBadEvent { get { return gameplayManager.currentFloorBadEvent; } }
+
+		public int CurrentFloorBadEvent { get { return gameplayManager.currentFloorBadEvent; } }
 		public EvecuationDirection CurrentEvecuationDirection { get { return gameplayManager.currentEvacuationDirection; } }
 
 
@@ -54,9 +57,15 @@ namespace GaryMoveOut
 
 		private void Awake()
 		{
+
 			m_players = new PlayerController[m_aims.Count];
 			m_portals = new DoorPortal[Mathf.Min(portalUpArrows.Count, portalDownArrows.Count)];
 
+			gameplayEvents = GameplayEvents.GetGameplayEvents();
+			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.GameOver, ShowGameOverText);
+			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.Summary, ShowWinText);
+			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.FadeIn, ReactionFadeIn);
+			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.FadeOut, ReactionFadeOut);
 
 			GameplayManager.PointsCollectedUpdate += UpdatePointsOnItemAdd;
 		}
@@ -71,13 +80,20 @@ namespace GaryMoveOut
 			youLostText.SetActive(false);
             youWonText.SetActive(false);
             gameplayManager = GameplayManager.GetGameplayManager();
-			gameplayEvents = GameplayEvents.GetGameplayEvents();
-			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.GameOver, ShowGameOverText);
-            gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.Summary, ShowWinText);
 
-        }
+		}
 
-        private void OnDestroy()
+		private void ReactionFadeIn(object obj)
+		{
+			black.DOColor(new Color(0, 0, 0, 0), 1f);
+		}
+
+		private void ReactionFadeOut(object obj)
+		{
+			black.DOColor(new Color(0, 0, 0, 1), 1f);
+		}
+
+		private void OnDestroy()
 		{
 			gameplayEvents.DetachFromEvent(GamePhases.GameplayPhase.GameOver, ShowGameOverText);
 		}

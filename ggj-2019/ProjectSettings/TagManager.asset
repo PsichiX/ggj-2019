@@ -12,6 +12,8 @@ TagManager:
   - InteractibleRoot
   - Ground
   - TruckLoader
+  - Fire
+  - Audio
   layers:
   - Default
   - TransparentFX
