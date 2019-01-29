@@ -47,6 +47,10 @@ namespace GaryMoveOut
 
 			ex.transform.localPosition = Vector3.zero;
 			ausource.Play();
+			foreach (var m in GetComponentsInChildren<MeshRenderer>())
+			{
+				m.enabled = false;
+			}
 			DOVirtual.DelayedCall(0.6f, KillMe);
             // TODO: destroy viz
         }
