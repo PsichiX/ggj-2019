@@ -7,6 +7,7 @@ namespace GaryMoveOut
         [SerializeField] private bool isInside = true;
         [SerializeField] private AddForce addForce;
         [SerializeField] private GameObject glassSheet;
+		private bool isBroken = false;
         private Collider coll;
 
         private Floor floor;
@@ -24,16 +25,19 @@ namespace GaryMoveOut
                 var item = itemScheme.assignedItem;
                 if (isInside)
                 {
+					Debug.Log("Added " + item.prefab.name + "to floor " + floor.Type);
                     floor.AddItem(item, other.gameObject);
                 }
                 else
                 {
-                    floor.RemoveItem(item);
+					Debug.Log("Removed " + item.prefab.name + "from floor " + floor.Type);
+					floor.RemoveItem(item);
                 }
             }
             if (addForce != null)
             {
-                var rigid = other.GetComponent<Rigidbody2D>();
+				isBroken = true;
+				var rigid = other.GetComponent<Rigidbody2D>();
                 if (rigid)
                 {
                     if (rigid.velocity.x > 0)

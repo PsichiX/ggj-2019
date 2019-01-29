@@ -44,7 +44,12 @@ namespace GaryMoveOut
 
         public void Throw(Vector2 impulse)
         {
-            m_rigidBody.bodyType = RigidbodyType2D.Dynamic;
+			var item = GetComponent<ItemScheme>();
+			if (item != null)
+			{
+				item.cantkillme = false;
+			}
+			m_rigidBody.bodyType = RigidbodyType2D.Dynamic;
             m_rigidBody.AddForce(impulse, ForceMode2D.Impulse);
             gameObject.layer = LayerMask.NameToLayer("Furniture");
             if (m_currentTweener != null)

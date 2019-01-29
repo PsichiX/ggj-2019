@@ -33,8 +33,15 @@ namespace GaryMoveOut
 				ausource = GetComponent<AudioSource>();
 			}
 		}
+
+		public bool cantkillme = false;
+
 		public void DestroyOnGround()
         {
+			if (cantkillme)
+			{
+				return;
+			}
             isAlive = false;
 			var ex = Instantiate(explosion, transform);
 
@@ -75,6 +82,8 @@ namespace GaryMoveOut
 				mr.enabled = true;
 			}
 			GetComponent<BoxCollider2D>().enabled = true;
+			
+			cantkillme = true;
 		}
 
         public void InTruck()
