@@ -1,115 +1,15 @@
-﻿using DG.Tweening;
-using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace GaryMoveOut
+namespace GaryMoveOut.Items
 {
-    public enum ItemType
+    [CreateAssetMenu(menuName = "ScriptableObjects/Items/Item Scheme")]
+    public class ItemScheme : ScriptableObject
     {
-        None = 0,
-        Fragile = 1,
-        Heavy = 2,
-        Fluffy = 3,
-    }
-
-    public class ItemScheme : MonoBehaviour
-    {
-		public event Action<ItemScheme> NewItemInTruck;
-		[SerializeField] private GameObject explosion;
-		[SerializeField] private AudioSource ausource;
-
-		public float value;
+        public float value;
         public float weight;
         public bool vertical;
-        public ItemType type;
-        public Item assignedItem;
-
-        private bool isAlive = true;
-
-		private void Start()
-		{
-			if (ausource == null)
-			{
-				ausource = GetComponent<AudioSource>();
-			}
-		}
-
-		public bool cantkillme = false;
-
-		public void DestroyOnGround()
-        {
-			if (cantkillme)
-			{
-				return;
-			}
-            isAlive = false;
-			var ex = Instantiate(explosion, transform);
-
-			ex.transform.localPosition = Vector3.zero;
-			ausource.Play();
-			foreach (var m in GetComponentsInChildren<MeshRenderer>())
-			{
-				m.enabled = false;
-			}
-			DOVirtual.DelayedCall(0.6f, KillMe);
-            // TODO: destroy viz
-        }
-
-		private void KillMe()
-		{
-			transform.parent = null;
-			Destroy(gameObject, 0.2f);
-		}
-
-		private void FreezeMe()
-		{
-			Destroy(GetComponent<Pickable>());
-			Destroy(GetComponent<Rigidbody2D>());
-			transform.parent = null;
-			GetComponent<BoxCollider2D>().enabled = false;
-		}
-
-		public void HideMe()
-		{
-			foreach (var mr in GetComponentsInChildren<MeshRenderer>())
-			{
-				mr.enabled = false;
-			}
-		}
-
-		public void UnKillMe()
-		{
-			gameObject.AddComponent<Rigidbody2D>();
-			gameObject.AddComponent<Pickable>();
-			foreach (var mr in GetComponentsInChildren<MeshRenderer>())
-			{
-				mr.enabled = true;
-			}
-			GetComponent<BoxCollider2D>().enabled = true;
-			
-			cantkillme = true;
-		}
-
-        public void InTruck()
-        {
-			//NewItemInTruck?.Invoke(this);
-			ausource.PlayOneShot(Resources.Load("Sounds/gain") as AudioClip);
-			GameplayManager.CallNewItemInTruckEvent(this);
-			FreezeMe();
-        }
-
-		public void CopyValues(ItemScheme source)
-		{
-			assignedItem = source.assignedItem;
-			value = source.value;
-			weight = source.weight;
-			vertical = source.vertical;
-			type = source.type;
-		}
-
-        public bool IsItemAlive()
-        {
-            return isAlive;
-        }
+        public ItemMaterialType materialType;
+        public GameObject itemPrefab;
+        public GameObject explosion;
     }
 }

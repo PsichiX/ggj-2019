@@ -444,7 +444,7 @@ namespace GaryMoveOut
         private void TeleportUp()
         {
             var portal = GetInteractible<DoorPortal>();
-            if (portal != null && portal.CanGoUp && portal.building.stairs.TryGetValue(portal.floorIndexAbove, out DoorPortal portalAbove))
+            if (portal != null && portal.CanGoUp && portal.building.Stairs.TryGetValue(portal.floorIndexAbove, out DoorPortal portalAbove))
             {
                 var pos = portalAbove.transform.position;
                 transform.position = new Vector3(pos.x, pos.y, transform.position.z);
@@ -458,7 +458,7 @@ namespace GaryMoveOut
             var portal = GetInteractible<DoorPortal>();
             if (portal != null && portal.CanGoDown)
             {
-                var portalBelow = portal.building.stairs[portal.floorIndexBelow];
+                var portalBelow = portal.building.Stairs[portal.floorIndexBelow];
                 var pos = portalBelow.transform.position;
                 transform.position = new Vector3(pos.x, pos.y, transform.position.z);
 

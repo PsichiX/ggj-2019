@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using GaryMoveOut.Items;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,12 +7,12 @@ namespace GaryMoveOut
     public class TruckLoader : MonoBehaviour
     {
 		[SerializeField] private MeshRenderer meshToColor;
-        public List<ItemScheme> itemsInTruck;
+        public List<Item> itemsInTruck;
 
         void Start()
         {
 			meshToColor.material.color = Random.ColorHSV(0, 1, 0.7f, 1f);
-			itemsInTruck = new List<ItemScheme>();
+			itemsInTruck = new List<Item>();
         }
 
         public void ResetTruckItemList()
@@ -20,7 +20,7 @@ namespace GaryMoveOut
 			itemsInTruck.Clear();
 		}
 
-        public List<ItemScheme> GetItemList()
+        public List<Item> GetItemList()
         {
             return itemsInTruck;
         }
@@ -32,15 +32,12 @@ namespace GaryMoveOut
             {
                 if (obj.transform.parent != null)
                 {
-                    var itemScheme = obj.transform.parent.GetComponent<ItemScheme>();
-					if (itemsInTruck.Contains(itemScheme) == false)
-					{
-						if (itemScheme != null)
-						{
-							itemsInTruck.Add(itemScheme);
-							itemScheme.InTruck();
-						}
-					}
+                    var item = obj.transform.parent.GetComponent<Item>();
+					if (item != null && !itemsInTruck.Contains(item))
+                    {
+                        itemsInTruck.Add(item);
+                        item.InTruck();
+                    }
                 }
             }
         }

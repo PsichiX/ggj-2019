@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using GaryMoveOut.Items;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,10 +14,10 @@ namespace GaryMoveOut
                 var obj = other.gameObject;
                 if (obj != null && obj.transform.parent != null)
                 {
-                    var itemScheme = obj.transform.parent.GetComponent<ItemScheme>();
-                    if (itemScheme != null)
+                    var item = obj.transform.parent.GetComponent<Item>();
+                    if (item != null)
                     {
-                        if (itemScheme.IsItemAlive())
+                        if (item.IsAlive)
                         {
                             var rb = obj.transform.parent.GetComponent<Rigidbody2D>();
                             if (rb != null)
@@ -24,7 +25,7 @@ namespace GaryMoveOut
                                 if (rb.velocity.magnitude > 1f)
                                 {
                                     Debug.Log("item hit the ground");
-                                    itemScheme.DestroyOnGround();
+                                    item.DestroyOnGround();
                                 }
                             }
                         }

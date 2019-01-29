@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using GaryMoveOut.Items;
+using UnityEngine;
 
 namespace GaryMoveOut
 {
@@ -19,44 +20,43 @@ namespace GaryMoveOut
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            var itemScheme = other.GetComponent<ItemScheme>();
-            if (itemScheme != null && floor != null)
+            var item = other.GetComponentInParent<Item>();
+            if (item != null && floor != null)
             {
-                var item = itemScheme.assignedItem;
                 if (isInside)
                 {
-					Debug.Log("Added " + item.prefab.name + "to floor " + floor.Type);
-                    floor.AddItem(item, other.gameObject);
+                    Debug.Log("Added " + item.name + "to floor " + floor.Type);
+                    floor.AddItem(item);
                 }
                 else
                 {
-					Debug.Log("Removed " + item.prefab.name + "from floor " + floor.Type);
-					floor.RemoveItem(item);
+                    Debug.Log("Removed " + item.name + "from floor " + floor.Type);
+                    floor.RemoveItem(item);
                 }
             }
             if (addForce != null)
             {
-				isBroken = true;
-				var rigid = other.GetComponent<Rigidbody2D>();
+                isBroken = true;
+                var rigid = other.GetComponent<Rigidbody2D>();
                 if (rigid)
                 {
                     if (rigid.velocity.x > 0)
                     {
-                        Pekaj(true);
+                        YouAreTearingMeApartItem(true);
                     }
                     else
                     {
-                        Pekaj(false);
+                        YouAreTearingMeApartItem(false);
                     }
                 }
             }
         }
 
-        private void Pekaj(bool wPrawo)
+        private void YouAreTearingMeApartItem(bool toTheRight)
         {
             glassSheet.SetActive(false);
             addForce.gameObject.SetActive(true);
-            addForce.right = wPrawo;
+            addForce.right = toTheRight;
             addForce.Peknij();
         }
     }

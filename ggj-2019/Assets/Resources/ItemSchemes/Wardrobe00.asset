@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcc529896a4670c4886a88b1246adf71, type: 3}
+  m_Name: Wardrobe00
+  m_EditorClassIdentifier: 
+  value: 0
+  weight: 0
+  vertical: 0
+  materialType: 0
+  itemPrefab: {fileID: 4841973043220262430, guid: de70c0b05a9b6b242932ec1ba920e9f9,
+    type: 3}
+  explosion: {fileID: 0}

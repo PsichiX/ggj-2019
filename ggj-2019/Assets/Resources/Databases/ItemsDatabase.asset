@@ -12,6 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6a5dfeab1d4b204db91e59d0f701d16, type: 3}
   m_Name: ItemsDatabase
   m_EditorClassIdentifier: 
-  debugItem: {fileID: 4857023597457288495, guid: ce2bd6c7a38a6ef4eb218ea6af96d0ec,
-    type: 3}
-  database: []
+  items:
+  - {fileID: 11400000, guid: 0db1cd1162da7594990a36b80ed35c09, type: 2}
+  - {fileID: 11400000, guid: 7702cb177e8c2e34f9f3c86bd8e36d81, type: 2}
+  - {fileID: 11400000, guid: 52cbf1d8ba80ef84c90df24cf42f05e4, type: 2}
+  - {fileID: 11400000, guid: d415c449b9d6a604fbfe2c2b6db4462d, type: 2}
+  - {fileID: 11400000, guid: bc24d68f463bde0468f2ab40c891c35a, type: 2}
+  - {fileID: 11400000, guid: 3c2b201438cdfa04ebecd5f22c059594, type: 2}
+  - {fileID: 11400000, guid: 5224c11f03d0fce4dba9006a2d8ba129, type: 2}
+  - {fileID: 11400000, guid: 5d5962de7167b2d43abee7b80950da73, type: 2}
+  - {fileID: 11400000, guid: 7b32ec8d6e20df1479b514c0bd35bc7f, type: 2}
+  - {fileID: 11400000, guid: b969af5746ac6bd43aee6260f2b37b1e, type: 2}
+  - {fileID: 11400000, guid: c8bfb56d783ad214aba95874ac607490, type: 2}
+  - {fileID: 11400000, guid: 9ee49e28ed4671f468760c0bb31f4463, type: 2}
+  - {fileID: 11400000, guid: 3976fd1344c9b114c989d9e1cac3b7b3, type: 2}
+  - {fileID: 11400000, guid: d3f2afa54a554e149aac7a76e5f25388, type: 2}
+  - {fileID: 11400000, guid: d2945d450b4dbf14fb3e8e32a550a3d1, type: 2}
+  prefabsPath: Assets/Resources/ItemSchemes/

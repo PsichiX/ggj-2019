@@ -1,4 +1,4 @@
-﻿using System;
+﻿using GaryMoveOut.Items;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,27 +11,31 @@ namespace GaryMoveOut
         Roof = 999
     }
 
+    [System.Serializable]
+    public struct FloorSize
+    {
+        public int segmentsCount;
+        public int stairsSegmentIndex;
+    }
+
     public class Floor : MonoBehaviour
     {
         public FloorType Type;
         public List<GameObject> segments = new List<GameObject>();
         public List<Item> items = new List<Item>();
-        public Dictionary<Item, GameObject> itemGOs = new Dictionary<Item, GameObject>();
 
 
-        public void AddItem(Item item, GameObject itemGO)
+        public void AddItem(Item item)
         {
             if (!items.Contains(item))
             {
                 items.Add(item);
-                itemGOs.Add(item, itemGO);
             }
         }
-
+        
         public void RemoveItem(Item item)
         {
             items.Remove(item);
-            itemGOs.Remove(item);
         }
     }
 }
