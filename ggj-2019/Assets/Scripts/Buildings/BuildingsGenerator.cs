@@ -7,23 +7,20 @@ namespace GaryMoveOut
     public class BuildingsGenerator
     {
         public BuildingSegmentsDatabase BuildingsDatabase { get; private set; }
-        [System.Obsolete] public ItemsDatabase ItemsDatabase { get; private set; }
-        public ItemsGenerator ItemsGenerator { get; private set; }
+        public ItemsSpawner ItemsSpawner { get; private set; }
 
 
         public BuildingsGenerator()
         {
             BuildingsDatabase = Resources.Load<BuildingSegmentsDatabase>("Databases/BuildingSegmentsDatabase");
 
-            ItemsGenerator = new ItemsGenerator();
-            ItemsDatabase = Resources.Load<ItemsDatabase>("Databases/ItemsDatabase");
-            ItemsDatabase.LoadItemsFromAssets_OLD();
+            ItemsSpawner = new ItemsSpawner();
         }
 
 
         public void DestroyBuildingOut(ref Building buildingOut)
         {
-            foreach(var floor in buildingOut.floors)
+            foreach(var floor in buildingOut.Floors)
             {
                 buildingOut.DestroyFloor(floor.Key);
                 //foreach(var segment in floor.segments)
@@ -36,7 +33,7 @@ namespace GaryMoveOut
 
                 GameObject.Destroy(floor.Value.gameObject);
             }
-            buildingOut.floors.Clear();
+            buildingOut.Floors.Clear();
         }
 
 
@@ -61,7 +58,7 @@ namespace GaryMoveOut
                 Height = floorScheme.segmentHeight,
                 Depth = floorScheme.segmentDepth
             };
-            var building = new Building(segmentSize)
+            var building = new Building(ItemsSpawner, segmentSize)
             {
                 root = root
             };
@@ -87,10 +84,10 @@ namespace GaryMoveOut
 
         private void GenerateFloor(ref Building building, FloorScheme scheme, Transform floorParent, Vector3 position, Quaternion rotation, FloorSize floorSize, int floorIndex, FloorType type)
         {
-            if (!building.floors.TryGetValue(floorIndex, out Floor floor))
+            if (!building.Floors.TryGetValue(floorIndex, out Floor floor))
             {
                 floor = Object.Instantiate(BuildingsDatabase.floorPrefab, floorParent.position, floorParent.rotation);
-                building.floors.Add(floorIndex, floor);
+                building.Floors.Add(floorIndex, floor);
             }
             floor.Type = type;
             floor.transform.SetParent(floorParent);
@@ -140,11 +137,11 @@ namespace GaryMoveOut
                     doorPortal.floorIndexBelow = indexBelow;
                     // setup index above:
                     var indexAbove = floorIndex + 1;
-                    indexAbove = (indexAbove < building.floors.Count) ? DoorPortal.MaxIndex : indexAbove;
+                    indexAbove = (indexAbove < building.Floors.Count) ? DoorPortal.MaxIndex : indexAbove;
                     doorPortal.floorIndexAbove = indexAbove;
                     doorPortal.building = building;
 
-                    building.stairs.Add(floorIndex, doorPortal);
+                    building.Stairs.Add(floorIndex, doorPortal);
                 }
                 floor.segments.Add(segment);
                 position += new Vector3(scheme.segmentWidth, 0f, 0f);

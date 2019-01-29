@@ -223,7 +223,7 @@ namespace GaryMoveOut
                 var minItemsCount = (int)(buildingConfig.minItemsCountToMaxFreeSegmentsRatio * maxFreeSegments);
                 var itemsCount = UnityEngine.Random.Range(minItemsCount, maxFreeSegments);
 
-                var items = buildingsGenerator.ItemsDatabase.GetRandomItems(itemsCount);
+                var items = buildingsGenerator.ItemsSpawner.ItemsDatabase.GetRandomItems(itemsCount);
                 //var items_old = buildingsGenerator.ItemsDatabase.GetRandomItems_OLD(itemsCount);
                 var floorSize = new FloorSize()
                 {
@@ -293,7 +293,7 @@ namespace GaryMoveOut
                 switch (currentEvacuationDirection)
                 {
                     case EvecuationDirection.Down:
-                        currentFloorBadEvent = buildingOut.floors.Count;
+                        currentFloorBadEvent = buildingOut.Floors.Count;
                         break;
                     default:
                         currentFloorBadEvent = -1;

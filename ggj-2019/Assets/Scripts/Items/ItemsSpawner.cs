@@ -2,34 +2,34 @@
 
 namespace GaryMoveOut.Items
 {
-    public class ItemsGenerator
+    public class ItemsSpawner
     {
-        private ItemsDatabase itemsDatabase;
+        public ItemsDatabase ItemsDatabase { get; private set; }
 
-        public ItemsGenerator()
+        public ItemsSpawner()
         {
-            itemsDatabase = Resources.Load<ItemsDatabase>("Databases/ItemsDatabase");
+            ItemsDatabase = Resources.Load<ItemsDatabase>("Databases/ItemsDatabase");
         }
 
 
         public GameObject SpawnRandomItem()
         {
-            var scheme = itemsDatabase.GetRandomItem();
-            return SpawnItem(scheme);
+            var scheme = ItemsDatabase.GetRandomItem();
+            return SpawnItem(scheme, null);
         }
 
         public GameObject SpawnRandomItem(ItemMaterialType materialType)
         {
-            var scheme = itemsDatabase.GetRandomItem(materialType);
-            return SpawnItem(scheme);
+            var scheme = ItemsDatabase.GetRandomItem(materialType);
+            return SpawnItem(scheme, null);
         }
 
-        private GameObject SpawnItem(ItemScheme scheme)
+        public GameObject SpawnItem(ItemScheme scheme, Transform parent)
         {
             GameObject itemGO = null;
             if (scheme != null)
             {
-                itemGO = GameObject.Instantiate(scheme.itemPrefab);
+                itemGO = GameObject.Instantiate(scheme.itemPrefab, parent);
                 if (itemGO != null)
                 {
                     var item = itemGO.GetComponent<Item>();

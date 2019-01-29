@@ -16,40 +16,28 @@ namespace GaryMoveOut
     public class Building
     {
         public Transform root;
-        public Dictionary<int, Floor> floors;
-        public Dictionary<int, DoorPortal> stairs;
-
+        public Dictionary<int, Floor> Floors { get; private set; }
+        public Dictionary<int, DoorPortal> Stairs { get; private set; }
         public SegmentSize SegmentSize { get; private set; }
-        //public float SegmentWidth { get; private set; }
-        //public float SegmentHeight { get; private set; }
-        //public float SegmentDepth { get; private set; }
+
+        private ItemsSpawner itemsSpawner;
 
 
-        public Building(SegmentSize segmentSize)
+        public Building(ItemsSpawner itemsSpawner, SegmentSize segmentSize)
         {
-            floors = new Dictionary<int, Floor>();
-            stairs = new Dictionary<int, DoorPortal>();
+            Floors = new Dictionary<int, Floor>();
+            Stairs = new Dictionary<int, DoorPortal>();
 
+            this.itemsSpawner = itemsSpawner;
             SegmentSize = segmentSize;
         }
 
 
-        private List<int> segmentIndices = new List<int>();
-
-        public Vector3? GetSpawnPosition()
-        {
-            if (stairs.TryGetValue(1, out DoorPortal door))
-            {
-                return door.transform.position;
-            }
-            return null;
-        }
-
         public void DestroyFloor(int floorIndex)
         {
-            if (floors.TryGetValue(floorIndex, out Floor floor))
+            if (Floors.TryGetValue(floorIndex, out Floor floor))
             {
-                foreach(var segment in floor.segments)
+                foreach (var segment in floor.segments)
                 {
                     GameObject.Destroy(segment);
                 }
@@ -57,23 +45,126 @@ namespace GaryMoveOut
             }
         }
 
+
+
+        private List<int> segmentIndicesTemp = new List<int>();
+
+        public Vector3? GetSpawnPosition()
+        {
+            if (Stairs.TryGetValue(1, out DoorPortal door))
+            {
+                return door.transform.position;
+            }
+            return null;
+        }
+
+        public Dictionary<int, List<ItemScheme>> GetItems()
+        {
+            Dictionary<int, List<ItemScheme>> itemsByFloorsId = new Dictionary<int, List<ItemScheme>>();
+            foreach (var floor in Floors)
+            {
+                itemsByFloorsId.Add(floor.Key, new List<ItemScheme>());
+                foreach(var item in floor.Value.items)
+                {
+                    itemsByFloorsId[floor.Key].Add(item.Scheme);
+                }
+            }
+            return itemsByFloorsId;
+        }
+
         public void SpawnItemsInside(List<ItemScheme> items)
         {
+            if (this.Floors.Count == 0)
+            {
+                return;
+            }
 
+            var itemsPerFloor = items.Count / (this.Floors.Count - 1);
+
+            int i = 0;
+            int itemsPlaced = 0;
+            foreach (var floor in this.Floors.Values)
+            {
+                if (floor.Type == FloorType.GroundFloor)
+                {
+                    i++;
+                    continue;
+                }
+
+                segmentIndicesTemp.Clear();
+                for (i = 0; i < floor.segments.Count; i++)
+                {
+                    segmentIndicesTemp.Add(i);
+                }
+
+                for (i = 0; i < itemsPerFloor && segmentIndicesTemp.Count > 0;)
+                {
+                    var index = UnityEngine.Random.Range(0, segmentIndicesTemp.Count);
+                    var si = segmentIndicesTemp[index];
+                    segmentIndicesTemp.RemoveAt(index);
+
+                    var itemSlot = floor.segments[si].GetComponentInChildren<ItemSlot>();
+                    if (itemSlot != null)
+                    {
+                        var scheme = items[itemsPlaced++];
+                        SpawnItem(scheme, itemSlot, floor);
+                        i++;
+                    }
+                }
+            }
+
+            i = 0;
+            while (itemsPlaced < items.Count && i < this.Floors.Count)
+            {
+                if (this.Floors[i].Type == FloorType.GroundFloor)
+                {
+                    i++;
+                    continue;
+                }
+                var floor = this.Floors[i];
+                foreach (var segment in floor.segments)
+                {
+                    var itemSlot = segment.GetComponentInChildren<ItemSlot>();
+                    if (itemSlot != null && !itemSlot.isOccupied)
+                    {
+                        var scheme = items[itemsPlaced++];
+                        SpawnItem(scheme, itemSlot, floor);
+                        itemsPlaced++;
+                        break;
+                    }
+                }
+                i++;
+            }
         }
 
+        private void SpawnItem(ItemScheme scheme, ItemSlot itemSlot, Floor floor)
+        {
+            if (scheme != null && itemSlot != null)
+            {
+                var itemGO = itemsSpawner.SpawnItem(scheme, itemSlot.transform);
+                var item = itemGO.GetComponent<Item>();
+                floor.AddItem(item);
+                itemSlot.isOccupied = true;
+            }
+        }
+
+
+
+
+
+        [System.Obsolete]
         public void SpawnItemsInside(List<ItemScheme_OLD> items)
         {
-            if (this.floors.Count == 0)
+            if (this.Floors.Count == 0)
             {
                 return;
             }
 
-            var itemsPerFloor = items.Count / (this.floors.Count - 1);
+            var itemsPerFloor = items.Count / (this.Floors.Count - 1);
 
             int i = 0;
             int itemsPlaced = 0;
-            foreach (var floor in this.floors.Values)
+            foreach (var floor in this.Floors.Values)
             {
                 if (floor.Type == FloorType.GroundFloor)
                 {
@@ -81,17 +172,17 @@ namespace GaryMoveOut
                     continue;
                 }
 
-                segmentIndices.Clear();
+                segmentIndicesTemp.Clear();
                 for (i = 0; i < floor.segments.Count; i++)
                 {
-                    segmentIndices.Add(i);
+                    segmentIndicesTemp.Add(i);
                 }
 
-                for (i = 0; i < itemsPerFloor && segmentIndices.Count > 0;)
+                for (i = 0; i < itemsPerFloor && segmentIndicesTemp.Count > 0;)
                 {
-                    var index = UnityEngine.Random.Range(0, segmentIndices.Count);
-                    var si = segmentIndices[index];
-                    segmentIndices.RemoveAt(index);
+                    var index = UnityEngine.Random.Range(0, segmentIndicesTemp.Count);
+                    var si = segmentIndicesTemp[index];
+                    segmentIndicesTemp.RemoveAt(index);
 
                     var itemSlot = floor.segments[si].GetComponentInChildren<ItemSlot>();
                     if (itemSlot != null)
@@ -99,21 +190,21 @@ namespace GaryMoveOut
                         var scheme = items[itemsPlaced++];
                         var item = new Item_OLD(scheme);
                         scheme.assignedItem = item;
-                        SpawnItem(item, itemSlot, floor);
+                        SpawnItem_OLD(item, itemSlot, floor);
                         i++;
                     }
                 }
             }
 
             i = 0;
-            while (itemsPlaced < items.Count && i < this.floors.Count)
+            while (itemsPlaced < items.Count && i < this.Floors.Count)
             {
-                if (this.floors[i].Type == FloorType.GroundFloor)
+                if (this.Floors[i].Type == FloorType.GroundFloor)
                 {
                     i++;
                     continue;
                 }
-                var floor = this.floors[i];
+                var floor = this.Floors[i];
                 foreach (var segment in floor.segments)
                 {
                     var itemSlot = segment.GetComponentInChildren<ItemSlot>();
@@ -122,7 +213,7 @@ namespace GaryMoveOut
                         var scheme = items[itemsPlaced++];
                         var item = new Item_OLD(scheme);
                         scheme.assignedItem = item;
-                        SpawnItem(item, itemSlot, floor);
+                        SpawnItem_OLD(item, itemSlot, floor);
                         itemsPlaced++;
                         break;
                     }
@@ -131,18 +222,19 @@ namespace GaryMoveOut
             }
         }
 
+        [System.Obsolete]
         public void SpawnItemsInside(List<Item_OLD> items)
         {
-            if (this.floors.Count == 0)
+            if (this.Floors.Count == 0)
             {
                 return;
             }
 
-            var itemsPerFloor = items.Count / (this.floors.Count - 1);
+            var itemsPerFloor = items.Count / (this.Floors.Count - 1);
 
             int i = 0;
             int itemsPlaced = 0;
-            foreach (var floor in this.floors.Values)
+            foreach (var floor in this.Floors.Values)
             {
                 if (floor.Type == FloorType.GroundFloor)
                 {
@@ -150,44 +242,44 @@ namespace GaryMoveOut
                     continue;
                 }
 
-                segmentIndices.Clear();
+                segmentIndicesTemp.Clear();
                 for (i = 0; i < floor.segments.Count; i++)
                 {
-                    segmentIndices.Add(i);
+                    segmentIndicesTemp.Add(i);
                 }
 
-                for (i = 0; i < itemsPerFloor && segmentIndices.Count > 0;)
+                for (i = 0; i < itemsPerFloor && segmentIndicesTemp.Count > 0;)
                 {
-                    var index = UnityEngine.Random.Range(0, segmentIndices.Count);
-                    var si = segmentIndices[index];
-                    segmentIndices.RemoveAt(index);
+                    var index = UnityEngine.Random.Range(0, segmentIndicesTemp.Count);
+                    var si = segmentIndicesTemp[index];
+                    segmentIndicesTemp.RemoveAt(index);
 
                     var itemSlot = floor.segments[si].GetComponentInChildren<ItemSlot>();
                     if (itemSlot != null)
                     {
                         var item = items[itemsPlaced++];
-                        SpawnItem(item, itemSlot, floor);
+                        SpawnItem_OLD(item, itemSlot, floor);
                         i++;
                     }
                 }
             }
 
             i = 0;
-            while (itemsPlaced < items.Count && i < this.floors.Count)
+            while (itemsPlaced < items.Count && i < this.Floors.Count)
             {
-                if (this.floors[i].Type == FloorType.GroundFloor)
+                if (this.Floors[i].Type == FloorType.GroundFloor)
                 {
                     i++;
                     continue;
                 }
-                var floor = this.floors[i];
+                var floor = this.Floors[i];
                 foreach (var segment in floor.segments)
                 {
                     var itemSlot = segment.GetComponentInChildren<ItemSlot>();
                     if (itemSlot != null && !itemSlot.isOccupied)
                     {
                         var item = items[itemsPlaced++];
-                        SpawnItem(item, itemSlot, floor);
+                        SpawnItem_OLD(item, itemSlot, floor);
                         itemsPlaced++;
                         break;
                     }
@@ -196,16 +288,17 @@ namespace GaryMoveOut
             }
         }
 
+        [System.Obsolete]
         public void SpawnItemsInside(Dictionary<int, List<Item_OLD>> itemsByFloorIndex)
         {
-            if (this.floors.Count == 0)
+            if (this.Floors.Count == 0)
             {
                 return;
             }
             
             int index = 0;
             List<Item_OLD> unstackedItems = new List<Item_OLD>();
-            foreach(var floor in floors)
+            foreach(var floor in Floors)
             {
                 List<int> indices = new List<int>();
                 for(int i = 0; i < floor.Value.segments.Count; i++)
@@ -224,7 +317,7 @@ namespace GaryMoveOut
                     {
                         var item = itemsByFloorIndex[floor.Key][0];
                         itemsByFloorIndex[floor.Key].RemoveAt(0);
-                        SpawnItem(item, itemSlot, floor.Value);
+                        SpawnItem_OLD(item, itemSlot, floor.Value);
                     }
                 }
                 if (itemsByFloorIndex[floor.Key].Count > 0)
@@ -234,7 +327,7 @@ namespace GaryMoveOut
             }
 
             // place unstacked items:
-            var floorsList = new List<Floor>(floors.Values);
+            var floorsList = new List<Floor>(Floors.Values);
             index = 0;
             while (unstackedItems.Count > 0)
             {
@@ -246,7 +339,7 @@ namespace GaryMoveOut
                     {
                         var item = unstackedItems[0];
                         unstackedItems.RemoveAt(0);
-                        SpawnItem(item, itemSlot, floor);
+                        SpawnItem_OLD(item, itemSlot, floor);
                         break;
                     }
                 }
@@ -255,7 +348,8 @@ namespace GaryMoveOut
 
         }
 
-        private void SpawnItem(Item_OLD item, ItemSlot itemSlot, Floor floor)
+        [System.Obsolete]
+        private void SpawnItem_OLD(Item_OLD item, ItemSlot itemSlot, Floor floor)
         {
             var itemGO = GameObject.Instantiate(item.prefab, itemSlot.gameObject.transform);
             //itemGO.transform.SetParent(null);
@@ -264,10 +358,11 @@ namespace GaryMoveOut
             itemSlot.isOccupied = true;
         }
 
-        public Dictionary<int, List<Item_OLD>> GetItems()
+        [System.Obsolete]
+        public Dictionary<int, List<Item_OLD>> GetItems_OLD()
         {
             Dictionary<int, List<Item_OLD>> itemsByFloorsId = new Dictionary<int, List<Item_OLD>>();
-            foreach (var floor in floors)
+            foreach (var floor in Floors)
             {
                 itemsByFloorsId.Add(floor.Key, new List<Item_OLD>(floor.Value.items_OLD));
             }

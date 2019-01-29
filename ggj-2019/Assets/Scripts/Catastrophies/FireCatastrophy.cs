@@ -27,7 +27,7 @@ namespace GaryMoveOut
         {
             Debug.LogWarning($"Fire on the {floorIndex} dance floor!");
 
-            if (building.floors.TryGetValue(floorIndex, out Floor floor))
+            if (building.Floors.TryGetValue(floorIndex, out Floor floor))
             {
                 for(int i = 1; i < floor.segments.Count - 1; i++)
                 {
