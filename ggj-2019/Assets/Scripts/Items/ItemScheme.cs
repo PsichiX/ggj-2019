@@ -46,7 +46,35 @@ namespace GaryMoveOut
 
 		private void KillMe()
 		{
-			Destroy(gameObject, 0.5f);
+			transform.parent = null;
+			Destroy(gameObject, 0.3f);
+		}
+
+		private void FreezeMe()
+		{
+			Destroy(GetComponent<Pickable>());
+			Destroy(GetComponent<Rigidbody2D>());
+			transform.parent = null;
+			GetComponent<BoxCollider2D>().enabled = false;
+		}
+
+		public void HideMe()
+		{
+			foreach (var mr in GetComponentsInChildren<MeshRenderer>())
+			{
+				mr.enabled = false;
+			}
+		}
+
+		public void UnKillMe()
+		{
+			gameObject.AddComponent<Rigidbody2D>();
+			gameObject.AddComponent<Pickable>();
+			foreach (var mr in GetComponentsInChildren<MeshRenderer>())
+			{
+				mr.enabled = true;
+			}
+			GetComponent<BoxCollider2D>().enabled = true;
 		}
 
         public void InTruck()
@@ -54,10 +82,17 @@ namespace GaryMoveOut
 			//NewItemInTruck?.Invoke(this);
 			ausource.PlayOneShot(Resources.Load("Sounds/gain") as AudioClip);
 			GameplayManager.CallNewItemInTruckEvent(this);
-            // TODO: hide object
-            KillMe();
-
+			FreezeMe();
         }
+
+		public void CopyValues(ItemScheme source)
+		{
+			assignedItem = source.assignedItem;
+			value = source.value;
+			weight = source.weight;
+			vertical = source.vertical;
+			type = source.type;
+		}
 
         public bool IsItemAlive()
         {

@@ -92,6 +92,7 @@ namespace GaryMoveOut
 		{
 			backgroundMusic.clip = Resources.Load("Sounds/sasiedzi") as AudioClip;
 			backgroundMusic.DOFade(1, 2f);
+			backgroundMusic.Play();
 		}
 
 		private void UpdatePointsOnItemAdd(int points)

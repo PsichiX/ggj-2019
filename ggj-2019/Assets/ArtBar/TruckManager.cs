@@ -59,12 +59,6 @@ namespace GaryMoveOut
             return truckLoader.GetItemList();
         }
 
-        public List<Item> GetTruckItemList2()
-        {
-            return truckLoader.GetItemList2();
-        }
-
-
         public void StartTruckMovement(float duration)
         {
             //anim.SetFloat("Forward", 1f);

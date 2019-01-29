@@ -6,28 +6,23 @@ namespace GaryMoveOut
 {
     public class TruckLoader : MonoBehaviour
     {
+		[SerializeField] private MeshRenderer meshToColor;
         public List<ItemScheme> itemsInTruck;
-        public List<Item> itemsInTruck2;
 
         void Start()
         {
-            itemsInTruck = new List<ItemScheme>();
-            itemsInTruck2 = new List<Item>();
+			meshToColor.material.color = Random.ColorHSV(0, 1, 0.7f, 1f);
+			itemsInTruck = new List<ItemScheme>();
         }
 
         public void ResetTruckItemList()
         {
-            itemsInTruck.Clear();
-            itemsInTruck2.Clear();
-        }
+			itemsInTruck.Clear();
+		}
 
         public List<ItemScheme> GetItemList()
         {
             return itemsInTruck;
-        }
-        public List<Item> GetItemList2()
-        {
-            return itemsInTruck2;
         }
 
         private void OnTriggerEnter2D(Collider2D other)
@@ -38,13 +33,14 @@ namespace GaryMoveOut
                 if (obj.transform.parent != null)
                 {
                     var itemScheme = obj.transform.parent.GetComponent<ItemScheme>();
-                    if (itemScheme != null)
-                    {
-                        itemsInTruck.Add(itemScheme);
-                        //itemsInTruck2.Add(new Item(itemScheme.assignedItem));
-                        itemScheme.InTruck();
-
-                    }
+					if (itemsInTruck.Contains(itemScheme) == false)
+					{
+						if (itemScheme != null)
+						{
+							itemsInTruck.Add(itemScheme);
+							itemScheme.InTruck();
+						}
+					}
                 }
             }
         }

@@ -71,6 +71,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8df0c7a6d1af604295c64f9e7d5dc30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  meshToColor: {fileID: 670125087624231887}
   itemsInTruck: []
 --- !u!61 &251756075811424808
 BoxCollider2D:
@@ -1725,7 +1726,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7537084307939491309}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -1.6939204, y: 0.9897573, z: 1.06}
+  m_LocalPosition: {x: -1.6939204, y: 0.9897573, z: -0.03}
   m_LocalScale: {x: 17.686356, y: 17.686356, z: 17.686356}
   m_Children: []
   m_Father: {fileID: 58561294659660812}

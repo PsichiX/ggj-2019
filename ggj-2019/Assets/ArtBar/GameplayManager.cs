@@ -45,16 +45,13 @@ namespace GaryMoveOut
         private Building buildingIn;
         [SerializeField] private Vector3 playerSpawnOffset;
 
-        private Dictionary<int, List<Item>> itemsFromLastInBuilding;
-        private List<ItemScheme> itemsFromTruck;
-        private List<Item> itemsFormTruck2;
+        private List<Item> items;
         [SerializeField] private GameObject prefabPlayer;
         private int playersCount = 1;
 
         private int currentPlayersInTruck = 0;
         private int currentPlayersDead = 0;
 
-        public List<ItemScheme> DeEvacuationTruckItemList;
         private CatastrophiesDatabase catastrophiesDatabase;
 
         private CameraMultiTarget multiTargetCamera;
@@ -226,9 +223,9 @@ namespace GaryMoveOut
                 var itemsCount = UnityEngine.Random.Range(minItemsCount, maxFreeSegments);
                 var items = buildingsGenerator.ItemsDatabase.GetRandomItems(itemsCount);
 
-                if (itemsFormTruck2 == null || itemsFormTruck2.Count == 0)
+                if (this.items == null || this.items.Count == 0)
                 {
-                    buildingOut = buildingsGenerator.GenerateBuildingWithItems(placeBuildingOut.transform,
+					buildingOut = buildingsGenerator.GenerateBuildingWithItems(placeBuildingOut.transform,
                                                                                buildingConfig.floorSegmentsCount,
                                                                                buildingConfig.buildingFloorsCount,
                                                                                buildingConfig.stairsSegmentIndex,
@@ -236,11 +233,11 @@ namespace GaryMoveOut
                 }
                 else
                 {
-                    buildingOut = buildingsGenerator.GenerateBuildingWithItems(placeBuildingOut.transform,
+					buildingOut = buildingsGenerator.GenerateBuildingWithItems(placeBuildingOut.transform,
                                                            buildingConfig.floorSegmentsCount,
                                                            buildingConfig.buildingFloorsCount,
                                                            buildingConfig.stairsSegmentIndex,
-                                                           itemsFormTruck2);
+                                                           this.items);
                 }
                 buildingFloorNumber = buildingConfig.buildingFloorsCount;
             }
@@ -498,7 +495,12 @@ namespace GaryMoveOut
             currentBuildingId++;
             SetupBuildingIn();
 
-            float delay = Vector2.Distance(placeBuildingOut.transform.position, placeBuildingIn.transform.position) / truckSpeedModifier;
+			foreach (var i in truckManager.GetTruckItemList())
+			{
+				i.HideMe();
+			}
+
+			float delay = Vector2.Distance(placeBuildingOut.transform.position, placeBuildingIn.transform.position) / truckSpeedModifier;
             truckManager.StartTruckMovement(delay);
             DOVirtual.DelayedCall(delay, PhaseTruckStop);
             Debug.Log("PhaseTruckStart");
@@ -506,14 +508,14 @@ namespace GaryMoveOut
 
         private void PhaseTruckStop()
         {
+			// fade out?
             events.CallEvent(GamePhases.GameplayPhase.TruckStop, null);
-
             buildingsGenerator.DestroyBuildingOut(ref buildingOut);
 
             float delay = 1f;
-            //DOVirtual.DelayedCall(delay, PhaseDeEvacuation);
-            GameSummary();
-            Debug.Log("PhaseTruckStop");
+			DOVirtual.DelayedCall(delay, PhaseDeEvacuation);
+			//GameSummary();
+			Debug.Log("PhaseTruckStop");
         }
 
         private void GameSummary()
@@ -531,13 +533,30 @@ namespace GaryMoveOut
 
         private void PhaseDeEvacuation()
         {
-            DeEvacuationTruckItemList = truckManager.GetTruckItemList();
-            itemsFormTruck2 = truckManager.GetTruckItemList2();
-            float delay = 0.2f;
-            DOVirtual.DelayedCall(delay, PhaseStartGame);
-            //itemsFromTruck = truckManager.GetTruckItemList();
-            //events.CallEvent(GamePhases.GameplayPhase.DeEvacuation, null);
-            Debug.Log("PhaseDeEvacuation");
+			// fade in?
+			//DOVirtual.DelayedCall(delay, PhaseStartGame);
+			Debug.Log("PhaseDeEvacuation");
+			cameraTargets.Clear();
+			for (int i = 0; i < players.Length; i++)
+			{
+				var p = Instantiate(prefabPlayer);
+				p.transform.position = truckManager.Truck.transform.position;
+				p.GetComponent<PlayerController>().Setup();
+				players[i].InputLayout = (InputHandler.Layout)(playerInputs[i]);
+				cameraTargets.Add(p);
+			}
+			// Fixme:
+			multiTargetCamera.enabled = false;
+			//multiTargetCamera.SetTargets(cameraTargets.ToArray());
+			foreach (var i in truckManager.GetTruckItemList())
+			{
+				i.transform.position = truckManager.Truck.transform.position;
+				i.UnKillMe();
+			}
+			// Fixme:
+			Destroy(truckManager.Truck);
+			truckManager.ResetTruckItemList();
+			events.CallEvent(GamePhases.GameplayPhase.DeEvacuation, null);
         }
 
         private void ReactionLastItemShot(object param)

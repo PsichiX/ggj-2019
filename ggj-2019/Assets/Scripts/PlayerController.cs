@@ -68,6 +68,7 @@ namespace GaryMoveOut
         private bool m_canTeleportUp = false;
         private bool m_canTeleportDown = false;
         private bool m_isAlive = true;
+		private bool groundKills = false;
 
 		private AudioSource aus;
 
@@ -80,31 +81,37 @@ namespace GaryMoveOut
 
         private void Start()
         {
-			aus = GameObject.FindGameObjectsWithTag("Audio")[0].GetComponent<AudioSource>();
-			m_rigidBody = GetComponent<Rigidbody2D>();
-            m_collider = GetComponent<BoxCollider2D>();
-            m_animator = GetComponentInChildren<Animator>();
-
-            if (m_ui != null)
-            {
-                m_ui.RegisterPlayer(this);
-            }
-            if (m_gameplayEvents != null)
-            {
-                m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.Evacuation, OnEvacuation);
-                m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.PlayerJump, OnPlayerJump);
-                m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.DeEvacuation, OnDeEvacuation);
-                m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.LastItemShot, OnLastItemShot);
-                m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.PlayerDie, OnPlayerDie);
-                m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.FloorEvacuationEnd, OnEvacuationEnd);
-                m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.GameOver, OnGameOver);
-                m_inputBlocked = true;
-            }
+			Setup();
         }
 
-        private void OnGameOver(object obj)
-        {
-            OnPlayerDie(this);
+		public void Setup()
+		{
+			aus = GameObject.FindGameObjectsWithTag("Audio")[0].GetComponent<AudioSource>();
+			m_rigidBody = GetComponent<Rigidbody2D>();
+			m_collider = GetComponent<BoxCollider2D>();
+			m_animator = GetComponentInChildren<Animator>();
+
+			if (m_ui != null)
+			{
+				m_ui.RegisterPlayer(this);
+			}
+			if (m_gameplayEvents != null)
+			{
+				m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.Evacuation, OnEvacuation);
+				m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.PlayerJump, OnPlayerJump);
+				m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.TruckStop, OnTruckStop);
+				m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.DeEvacuation, OnDeEvacuation);
+				m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.LastItemShot, OnLastItemShot);
+				m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.PlayerDie, OnPlayerDie);
+				m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.FloorEvacuationEnd, OnEvacuationEnd);
+				m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.GameOver, OnGameOver);
+				//m_inputBlocked = true;
+			}
+		}
+
+		private void OnGameOver(object obj)
+		{
+			OnPlayerDie(this);
         }
 
         private void OnPlayerDie(object obj)
@@ -128,7 +135,8 @@ namespace GaryMoveOut
                 m_gameplayEvents.DetachFromEvent(GamePhases.GameplayPhase.Evacuation, OnEvacuation);
                 m_gameplayEvents.DetachFromEvent(GamePhases.GameplayPhase.PlayerJump, OnPlayerJump);
                 m_gameplayEvents.DetachFromEvent(GamePhases.GameplayPhase.DeEvacuation, OnDeEvacuation);
-                m_gameplayEvents.DetachFromEvent(GamePhases.GameplayPhase.LastItemShot, OnLastItemShot);
+				m_gameplayEvents.DetachFromEvent(GamePhases.GameplayPhase.TruckStop, OnTruckStop);
+				m_gameplayEvents.DetachFromEvent(GamePhases.GameplayPhase.LastItemShot, OnLastItemShot);
                 m_gameplayEvents.DetachFromEvent(GamePhases.GameplayPhase.PlayerDie, OnPlayerDie);
                 m_gameplayEvents.DetachFromEvent(GamePhases.GameplayPhase.FloorEvacuationEnd, OnEvacuationEnd);
                 m_gameplayEvents.DetachFromEvent(GamePhases.GameplayPhase.GameOver, OnGameOver);
@@ -146,7 +154,7 @@ namespace GaryMoveOut
         private void FixedUpdate()
         {
             Velocity = 0;
-            if (m_inputHandler != null && !m_inputBlocked)
+            if (m_inputHandler != null && m_inputBlocked == false)
             {
                 var dt = Time.fixedDeltaTime;
                 var action = m_inputHandler.Action;
@@ -290,16 +298,16 @@ namespace GaryMoveOut
             }
         }
 
-        private void OnTriggerEnter2D(Collider2D other)
+		private void OnTriggerEnter2D(Collider2D other)
         {
-            if (other.tag == "Ground" && m_isAlive)
+            if (other.tag == "Ground" && m_isAlive && groundKills == true)
             {
                 m_isAlive = false;
                 m_gameplayEvents.CallEvent(GamePhases.GameplayPhase.PlayerDie, this);
                 Debug.Log("player hit the ground");
             }
 
-            if (other.tag == "TruckLoader" && m_isAlive)
+            if (other.tag == "TruckLoader" && m_isAlive && groundKills == true)
             {
                 m_gameplayEvents.CallEvent(GamePhases.GameplayPhase.PlayerInTruck, null);
                 Debug.Log("player in truck");
@@ -513,13 +521,22 @@ namespace GaryMoveOut
 
         private void OnLastItemShot(object obj)
         {
+			groundKills = true;
             m_inputBlocked = true;
         }
 
-        private void OnDeEvacuation(object obj)
+		private void OnDeEvacuation(object obj)
         {
+			groundKills = false;
             m_inputBlocked = false;
+			Debug.Log("is input blocked? : " + m_inputBlocked);
         }
+
+		private void OnTruckStop(object obj)
+		{
+			groundKills = false;
+			m_inputBlocked = false;
+		}
 
         private void OnPlayerJump(object obj)
         {
@@ -528,7 +545,8 @@ namespace GaryMoveOut
 
         private void OnEvacuation(object obj)
         {
-            m_inputBlocked = false;
+			groundKills = true;
+			m_inputBlocked = false;
         }
     }
 }

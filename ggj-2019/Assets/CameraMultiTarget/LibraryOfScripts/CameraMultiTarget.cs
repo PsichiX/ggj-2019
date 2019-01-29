@@ -20,27 +20,29 @@ public class CameraMultiTarget : MonoBehaviour
 	enum DebugProjection { DISABLE, IDENTITY, ROTATED }
 	enum ProjectionEdgeHits { TOP_BOTTOM, LEFT_RIGHT }
 
-	public void SetTargets(GameObject[] targets) {
+	public void SetTargets(GameObject[] targets)
+	{
 		_targets = targets;
 	}
-	
+
 	private void Awake()
 	{
 		_camera = gameObject.GetComponent<Camera>();
 		_debugProjection = DebugProjection.ROTATED;
 	}
 
-	private void LateUpdate() {
+	private void LateUpdate()
+	{
 		if (_targets.Length == 0)
 			return;
-		
+
 		var targetPositionAndRotation = TargetPositionAndRotation(_targets);
 
 		Vector3 velocity = Vector3.zero;
 		transform.position = Vector3.SmoothDamp(transform.position, targetPositionAndRotation.Position, ref velocity, MoveSmoothTime);
 		transform.rotation = targetPositionAndRotation.Rotation;
 	}
-	
+
 	PositionAndRotation TargetPositionAndRotation(GameObject[] targets)
 	{
 		float halfVerticalFovRad = (_camera.fieldOfView * Mathf.Deg2Rad) / 2f;
@@ -49,23 +51,23 @@ public class CameraMultiTarget : MonoBehaviour
 		var rotation = Quaternion.Euler(Pitch, Yaw, Roll);
 		var inverseRotation = Quaternion.Inverse(rotation);
 
-        //=================================================================
-        // old version:
-        //var targetsRotatedToCameraIdentity = targets.Select(target => inverseRotation * target.transform.position).ToArray();
+		//=================================================================
+		// old version:
+		//var targetsRotatedToCameraIdentity = targets.Select(target => inverseRotation * target.transform.position).ToArray();
 
-        // K8's changes:
-        targets = targets.Where(target => target != null).ToArray();
-        var targetsRotatedToCameraIdentity = targets.Select(target => inverseRotation * target.transform.position).ToArray();
-        //=================================================================
+		// K8's changes:
+		targets = targets.Where(target => target != null).ToArray();
+		var targetsRotatedToCameraIdentity = targets.Select(target => inverseRotation * target.transform.position).ToArray();
+		//=================================================================
 
-        float furthestPointDistanceFromCamera = targetsRotatedToCameraIdentity.Max(target => target.z);
+		float furthestPointDistanceFromCamera = targetsRotatedToCameraIdentity.Max(target => target.z);
 		float projectionPlaneZ = furthestPointDistanceFromCamera + 3f;
 
-		ProjectionHits viewProjectionLeftAndRightEdgeHits = 
+		ProjectionHits viewProjectionLeftAndRightEdgeHits =
 			ViewProjectionEdgeHits(targetsRotatedToCameraIdentity, ProjectionEdgeHits.LEFT_RIGHT, projectionPlaneZ, halfHorizontalFovRad).AddPadding(PaddingRight, PaddingLeft);
-		ProjectionHits viewProjectionTopAndBottomEdgeHits = 
+		ProjectionHits viewProjectionTopAndBottomEdgeHits =
 			ViewProjectionEdgeHits(targetsRotatedToCameraIdentity, ProjectionEdgeHits.TOP_BOTTOM, projectionPlaneZ, halfVerticalFovRad).AddPadding(PaddingUp, PaddingDown);
-		
+
 		var requiredCameraPerpedicularDistanceFromProjectionPlane =
 			Mathf.Max(
 				RequiredCameraPerpedicularDistanceFromProjectionPlane(viewProjectionTopAndBottomEdgeHits, halfVerticalFovRad),
@@ -77,13 +79,13 @@ public class CameraMultiTarget : MonoBehaviour
 			(viewProjectionTopAndBottomEdgeHits.Max + viewProjectionTopAndBottomEdgeHits.Min) / 2f,
 			projectionPlaneZ - requiredCameraPerpedicularDistanceFromProjectionPlane);
 
-		DebugDrawProjectionRays(cameraPositionIdentity, 
-			viewProjectionLeftAndRightEdgeHits, 
-			viewProjectionTopAndBottomEdgeHits, 
-			requiredCameraPerpedicularDistanceFromProjectionPlane, 
-			targetsRotatedToCameraIdentity, 
-			projectionPlaneZ, 
-			halfHorizontalFovRad, 
+		DebugDrawProjectionRays(cameraPositionIdentity,
+			viewProjectionLeftAndRightEdgeHits,
+			viewProjectionTopAndBottomEdgeHits,
+			requiredCameraPerpedicularDistanceFromProjectionPlane,
+			targetsRotatedToCameraIdentity,
+			projectionPlaneZ,
+			halfHorizontalFovRad,
 			halfVerticalFovRad);
 
 		return new PositionAndRotation(rotation * cameraPositionIdentity, rotation);
@@ -102,7 +104,7 @@ public class CameraMultiTarget : MonoBehaviour
 			.ToArray();
 		return new ProjectionHits(projectionHits.Max(), projectionHits.Min());
 	}
-	
+
 	private float[] TargetProjectionHits(Vector3 target, ProjectionEdgeHits alongAxis, float projectionPlaneDistance, float halfFovRad)
 	{
 		float distanceFromProjectionPlane = projectionPlaneDistance - target.z;
@@ -110,23 +112,24 @@ public class CameraMultiTarget : MonoBehaviour
 
 		if (alongAxis == ProjectionEdgeHits.LEFT_RIGHT)
 		{
-			return new[] {target.x + projectionHalfSpan, target.x - projectionHalfSpan};
+			return new[] { target.x + projectionHalfSpan, target.x - projectionHalfSpan };
 		}
 		else
 		{
-			return new[] {target.y + projectionHalfSpan, target.y - projectionHalfSpan};
+			return new[] { target.y + projectionHalfSpan, target.y - projectionHalfSpan };
 		}
-	
+
 	}
-	
+
 	private void DebugDrawProjectionRays(Vector3 cameraPositionIdentity, ProjectionHits viewProjectionLeftAndRightEdgeHits,
 		ProjectionHits viewProjectionTopAndBottomEdgeHits, float requiredCameraPerpedicularDistanceFromProjectionPlane,
 		IEnumerable<Vector3> targetsRotatedToCameraIdentity, float projectionPlaneZ, float halfHorizontalFovRad,
-		float halfVerticalFovRad) {
-		
+		float halfVerticalFovRad)
+	{
+
 		if (_debugProjection == DebugProjection.DISABLE)
 			return;
-		
+
 		DebugDrawProjectionRay(
 			cameraPositionIdentity,
 			new Vector3((viewProjectionLeftAndRightEdgeHits.Max - viewProjectionLeftAndRightEdgeHits.Min) / 2f,
@@ -148,13 +151,14 @@ public class CameraMultiTarget : MonoBehaviour
 				-(viewProjectionTopAndBottomEdgeHits.Max - viewProjectionTopAndBottomEdgeHits.Min) / 2f,
 				requiredCameraPerpedicularDistanceFromProjectionPlane), new Color32(31, 119, 180, 255));
 
-		foreach (var target in targetsRotatedToCameraIdentity) {
+		foreach (var target in targetsRotatedToCameraIdentity)
+		{
 			float distanceFromProjectionPlane = projectionPlaneZ - target.z;
 			float halfHorizontalProjectionVolumeCircumcircleDiameter = Mathf.Sin(Mathf.PI - ((Mathf.PI / 2f) + halfHorizontalFovRad)) / (distanceFromProjectionPlane);
 			float projectionHalfHorizontalSpan = Mathf.Sin(halfHorizontalFovRad) / halfHorizontalProjectionVolumeCircumcircleDiameter;
 			float halfVerticalProjectionVolumeCircumcircleDiameter = Mathf.Sin(Mathf.PI - ((Mathf.PI / 2f) + halfVerticalFovRad)) / (distanceFromProjectionPlane);
 			float projectionHalfVerticalSpan = Mathf.Sin(halfVerticalFovRad) / halfVerticalProjectionVolumeCircumcircleDiameter;
-			
+
 			DebugDrawProjectionRay(target,
 				new Vector3(projectionHalfHorizontalSpan, 0f, distanceFromProjectionPlane),
 				new Color32(214, 39, 40, 255));
