@@ -74,7 +74,7 @@ namespace GaryMoveOut
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.PlayerInTruck, ReactionPlayerInTruck);
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.FewDaysLater, ReactionFewDaysLater);
 
-			GameplayManager.PointsCollectedUpdate += UpdatePointsOnItemAdd;
+			GameplayManager.GetGameplayManager().PointsCollectedUpdate += UpdatePointsOnItemAdd;
 		}
 
 		private void ReactionPlayerInTruck(object obj)

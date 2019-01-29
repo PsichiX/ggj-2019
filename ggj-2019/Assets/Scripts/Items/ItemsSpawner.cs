@@ -12,18 +12,6 @@ namespace GaryMoveOut.Items
         }
 
 
-        public GameObject SpawnRandomItem()
-        {
-            var scheme = ItemsDatabase.GetRandomItem();
-            return SpawnItem(scheme, null);
-        }
-
-        public GameObject SpawnRandomItem(ItemMaterialType materialType)
-        {
-            var scheme = ItemsDatabase.GetRandomItem(materialType);
-            return SpawnItem(scheme, null);
-        }
-
         public GameObject SpawnItem(ItemScheme scheme, Transform parent)
         {
             GameObject itemGO = null;
@@ -40,6 +28,19 @@ namespace GaryMoveOut.Items
                 }
             }
             return itemGO;
+        }
+
+
+        public GameObject SpawnRandomItem()
+        {
+            var scheme = ItemsDatabase.GetRandomItem();
+            return SpawnItem(scheme, null);
+        }
+
+        public GameObject SpawnRandomItem(ItemMaterialType materialType)
+        {
+            var scheme = ItemsDatabase.GetRandomItem(materialType);
+            return SpawnItem(scheme, null);
         }
     }
 }

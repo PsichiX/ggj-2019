@@ -10,5 +10,6 @@ namespace GaryMoveOut.Items
         public bool vertical;
         public ItemMaterialType materialType;
         public GameObject itemPrefab;
+        public GameObject explosion;
     }
 }

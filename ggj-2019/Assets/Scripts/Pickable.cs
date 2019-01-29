@@ -44,10 +44,9 @@ namespace GaryMoveOut
 
         public void Throw(Vector2 impulse)
         {
-			var item = GetComponent<ItemScheme_OLD>();
 			if (item != null)
 			{
-				item.cantkillme = false;
+				item.cantKillMe = false;
 			}
 			m_rigidBody.bodyType = RigidbodyType2D.Dynamic;
             m_rigidBody.AddForce(impulse, ForceMode2D.Impulse);

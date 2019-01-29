@@ -9,8 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6a5dfeab1d4b204db91e59d0f701d16, type: 3}
-  m_Name: ItemsDatabase
+  m_Script: {fileID: 11500000, guid: fcc529896a4670c4886a88b1246adf71, type: 3}
+  m_Name: Table
   m_EditorClassIdentifier: 
-  items: []
-  prefabsPath: Assets/Resources/ItemSchemes/
+  value: 0
+  weight: 0
+  vertical: 0
+  materialType: 0
+  itemPrefab: {fileID: 4412790381592846228, guid: fa1a85af710d3cb4f9f56986813701bd,
+    type: 3}
+  explosion: {fileID: 0}

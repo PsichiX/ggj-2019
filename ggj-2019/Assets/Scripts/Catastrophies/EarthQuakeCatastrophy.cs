@@ -28,7 +28,7 @@ namespace GaryMoveOut
             var endPos = building.root.transform.position - new Vector3(0f, building.SegmentSize.Height, 0f);
             building.root.transform.DOMove(endPos, floorFallTime).SetEase(Ease.OutBounce);
 
-            var force = 3f;
+            //var force = 3f;
             //foreach (var floor in building.floors)
             //{
             //    // apply force to all items:

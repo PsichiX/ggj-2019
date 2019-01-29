@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using GaryMoveOut.Items;
 
 namespace GaryMoveOut
 {
@@ -54,7 +55,7 @@ namespace GaryMoveOut
             truckLoader.ResetTruckItemList();
         }
 
-        public List<ItemScheme_OLD> GetTruckItemList()
+        public List<Item> GetTruckItemList()
         {
             return truckLoader.GetItemList();
         }

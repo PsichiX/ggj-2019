@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using GaryMoveOut.Items;
+using UnityEngine;
 
 namespace GaryMoveOut
 {
@@ -17,40 +18,38 @@ namespace GaryMoveOut
             this.floor = floor;
         }
 
-        // FIX ME:
         private void OnTriggerEnter2D(Collider2D other)
         {
-    //        var itemScheme = other.GetComponent<ItemScheme_OLD>();
-    //        if (itemScheme != null && floor != null)
-    //        {
-    //            var item = itemScheme.assignedItem;
-    //            if (isInside)
-    //            {
-				//	Debug.Log("Added " + item.prefab.name + "to floor " + floor.Type);
-    //                floor.AddItem_OLD(item, other.gameObject);
-    //            }
-    //            else
-    //            {
-				//	Debug.Log("Removed " + item.prefab.name + "from floor " + floor.Type);
-				//	floor.RemoveItem_OLD(item);
-    //            }
-    //        }
-    //        if (addForce != null)
-    //        {
-				//isBroken = true;
-				//var rigid = other.GetComponent<Rigidbody2D>();
-    //            if (rigid)
-    //            {
-    //                if (rigid.velocity.x > 0)
-    //                {
-    //                    YouAreTearingMeApartItem(true);
-    //                }
-    //                else
-    //                {
-    //                    YouAreTearingMeApartItem(false);
-    //                }
-    //            }
-    //        }
+            var item = other.GetComponentInParent<Item>();
+            if (item != null && floor != null)
+            {
+                if (isInside)
+                {
+                    Debug.Log("Added " + item.name + "to floor " + floor.Type);
+                    floor.AddItem(item);
+                }
+                else
+                {
+                    Debug.Log("Removed " + item.name + "from floor " + floor.Type);
+                    floor.RemoveItem(item);
+                }
+            }
+            if (addForce != null)
+            {
+                isBroken = true;
+                var rigid = other.GetComponent<Rigidbody2D>();
+                if (rigid)
+                {
+                    if (rigid.velocity.x > 0)
+                    {
+                        YouAreTearingMeApartItem(true);
+                    }
+                    else
+                    {
+                        YouAreTearingMeApartItem(false);
+                    }
+                }
+            }
         }
 
         private void YouAreTearingMeApartItem(bool toTheRight)

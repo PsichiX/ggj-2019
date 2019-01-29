@@ -15,98 +15,92 @@ namespace GaryMoveOut
     [System.Obsolete]
     public class ItemScheme_OLD : MonoBehaviour
     {
-		public event Action<ItemScheme_OLD> NewItemInTruck;
-		[SerializeField] private GameObject explosion;
-		[SerializeField] private AudioSource ausource;
+		//public event Action<ItemScheme_OLD> NewItemInTruck;
+		//[SerializeField] private GameObject explosion;
+		//[SerializeField] private AudioSource ausource;
 
-		public float value;
-        public float weight;
-        public bool vertical;
-        public ItemType type;
-        public Item_OLD assignedItem;
+		//public float value;
+  //      public float weight;
+  //      public bool vertical;
+  //      public ItemType type;
+  //      public Item_OLD assignedItem;
 
-        private bool isAlive = true;
+		//private void Start()
+		//{
+		//	if (ausource == null)
+		//	{
+		//		ausource = GetComponent<AudioSource>();
+		//	}
+		//}
 
-		private void Start()
-		{
-			if (ausource == null)
-			{
-				ausource = GetComponent<AudioSource>();
-			}
-		}
+		//public bool cantKillMe = false;
+  //      public bool IsAlive { get; private set; }
 
-		public bool cantkillme = false;
+  //      public void DestroyOnGround()
+  //      {
+		//	if (cantKillMe)
+		//	{
+		//		return;
+		//	}
+  //          IsAlive = false;
+		//	var ex = Instantiate(explosion, transform);
 
-		public void DestroyOnGround()
-        {
-			if (cantkillme)
-			{
-				return;
-			}
-            isAlive = false;
-			var ex = Instantiate(explosion, transform);
+		//	ex.transform.localPosition = Vector3.zero;
+		//	ausource.Play();
+		//	DOVirtual.DelayedCall(0.6f, KillMe);
+  //          // TODO: destroy viz
+  //      }
 
-			ex.transform.localPosition = Vector3.zero;
-			ausource.Play();
-			DOVirtual.DelayedCall(0.6f, KillMe);
-            // TODO: destroy viz
-        }
+		//private void KillMe()
+		//{
+		//	transform.parent = null;
+		//	Destroy(gameObject, 0.2f);
+		//}
 
-		private void KillMe()
-		{
-			transform.parent = null;
-			Destroy(gameObject, 0.2f);
-		}
+		//private void FreezeMe()
+		//{
+		//	Destroy(GetComponent<Pickable>());
+		//	Destroy(GetComponent<Rigidbody2D>());
+		//	transform.parent = null;
+		//	GetComponent<BoxCollider2D>().enabled = false;
+		//}
 
-		private void FreezeMe()
-		{
-			Destroy(GetComponent<Pickable>());
-			Destroy(GetComponent<Rigidbody2D>());
-			transform.parent = null;
-			GetComponent<BoxCollider2D>().enabled = false;
-		}
+		//public void HideMe()
+		//{
+		//	foreach (var mr in GetComponentsInChildren<MeshRenderer>())
+		//	{
+		//		mr.enabled = false;
+		//	}
+		//}
 
-		public void HideMe()
-		{
-			foreach (var mr in GetComponentsInChildren<MeshRenderer>())
-			{
-				mr.enabled = false;
-			}
-		}
-
-		public void UnKillMe()
-		{
-			gameObject.AddComponent<Rigidbody2D>();
-			gameObject.AddComponent<Pickable>();
-			foreach (var mr in GetComponentsInChildren<MeshRenderer>())
-			{
-				mr.enabled = true;
-			}
-			GetComponent<BoxCollider2D>().enabled = true;
+		//public void UnKillMe()
+		//{
+		//	gameObject.AddComponent<Rigidbody2D>();
+		//	gameObject.AddComponent<Pickable>();
+		//	foreach (var mr in GetComponentsInChildren<MeshRenderer>())
+		//	{
+		//		mr.enabled = true;
+		//	}
+		//	GetComponent<BoxCollider2D>().enabled = true;
 			
-			cantkillme = true;
-		}
+		//	cantKillMe = true;
+		//}
 
-        public void InTruck()
-        {
-			//NewItemInTruck?.Invoke(this);
-			ausource.PlayOneShot(Resources.Load("Sounds/gain") as AudioClip);
-			GameplayManager.CallNewItemInTruckEvent(this);
-			FreezeMe();
-        }
+  //      public void InTruck()
+  //      {
+		//	//NewItemInTruck?.Invoke(this);
+		//	ausource.PlayOneShot(Resources.Load("Sounds/gain") as AudioClip);
+		//	//GameplayManager.GetGameplayManager().CallNewItemInTruckEvent(this);
+		//	FreezeMe();
+  //      }
 
-		public void CopyValues(ItemScheme_OLD source)
-		{
-			assignedItem = source.assignedItem;
-			value = source.value;
-			weight = source.weight;
-			vertical = source.vertical;
-			type = source.type;
-		}
-
-        public bool IsItemAlive()
-        {
-            return isAlive;
-        }
+		//public void CopyValues(ItemScheme_OLD source)
+		//{
+		//	assignedItem = source.assignedItem;
+		//	value = source.value;
+		//	weight = source.weight;
+		//	vertical = source.vertical;
+		//	type = source.type;
+		//}
     }
 }

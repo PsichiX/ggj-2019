@@ -19,6 +19,11 @@ namespace GaryMoveOut.Items
                     var target = serializedObject.targetObject as ItemsDatabase;
                     target?.RefreshDatabase();
                 }
+                if (GUILayout.Button("Generate item schemes"))
+                {
+                    var target = serializedObject.targetObject as ItemsDatabase;
+                    target?.GenerateItemSchemes();
+                }
             }
             EditorGUILayout.EndToggleGroup();
 

@@ -14,7 +14,7 @@ namespace GaryMoveOut.Items
             items.Clear();
             itemsByMaterialType.Clear();
 
-            var itemsFound = Resources.LoadAll<ItemScheme>("ItemSchemas");
+            var itemsFound = Resources.LoadAll<ItemScheme>("ItemSchemes");
             foreach(var item in itemsFound)
             {
                 items.Add(item);
@@ -29,11 +29,19 @@ namespace GaryMoveOut.Items
             }
         }
 
-        [SerializeField] private string prefabsPath;
-        public void GenerateItemSchemas()
+        [SerializeField] private string prefabsPath = "Resources/ItemSchemes/";
+        public void GenerateItemSchemes()
         {
-            // to do
-            // ...
+            var itemPrefabsFound = Resources.LoadAll("Items_NEW");
+            foreach (var item in itemPrefabsFound)
+            {
+                var scheme = ScriptableObject.CreateInstance<ItemScheme>();
+                scheme.itemPrefab = item as GameObject;
+                scheme.name = item.name;
+                var path = $"{prefabsPath}{scheme.name}.asset";
+                UnityEditor.AssetDatabase.CreateFolder("Resources", "ItemSchemes");
+                UnityEditor.AssetDatabase.CreateAsset(scheme, path);
+            }
         }
 
         public ItemScheme GetRandomItem()
@@ -83,73 +91,5 @@ namespace GaryMoveOut.Items
                 return null;
             }
         }
-
-
-
-
-
-        #region OLD
-        public ItemScheme_OLD debugItem_OLD;
-
-        public List<ItemScheme_OLD> database_OLD = new List<ItemScheme_OLD>();
-        public Dictionary<ItemType, List<ItemScheme_OLD>> itemsByType_OLD = new Dictionary<ItemType, List<ItemScheme_OLD>>();
-
-
-        [System.Obsolete]
-        public void LoadItemsFromAssets_OLD()
-        {
-            database_OLD.Clear();
-            itemsByType_OLD.Clear();
-
-            var items = Resources.LoadAll<ItemScheme_OLD>("Items");
-            foreach (var item in items)
-            {
-                database_OLD.Add(item);
-                if (!itemsByType_OLD.ContainsKey(item.type))
-                {
-                    itemsByType_OLD.Add(item.type, new List<ItemScheme_OLD>());
-                }
-                itemsByType_OLD[item.type].Add(item);
-            }
-        }
-
-        [System.Obsolete]
-        public List<ItemScheme_OLD> GetRandomItems_OLD(int count)
-        {
-            List<ItemScheme_OLD> items = new List<ItemScheme_OLD>();
-            for (int i = 0; i < count; i++)
-            {
-                items.Add(GetRandomItem_OLD());
-            }
-            return items;
-        }
-
-
-        [System.Obsolete]
-        public ItemScheme_OLD GetRandomItem_OLD()
-        {
-            if (database_OLD.Count > 0)
-            {
-                return database_OLD[Random.Range(0, database_OLD.Count)];
-            }
-            else
-            {
-                return debugItem_OLD;
-            }
-        }
-
-        [System.Obsolete]
-        public ItemScheme_OLD GetRandomItemByType_OLD(ItemType type)
-        {
-            if (itemsByType_OLD.ContainsKey(type) && itemsByType_OLD[type].Count > 0)
-            {
-                return itemsByType_OLD[type][Random.Range(0, itemsByType_OLD[type].Count)];
-            }
-            else
-            {
-                return debugItem_OLD;
-            }
-        }
-        #endregion
     }
 }

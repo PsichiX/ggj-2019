@@ -16,9 +16,9 @@ namespace GaryMoveOut
             Both = 2
         }
 
-        public static event System.Action<int> PointsCollectedUpdate;
-        public static event System.Action<ItemScheme_OLD> NewItemInTruck;
-        public static void CallNewItemInTruckEvent(ItemScheme_OLD scheme)
+        public event System.Action<int> PointsCollectedUpdate;
+        public event System.Action<ItemScheme> NewItemInTruck;
+        public void CallNewItemInTruckEvent(ItemScheme scheme)
         {
             NewItemInTruck?.Invoke(scheme);
         }
@@ -46,10 +46,7 @@ namespace GaryMoveOut
         private Building buildingIn;
         [SerializeField] private Vector3 playerSpawnOffset;
 
-        [System.Obsolete] private List<Item_OLD> items_old;
         private List<ItemScheme> itemsInTruck;
-
-
 
         [SerializeField] private GameObject prefabPlayer;
         private int playersCount = 1;
@@ -93,7 +90,7 @@ namespace GaryMoveOut
             NewItemInTruck += OnNewItemInTruck;
         }
 
-        private void OnNewItemInTruck(ItemScheme_OLD scheme)
+        private void OnNewItemInTruck(ItemScheme scheme)
         {
             pointsCollected += (int)scheme.value;
             PointsCollectedUpdate?.Invoke(pointsCollected);
@@ -224,7 +221,6 @@ namespace GaryMoveOut
                 var itemsCount = UnityEngine.Random.Range(minItemsCount, maxFreeSegments);
 
                 var items = buildingsGenerator.ItemsSpawner.ItemsDatabase.GetRandomItems(itemsCount);
-                //var items_old = buildingsGenerator.ItemsDatabase.GetRandomItems_OLD(itemsCount);
                 var floorSize = new FloorSize()
                 {
                     segmentsCount = buildingConfig.floorSegmentsCount,
