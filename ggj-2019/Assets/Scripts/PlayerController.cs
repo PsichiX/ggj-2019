@@ -33,21 +33,16 @@ namespace GaryMoveOut
 
         public int FloorIndex = 1;
 
+        [SerializeField] private InputHandler m_inputHandler;
+        [SerializeField] private float m_speed;
+        [SerializeField] private Transform m_pickableOrigin;
+        [SerializeField] private Vector2 m_aimStrengthRange = new Vector2(1, 10);
+        [SerializeField] private float m_aimingAngleSpeed = 1;
+        [SerializeField] private float m_aimingStrengthSpeed = 1;
+		[SerializeField] private SkinnedMeshRenderer meshRenderer;
+		[SerializeField] private GameObject blood;
 
-        [SerializeField]
-        private InputHandler m_inputHandler;
-        [SerializeField]
-        private float m_speed;
-        [SerializeField]
-        private Transform m_pickableOrigin;
-        [SerializeField]
-        private Vector2 m_aimStrengthRange = new Vector2(1, 10);
-        [SerializeField]
-        private float m_aimingAngleSpeed = 1;
-        [SerializeField]
-        private float m_aimingStrengthSpeed = 1;
-
-        private Rigidbody2D m_rigidBody;
+		private Rigidbody2D m_rigidBody;
         private BoxCollider2D m_collider;
         private HashSet<GameObject> m_interactibles = new HashSet<GameObject>();
         private bool m_lastAction = false;
@@ -69,6 +64,7 @@ namespace GaryMoveOut
         private bool m_canTeleportDown = false;
         private bool m_isAlive = true;
 		private bool groundKills = false;
+		private Vector2 smallOffsetY = new Vector2(0, 0.01f);
 
 		private AudioSource aus;
 
@@ -90,6 +86,7 @@ namespace GaryMoveOut
 			m_rigidBody = GetComponent<Rigidbody2D>();
 			m_collider = GetComponent<BoxCollider2D>();
 			m_animator = GetComponentInChildren<Animator>();
+			SetRandomColor();
 
 			if (m_ui != null)
 			{
@@ -109,6 +106,11 @@ namespace GaryMoveOut
 			}
 		}
 
+		private void SetRandomColor()
+		{
+			meshRenderer.materials[0].color = UnityEngine.Random.ColorHSV(0,1,0.6f,1f);
+		}
+
 		private void OnGameOver(object obj)
 		{
 			OnPlayerDie(this);
@@ -120,7 +122,9 @@ namespace GaryMoveOut
             {
                 m_inputBlocked = true;
                 InputLayout = InputHandler.Layout.None;
-                Destroy(this.gameObject);
+				HideMe();
+				// FixMe: not
+                //Destroy(this.gameObject, 0.5f);
             }
         }
 
@@ -259,14 +263,14 @@ namespace GaryMoveOut
                     if (m_inputHandler.Left)
                     {
                         //m_rigidBody.AddForce((Vector2.left * m_speed + Vector2.up) * dt * m_rigidBody.mass, ForceMode2D.Impulse);
-                        m_rigidBody.MovePosition(m_rigidBody.position + Vector2.left * m_speed * dt);
+                        m_rigidBody.MovePosition(m_rigidBody.position + (Vector2.left + smallOffsetY) * m_speed * dt);
                         Velocity = -m_speed;
                         TurnToSide = Side.Left;
                     }
                     else if (m_inputHandler.Right)
                     {
                         //m_rigidBody.AddForce((Vector2.right * m_speed + Vector2.up) * dt * m_rigidBody.mass, ForceMode2D.Impulse);
-                        m_rigidBody.MovePosition(m_rigidBody.position + Vector2.right * m_speed * dt);
+                        m_rigidBody.MovePosition(m_rigidBody.position + (Vector2.right + smallOffsetY) * m_speed * dt);
                         Velocity = m_speed;
                         TurnToSide = Side.Right;
                     }
@@ -300,16 +304,24 @@ namespace GaryMoveOut
 
 		private void OnTriggerEnter2D(Collider2D other)
         {
-            if (other.tag == "Ground" && m_isAlive && groundKills == true)
+			if (other.tag == "Ground" && m_isAlive)
             {
-                m_isAlive = false;
-                m_gameplayEvents.CallEvent(GamePhases.GameplayPhase.PlayerDie, this);
-                Debug.Log("player hit the ground");
+				m_animator.SetBool("isJumping", false);
+				if (groundKills == true)
+				{
+					blood.SetActive(true);
+					blood.transform.SetParent(null);
+					aus.PlayOneShot(Resources.Load("Sounds/PlayerSplat") as AudioClip);
+					m_isAlive = false;
+					m_gameplayEvents.CallEvent(GamePhases.GameplayPhase.PlayerDie, this);
+					Debug.Log("player hit the ground");
+				}
             }
 
             if (other.tag == "TruckLoader" && m_isAlive && groundKills == true)
             {
-                m_gameplayEvents.CallEvent(GamePhases.GameplayPhase.PlayerInTruck, null);
+				m_animator.SetBool("isJumping", false);
+				m_gameplayEvents.CallEvent(GamePhases.GameplayPhase.PlayerInTruck, null);
                 Debug.Log("player in truck");
 				aus.PlayOneShot(Resources.Load("Sounds/gain") as AudioClip);
 				HideMe();
@@ -359,7 +371,9 @@ namespace GaryMoveOut
 		private void UnHideMe()
 		{
 			GetComponentInChildren<BoxCollider2D>().enabled = true;
+			GetComponentInChildren<BoxCollider2D>().size = new Vector2(1, 2);
 			m_rigidBody.WakeUp();
+			m_rigidBody.freezeRotation = true;
 			GetComponentInChildren<SkinnedMeshRenderer>().enabled = true;
 		}
 
@@ -402,9 +416,10 @@ namespace GaryMoveOut
         private bool PickUp()
         {
             var pickable = GetInteractible<Pickable>();
-            if (pickable != null)
+            if (pickable != null && !isCarryingItem)
             {
-                m_pickedUp = pickable;
+				aus.PlayOneShot(Resources.Load("Sounds/PickUp") as AudioClip);
+				m_pickedUp = pickable;
                 m_pickedUp.PickUp(TurnToSide);
                 m_animator?.SetBool("PickedUp", true);
                 isCarryingItem = true;
@@ -467,7 +482,9 @@ namespace GaryMoveOut
 
         private void Throw()
         {
-            if (m_pickedUp != null && m_isAiming)
+			aus.PlayOneShot(Resources.Load("Sounds/Throw") as AudioClip);
+
+			if (m_pickedUp != null && m_isAiming)
             {
                 m_isAiming = false;
                 var angle = TurnToSide == Side.Left ? 180 - m_aimAngle : m_aimAngle;
@@ -511,7 +528,7 @@ namespace GaryMoveOut
                 m_rigidBody.constraints = RigidbodyConstraints2D.None;
                 m_rigidBody.MovePosition(m_rigidBody.position + new Vector2(0, 1));
                 m_collider.size = new Vector2(0.5f, 0.5f);
-                m_animator.SetFloat("Jump", 0.2f);
+                m_animator.SetBool("isJumping", true);
                 m_window = null;
             }
             if (m_ui != null)

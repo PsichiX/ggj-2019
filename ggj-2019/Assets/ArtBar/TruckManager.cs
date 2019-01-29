@@ -12,6 +12,7 @@ namespace GaryMoveOut
         private Vector3 truckInPosition;
         private Animator anim;
         private TruckLoader truckLoader;
+		private AudioSource truckAudio;
 
         public TruckManager()
         {
@@ -26,7 +27,7 @@ namespace GaryMoveOut
                 {
                     if (TruckDatabase.truckPrefabs.Count > 0)
                     {
-                        Truck = Object.Instantiate(TruckDatabase.truckPrefabs[0], truckOutPosition, parent.rotation, parent);
+                        Truck = Object.Instantiate(TruckDatabase.truckPrefabs[Random.Range(0,TruckDatabase.truckPrefabs.Count)], truckOutPosition, parent.rotation, parent);
                         if( Truck != null)
                         {
                             Truck.transform.Rotate(Vector3.up, 180f);
@@ -44,8 +45,7 @@ namespace GaryMoveOut
                 }
                 return false;
             }
-
-            Truck.transform.position = truckOutPosition;
+			Truck.transform.position = truckOutPosition;
             this.truckInPosition = truckInPosition;
             return true;
         }
@@ -62,9 +62,14 @@ namespace GaryMoveOut
 
         public void StartTruckMovement(float duration)
         {
-            //anim.SetFloat("Forward", 1f);
-            Truck.transform.DOMove(truckInPosition, duration).SetEase(Ease.OutQuad);
-            //DOVirtual.DelayedCall(duration - 0.2f, () => { anim.SetFloat("Forward", 0f); });
+			truckAudio = Truck.GetComponent<AudioSource>();
+			if (truckAudio != null)
+			{
+				truckAudio.Play();
+				truckAudio.DOFade(0, duration);
+			}
+			anim.SetFloat("Forward", 1f);
+			Truck.transform.DOMove(truckInPosition, duration).SetEase(Ease.OutQuad).OnComplete(() => anim.SetFloat("Forward", 0f));
         }
     }
 }

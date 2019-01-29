@@ -1,12 +1,14 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using static GaryMoveOut.GameplayManager;
+using DG.Tweening;
 
 namespace GaryMoveOut
 {
     [CreateAssetMenu(menuName = "ScriptableObjects/Catastrophies/Fire")]
     public class FireCatastrophy : BaseCatastrophy
     {
-        public GameObject firePrefab;
+        public List<GameObject> firePrefabs;
 
         public override CatastrophyType Type { get { return CatastrophyType.Fire; } }
         public override EvecuationDirection EvacuationDirection
@@ -31,9 +33,21 @@ namespace GaryMoveOut
             {
                 for(int i = 1; i < floor.segments.Count - 1; i++)
                 {
-                    var fire = GameObject.Instantiate(firePrefab, floor.segments[i].transform);
-                }
+					var fire = Instantiate(firePrefabs[Random.Range(0, firePrefabs.Count)], floor.segments[i].transform);
+					Vector3 pos = fire.transform.localPosition;
+					pos.x = Random.Range(-2f, 0.5f);
+					fire.transform.localPosition = pos;
+					//DOVirtual.DelayedCall(Random.Range(0, 0.4f), () => DelayedSpawn(floor.segments[i].transform));
+				}
             }
         }
+
+		private void DelayedSpawn(Transform trans)
+		{
+			//var fire = Instantiate(firePrefabs[Random.Range(0, firePrefabs.Count)], trans);
+			//Vector3 pos = fire.transform.localPosition;
+			//pos.z = Random.Range(-2f, 0.5f);
+			//fire.transform.localPosition = pos;
+		}
     }
 }

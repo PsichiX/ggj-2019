@@ -542,7 +542,7 @@ namespace GaryMoveOut
 			for (int i = 0; i < currentPlayersInTruck; i++)
 			{
 				// FixMe : here be bugs
-				players[i].transform.position = truckManager.Truck.transform.position;
+				players[i].transform.position = truckManager.Truck.transform.position + new Vector3(0, 0.5f, 0);
 				//p.GetComponent<PlayerController>().Setup();
 				players[i].InputLayout = (InputHandler.Layout)(playerInputs[i]);
 				cameraTargets.Add(players[i].gameObject);
