@@ -182,8 +182,8 @@ namespace GaryMoveOut
             multiTargetCamera.SetTargets(cameraTargets.ToArray());
 
             events.CallEvent(GamePhases.GameplayPhase.FadeIn, null);
-            float fadeDealy = 1f;
-            DOVirtual.DelayedCall(fadeDealy, PhaseBadEventStart);
+            float fadeDelay = 1f;
+            DOVirtual.DelayedCall(fadeDelay, PhaseBadEventStart);
             Debug.Log("PhaseStart");
         }
 
@@ -428,16 +428,26 @@ namespace GaryMoveOut
         {
             for (var i = 0; i < players.Length; ++i)
             {
-                var instance = Instantiate(prefabPlayer);
-                var spawnPos = buildingOut.GetSpawnPosition();
-                var pos = spawnPos.HasValue ? new Vector3(spawnPos.Value.x, spawnPos.Value.y, 0) : Vector3.zero;
-                instance.transform.position = pos + playerSpawnOffset;
-                instance.transform.rotation = Quaternion.identity;
-                var player = players[i] = instance.GetComponent<PlayerController>();
+				var spawnPos = buildingOut.GetSpawnPosition();
+				var pos = spawnPos.HasValue ? new Vector3(spawnPos.Value.x, spawnPos.Value.y, 0) : Vector3.zero;
+				if (players[i] == null || players[i].gameObject == null)
+				{
+					var instance = Instantiate(prefabPlayer);
+					instance.transform.position = pos + playerSpawnOffset;
+					instance.transform.rotation = Quaternion.identity;
+					var player = players[i] = instance.GetComponent<PlayerController>();
 
-                AddMultiCameraTarget(instance.gameObject);
-                player.InputLayout = (InputHandler.Layout)(playerInputs[i]);
-
+					AddMultiCameraTarget(instance.gameObject);
+					player.InputLayout = (InputHandler.Layout)(playerInputs[i]);
+				}
+				else
+				{
+					cameraTargets.Clear();
+					AddMultiCameraTarget(players[i].gameObject);
+					AddMultiCameraTarget(truckManager.Truck);
+					multiTargetCamera.SetTargets(cameraTargets.ToArray());
+					players[i].transform.position = pos + playerSpawnOffset;
+				}
             }
         }
 
@@ -445,8 +455,8 @@ namespace GaryMoveOut
         {
             for (var i = 0; i < players.Length; ++i)
             {
-                GameObject.Destroy(players[i]);
-                players[i] = null;
+                //GameObject.Destroy(players[i]);
+                //players[i] = null;
             }
         }
 

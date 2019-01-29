@@ -23,6 +23,7 @@ namespace GaryMoveOut
 		[SerializeField] private Vector3 m_portalArrowsOffset;
 		[SerializeField] private GameObject youLostText;
 		[SerializeField] private GameObject youWonText;
+		[SerializeField] private GameObject manyMonthsLater;
 		[SerializeField] private UnityEngine.UI.Image black;
 		[SerializeField] private AudioSource backgroundMusic;
 
@@ -84,12 +85,16 @@ namespace GaryMoveOut
 
 		private void ReactionFewDaysLater(object obj)
 		{
-			backgroundMusic.DOFade(0, 5f).OnComplete(SetActionMusic);
+			manyMonthsLater.SetActive(true);
+			backgroundMusic.DOFade(0, 1.2f);
+			DOVirtual.DelayedCall(3f, SetActionMusic);
 		}
 
 		private void SetActionMusic()
 		{
+			manyMonthsLater.SetActive(false);
 			backgroundMusic.clip = Resources.Load("Sounds/katastrofa") as AudioClip;
+			backgroundMusic.Play();
 			backgroundMusic.DOFade(1, 2f);
 		}
 
