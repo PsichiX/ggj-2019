@@ -29,24 +29,24 @@ namespace GaryMoveOut
             building.root.transform.DOMove(endPos, floorFallTime).SetEase(Ease.OutBounce);
 
             var force = 3f;
-            foreach (var floor in building.floors)
-            {
-                // apply force to all items:
-                foreach (var floorObj in building.floors.Values)
-                {
-                    foreach (var item in floorObj.itemGOs.Values)
-                    {
-                        if (item != null)
-                        {
-                            var rigidBody = item.GetComponent<Rigidbody2D>();
-                            if (rigidBody != null)
-                            {
-                                rigidBody.AddForce(new Vector2(0f, -force), ForceMode2D.Impulse);
-                            }
-                        }
-                    }
-                }
-            }
+            //foreach (var floor in building.floors)
+            //{
+            //    // apply force to all items:
+            //    foreach (var floorObj in building.floors.Values)
+            //    {
+            //        foreach (var item in floorObj.itemGOs.Values)
+            //        {
+            //            if (item != null)
+            //            {
+            //                var rigidBody = item.GetComponent<Rigidbody2D>();
+            //                if (rigidBody != null)
+            //                {
+            //                    rigidBody.AddForce(new Vector2(0f, -force), ForceMode2D.Impulse);
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
             DOVirtual.DelayedCall(floorFallTime, () =>
             {
                 building.DestroyFloor(floorIndex);

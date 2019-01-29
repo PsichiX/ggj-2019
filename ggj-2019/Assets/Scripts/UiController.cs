@@ -24,7 +24,7 @@ namespace GaryMoveOut
 		[SerializeField] private GameObject youLostText;
 		[SerializeField] private GameObject youWonText;
 		[SerializeField] private UnityEngine.UI.Image black;
-
+		[SerializeField] private AudioSource backgroundMusic;
 
 		public int CurrentFloorBadEvent { get { return gameplayManager.currentFloorBadEvent; } }
 		public EvecuationDirection CurrentEvecuationDirection { get { return gameplayManager.currentEvacuationDirection; } }
@@ -66,8 +66,32 @@ namespace GaryMoveOut
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.Summary, ShowWinText);
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.FadeIn, ReactionFadeIn);
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.FadeOut, ReactionFadeOut);
+			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.PlayerInTruck, ReactionPlayerInTruck);
+			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.FewDaysLater, ReactionFewDaysLater);
 
 			GameplayManager.PointsCollectedUpdate += UpdatePointsOnItemAdd;
+		}
+
+		private void ReactionPlayerInTruck(object obj)
+		{
+			backgroundMusic.DOFade(0, 5f).OnComplete(SetCalmMusic);
+		}
+
+		private void ReactionFewDaysLater(object obj)
+		{
+			backgroundMusic.DOFade(0, 5f).OnComplete(SetActionMusic);
+		}
+
+		private void SetActionMusic()
+		{
+			backgroundMusic.clip = Resources.Load("Sounds/katastrofa") as AudioClip;
+			backgroundMusic.DOFade(1, 2f);
+		}
+
+		private void SetCalmMusic()
+		{
+			backgroundMusic.clip = Resources.Load("Sounds/sasiedzi") as AudioClip;
+			backgroundMusic.DOFade(1, 2f);
 		}
 
 		private void UpdatePointsOnItemAdd(int points)

@@ -68,7 +68,7 @@ namespace GaryMoveOut
         public void StartTruckMovement(float duration)
         {
             //anim.SetFloat("Forward", 1f);
-            Truck.transform.DOMove(truckInPosition, duration).SetEase(Ease.InOutQuad);
+            Truck.transform.DOMove(truckInPosition, duration).SetEase(Ease.OutQuad);
             //DOVirtual.DelayedCall(duration - 0.2f, () => { anim.SetFloat("Forward", 0f); });
         }
     }

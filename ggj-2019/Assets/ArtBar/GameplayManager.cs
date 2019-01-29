@@ -30,8 +30,9 @@ namespace GaryMoveOut
         }
 
         public Vector3 PlayerSpawnOffset => playerSpawnOffset;
+		public float truckSpeedModifier = 15f;
 
-        private GameplayEvents events;
+		private GameplayEvents events;
         private BuildingsGenerator buildingsGenerator;
         private BuildingConfigurator buildingConfigurator;
         private TruckManager truckManager;
@@ -497,7 +498,7 @@ namespace GaryMoveOut
             currentBuildingId++;
             SetupBuildingIn();
 
-            float delay = 2f;
+            float delay = Vector2.Distance(placeBuildingOut.transform.position, placeBuildingIn.transform.position) / truckSpeedModifier;
             truckManager.StartTruckMovement(delay);
             DOVirtual.DelayedCall(delay, PhaseTruckStop);
             Debug.Log("PhaseTruckStart");

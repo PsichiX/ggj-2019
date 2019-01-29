@@ -46,14 +46,14 @@ namespace GaryMoveOut
 
 		private void KillMe()
 		{
-			Destroy(gameObject);
+			Destroy(gameObject, 0.5f);
 		}
 
         public void InTruck()
         {
 			//NewItemInTruck?.Invoke(this);
+			ausource.PlayOneShot(Resources.Load("Sounds/gain") as AudioClip);
 			GameplayManager.CallNewItemInTruckEvent(this);
-            ausource.PlayOneShot(Resources.Load("Audio/Points") as AudioClip);
             // TODO: hide object
             KillMe();
 
