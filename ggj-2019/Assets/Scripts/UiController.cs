@@ -61,11 +61,16 @@ namespace GaryMoveOut
 			m_players = new PlayerController[m_aims.Count];
 			m_portals = new DoorPortal[Mathf.Min(portalUpArrows.Count, portalDownArrows.Count)];
 
+			DOVirtual.DelayedCall(0.1f, Attach);
+		}
+
+		private void Attach()
+		{
 			gameplayEvents = GameplayEvents.GetGameplayEvents();
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.GameOver, ShowGameOverText);
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.Summary, ShowWinText);
-			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.FadeIn, ReactionFadeIn);
-			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.FadeOut, ReactionFadeOut);
+			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.BadEventStart, ReactionFadeIn);
+			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.GameOver, ReactionFadeOut);
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.PlayerInTruck, ReactionPlayerInTruck);
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.FewDaysLater, ReactionFewDaysLater);
 
