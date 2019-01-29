@@ -12,20 +12,20 @@ namespace GaryMoveOut.Items
         {
             serializedObject.Update();
 
-            editMode = EditorGUILayout.BeginToggleGroup("Edit mode", editMode);
-            {
-                if (GUILayout.Button("Refresh item schemes"))
-                {
-                    var target = serializedObject.targetObject as ItemsDatabase;
-                    target?.RefreshDatabase();
-                }
-                if (GUILayout.Button("Generate item schemes"))
-                {
-                    var target = serializedObject.targetObject as ItemsDatabase;
-                    target?.GenerateItemSchemes();
-                }
-            }
-            EditorGUILayout.EndToggleGroup();
+            //editMode = EditorGUILayout.BeginToggleGroup("Edit mode", editMode);
+            //{
+            //    if (GUILayout.Button("Refresh item schemes"))
+            //    {
+            //        var target = serializedObject.targetObject as ItemsDatabase;
+            //        target?.RefreshDatabase();
+            //    }
+            //    if (GUILayout.Button("Generate item schemes"))
+            //    {
+            //        var target = serializedObject.targetObject as ItemsDatabase;
+            //        target?.GenerateItemSchemes();
+            //    }
+            //}
+            //EditorGUILayout.EndToggleGroup();
 
             base.OnInspectorGUI();
 
