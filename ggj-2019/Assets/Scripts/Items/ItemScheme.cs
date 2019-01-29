@@ -47,7 +47,7 @@ namespace GaryMoveOut
 		private void KillMe()
 		{
 			transform.parent = null;
-			Destroy(gameObject, 0.3f);
+			Destroy(gameObject, 0.2f);
 		}
 
 		private void FreezeMe()

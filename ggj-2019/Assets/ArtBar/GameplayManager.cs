@@ -82,7 +82,7 @@ namespace GaryMoveOut
 
 
             var camera = Camera.main;
-            multiTargetCamera = camera.gameObject.AddComponent<CameraMultiTarget>();
+            multiTargetCamera = camera.GetComponent<CameraMultiTarget>();
             cameraTargets.Clear();
 
             NewItemInTruck += OnNewItemInTruck;
@@ -198,11 +198,7 @@ namespace GaryMoveOut
             if (truckManager.CreateTruck(gameObject.transform, truckOutPosition, truckInPosition))
             {
                 AddMultiCameraTarget(truckManager.Truck.gameObject);
-                var cameraMocap = truckManager.Truck.GetComponentInChildren<CameraMocap>();
-                if (cameraMocap != null)
-                {
-                    AddMultiCameraTarget(cameraMocap.gameObject);
-                }
+
             }
         }
 
@@ -537,17 +533,16 @@ namespace GaryMoveOut
 			//DOVirtual.DelayedCall(delay, PhaseStartGame);
 			Debug.Log("PhaseDeEvacuation");
 			cameraTargets.Clear();
-			for (int i = 0; i < players.Length; i++)
+			for (int i = 0; i < currentPlayersInTruck; i++)
 			{
-				var p = Instantiate(prefabPlayer);
-				p.transform.position = truckManager.Truck.transform.position;
-				p.GetComponent<PlayerController>().Setup();
+				// FixMe : here be bugs
+				players[i].transform.position = truckManager.Truck.transform.position;
+				//p.GetComponent<PlayerController>().Setup();
 				players[i].InputLayout = (InputHandler.Layout)(playerInputs[i]);
-				cameraTargets.Add(p);
+				cameraTargets.Add(players[i].gameObject);
 			}
-			// Fixme:
-			multiTargetCamera.enabled = false;
-			//multiTargetCamera.SetTargets(cameraTargets.ToArray());
+			cameraTargets.Add(placeBuildingIn);
+			multiTargetCamera.SetTargets(cameraTargets.ToArray());
 			foreach (var i in truckManager.GetTruckItemList())
 			{
 				i.transform.position = truckManager.Truck.transform.position;

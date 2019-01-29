@@ -110,7 +110,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 66c26a60ab6146d40bdb62f981e68554, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -274,14 +274,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4547167541491930457}
     m_Modifications:
-    - target: {fileID: 100000, guid: 75a8b809665c7f24bb071b84f62db66a, type: 3}
-      propertyPath: m_Name
-      value: Bust
-      objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: 75a8b809665c7f24bb071b84f62db66a, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 75a8b809665c7f24bb071b84f62db66a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0
@@ -333,6 +325,14 @@ PrefabInstance:
     - target: {fileID: 400000, guid: 75a8b809665c7f24bb071b84f62db66a, type: 3}
       propertyPath: m_LocalScale.z
       value: 99.99997
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 75a8b809665c7f24bb071b84f62db66a, type: 3}
+      propertyPath: m_Name
+      value: Bust
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 75a8b809665c7f24bb071b84f62db66a, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 75a8b809665c7f24bb071b84f62db66a, type: 3}

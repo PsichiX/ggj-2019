@@ -312,7 +312,7 @@ namespace GaryMoveOut
                 m_gameplayEvents.CallEvent(GamePhases.GameplayPhase.PlayerInTruck, null);
                 Debug.Log("player in truck");
 				aus.PlayOneShot(Resources.Load("Sounds/gain") as AudioClip);
-				Destroy(gameObject);
+				HideMe();
             }
 
             if (other.tag == "Interactible")
@@ -348,6 +348,20 @@ namespace GaryMoveOut
                 }
             }
         }
+
+		private void HideMe()
+		{
+			GetComponentInChildren<BoxCollider2D>().enabled = false;
+			m_rigidBody.Sleep();
+			GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
+		}
+
+		private void UnHideMe()
+		{
+			GetComponentInChildren<BoxCollider2D>().enabled = true;
+			m_rigidBody.WakeUp();
+			GetComponentInChildren<SkinnedMeshRenderer>().enabled = true;
+		}
 
         private void OnTriggerExit2D(Collider2D other)
         {
@@ -529,11 +543,11 @@ namespace GaryMoveOut
         {
 			groundKills = false;
             m_inputBlocked = false;
-			Debug.Log("is input blocked? : " + m_inputBlocked);
         }
 
 		private void OnTruckStop(object obj)
 		{
+			UnHideMe();
 			groundKills = false;
 			m_inputBlocked = false;
 		}
