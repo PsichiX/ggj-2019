@@ -303,19 +303,24 @@ namespace GaryMoveOut
 
 		private void OnTriggerEnter2D(Collider2D other)
         {
-            if (other.tag == "Ground" && m_isAlive && groundKills == true)
+			if (other.tag == "Ground" && m_isAlive)
             {
-				blood.SetActive(true);
-				blood.transform.SetParent(null);
-				aus.PlayOneShot(Resources.Load("Sounds/PlayerSplat") as AudioClip);
-				m_isAlive = false;
-                m_gameplayEvents.CallEvent(GamePhases.GameplayPhase.PlayerDie, this);
-                Debug.Log("player hit the ground");
+				m_animator.SetBool("isJumping", false);
+				if (groundKills == true)
+				{
+					blood.SetActive(true);
+					blood.transform.SetParent(null);
+					aus.PlayOneShot(Resources.Load("Sounds/PlayerSplat") as AudioClip);
+					m_isAlive = false;
+					m_gameplayEvents.CallEvent(GamePhases.GameplayPhase.PlayerDie, this);
+					Debug.Log("player hit the ground");
+				}
             }
 
             if (other.tag == "TruckLoader" && m_isAlive && groundKills == true)
             {
-                m_gameplayEvents.CallEvent(GamePhases.GameplayPhase.PlayerInTruck, null);
+				m_animator.SetBool("isJumping", false);
+				m_gameplayEvents.CallEvent(GamePhases.GameplayPhase.PlayerInTruck, null);
                 Debug.Log("player in truck");
 				aus.PlayOneShot(Resources.Load("Sounds/gain") as AudioClip);
 				HideMe();
@@ -365,7 +370,9 @@ namespace GaryMoveOut
 		private void UnHideMe()
 		{
 			GetComponentInChildren<BoxCollider2D>().enabled = true;
+			GetComponentInChildren<BoxCollider2D>().size = new Vector2(1, 2);
 			m_rigidBody.WakeUp();
+			m_rigidBody.freezeRotation = true;
 			GetComponentInChildren<SkinnedMeshRenderer>().enabled = true;
 		}
 
@@ -520,7 +527,7 @@ namespace GaryMoveOut
                 m_rigidBody.constraints = RigidbodyConstraints2D.None;
                 m_rigidBody.MovePosition(m_rigidBody.position + new Vector2(0, 1));
                 m_collider.size = new Vector2(0.5f, 0.5f);
-                m_animator.SetFloat("Jump", 0.2f);
+                m_animator.SetBool("isJumping", true);
                 m_window = null;
             }
             if (m_ui != null)
