@@ -34,20 +34,15 @@ namespace GaryMoveOut
         public int FloorIndex = 1;
 
 
-        [SerializeField]
-        private InputHandler m_inputHandler;
-        [SerializeField]
-        private float m_speed;
-        [SerializeField]
-        private Transform m_pickableOrigin;
-        [SerializeField]
-        private Vector2 m_aimStrengthRange = new Vector2(1, 10);
-        [SerializeField]
-        private float m_aimingAngleSpeed = 1;
-        [SerializeField]
-        private float m_aimingStrengthSpeed = 1;
+        [SerializeField] private InputHandler m_inputHandler;
+        [SerializeField] private float m_speed;
+        [SerializeField] private Transform m_pickableOrigin;
+        [SerializeField] private Vector2 m_aimStrengthRange = new Vector2(1, 10);
+        [SerializeField] private float m_aimingAngleSpeed = 1;
+        [SerializeField] private float m_aimingStrengthSpeed = 1;
+		[SerializeField] private SkinnedMeshRenderer meshRenderer;
 
-        private Rigidbody2D m_rigidBody;
+		private Rigidbody2D m_rigidBody;
         private BoxCollider2D m_collider;
         private HashSet<GameObject> m_interactibles = new HashSet<GameObject>();
         private bool m_lastAction = false;
@@ -90,6 +85,7 @@ namespace GaryMoveOut
 			m_rigidBody = GetComponent<Rigidbody2D>();
 			m_collider = GetComponent<BoxCollider2D>();
 			m_animator = GetComponentInChildren<Animator>();
+			SetRandomColor();
 
 			if (m_ui != null)
 			{
@@ -107,6 +103,11 @@ namespace GaryMoveOut
 				m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.GameOver, OnGameOver);
 				//m_inputBlocked = true;
 			}
+		}
+
+		private void SetRandomColor()
+		{
+			meshRenderer.materials[0].color = UnityEngine.Random.ColorHSV(0,1,0.6f,1f);
 		}
 
 		private void OnGameOver(object obj)

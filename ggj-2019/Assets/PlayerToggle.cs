@@ -13,9 +13,13 @@ public class PlayerToggle : MonoBehaviour
 	void Start()
     {
 		startConfig = StartConfig.GetStartConfig();
-		player1.isOn = startConfig.IsPlayerActive(1);
-		player2.isOn = startConfig.IsPlayerActive(2);
-		player3.isOn = startConfig.IsPlayerActive(3);
+		for (int i = 0; i < startConfig.players.Length; i++)
+		{
+			startConfig.DeactivePlayer(i);
+		}
+		//player1.isOn = startConfig.IsPlayerActive(1);
+		//player2.isOn = startConfig.IsPlayerActive(2);
+		//player3.isOn = startConfig.IsPlayerActive(3);
 
 	}
 

@@ -103,6 +103,7 @@ MonoBehaviour:
   m_aimStrengthRange: {x: 4, y: 20}
   m_aimingAngleSpeed: 90
   m_aimingStrengthSpeed: 16
+  meshRenderer: {fileID: 406794870917789691}
 --- !u!114 &8141853408582077107
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -878,6 +879,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d828466b95d023b4190a563cae09d160, type: 3}
+--- !u!137 &406794870917789691 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 13700000, guid: d828466b95d023b4190a563cae09d160,
+    type: 3}
+  m_PrefabInstance: {fileID: 406794870914579547}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &406794870914967173 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400094, guid: d828466b95d023b4190a563cae09d160,
