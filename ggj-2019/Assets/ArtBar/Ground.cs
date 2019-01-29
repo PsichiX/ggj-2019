@@ -13,7 +13,7 @@ namespace GaryMoveOut
                 var obj = other.gameObject;
                 if (obj != null && obj.transform.parent != null)
                 {
-                    var itemScheme = obj.transform.parent.GetComponent<ItemScheme>();
+                    var itemScheme = obj.transform.parent.GetComponent<ItemScheme_OLD>();
                     if (itemScheme != null)
                     {
                         if (itemScheme.IsItemAlive())

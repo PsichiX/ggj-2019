@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcc529896a4670c4886a88b1246adf71, type: 3}
+  m_Name: BowlLemon
+  m_EditorClassIdentifier: 
+  value: 10
+  weight: 1
+  vertical: 0
+  materialType: 2
+  itemPrefab: {fileID: 1238480114814161272, guid: bf097d2814d128a4ab4b3f1e6954f3bf,
+    type: 3}

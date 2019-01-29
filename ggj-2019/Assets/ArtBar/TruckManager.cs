@@ -54,7 +54,7 @@ namespace GaryMoveOut
             truckLoader.ResetTruckItemList();
         }
 
-        public List<ItemScheme> GetTruckItemList()
+        public List<ItemScheme_OLD> GetTruckItemList()
         {
             return truckLoader.GetItemList();
         }

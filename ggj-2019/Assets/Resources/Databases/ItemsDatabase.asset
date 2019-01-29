@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6a5dfeab1d4b204db91e59d0f701d16, type: 3}
   m_Name: ItemsDatabase
   m_EditorClassIdentifier: 
-  debugItem: {fileID: 4857023597457288495, guid: ce2bd6c7a38a6ef4eb218ea6af96d0ec,
-    type: 3}
-  database: []
+  items:
+  - {fileID: 11400000, guid: 2f1b795e83d0f9542a35f755e6093c76, type: 2}
+  - {fileID: 11400000, guid: 234a5b4d4301cca429ac69829090b239, type: 2}
+  prefabsPath: 
+  debugItem_OLD: {fileID: 0}
+  database_OLD: []

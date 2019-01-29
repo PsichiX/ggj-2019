@@ -3,14 +3,14 @@ using UnityEngine;
 
 namespace GaryMoveOut
 {
-    [RequireComponent(typeof(ItemScheme))]
+    [RequireComponent(typeof(ItemScheme_OLD))]
     [RequireComponent(typeof(Rigidbody2D))]
     public class Pickable : MonoBehaviour
     {
         private const float PICKUP_ANIM_TIME = 1 / 3;
 
         public bool IsPickedUp => m_rigidBody.bodyType == RigidbodyType2D.Kinematic;
-        public ItemScheme Scheme { get; private set; }
+        public ItemScheme_OLD Scheme { get; private set; }
 
         private Rigidbody2D m_rigidBody;
         private Tweener m_currentTweener;
@@ -18,7 +18,7 @@ namespace GaryMoveOut
         private void Start()
         {
             m_rigidBody = GetComponent<Rigidbody2D>();
-            Scheme = GetComponent<ItemScheme>();
+            Scheme = GetComponent<ItemScheme_OLD>();
         }
 
         public void PickUp(PlayerController.Side side)
@@ -44,7 +44,7 @@ namespace GaryMoveOut
 
         public void Throw(Vector2 impulse)
         {
-			var item = GetComponent<ItemScheme>();
+			var item = GetComponent<ItemScheme_OLD>();
 			if (item != null)
 			{
 				item.cantkillme = false;

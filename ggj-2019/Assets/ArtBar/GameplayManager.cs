@@ -16,8 +16,8 @@ namespace GaryMoveOut
         }
 
         public static event System.Action<int> PointsCollectedUpdate;
-        public static event System.Action<ItemScheme> NewItemInTruck;
-        public static void CallNewItemInTruckEvent(ItemScheme scheme)
+        public static event System.Action<ItemScheme_OLD> NewItemInTruck;
+        public static void CallNewItemInTruckEvent(ItemScheme_OLD scheme)
         {
             NewItemInTruck?.Invoke(scheme);
         }
@@ -88,7 +88,7 @@ namespace GaryMoveOut
             NewItemInTruck += OnNewItemInTruck;
         }
 
-        private void OnNewItemInTruck(ItemScheme scheme)
+        private void OnNewItemInTruck(ItemScheme_OLD scheme)
         {
             pointsCollected += (int)scheme.value;
             PointsCollectedUpdate?.Invoke(pointsCollected);
@@ -217,7 +217,7 @@ namespace GaryMoveOut
                 var maxFreeSegments = (buildingConfig.floorSegmentsCount - 1) * buildingConfig.buildingFloorsCount;
                 var minItemsCount = (int)(buildingConfig.minItemsCountToMaxFreeSegmentsRatio * maxFreeSegments);
                 var itemsCount = UnityEngine.Random.Range(minItemsCount, maxFreeSegments);
-                var items = buildingsGenerator.ItemsDatabase.GetRandomItems(itemsCount);
+                var items = buildingsGenerator.ItemsDatabase.GetRandomItems_OLD(itemsCount);
 
                 if (this.items == null || this.items.Count == 0)
                 {

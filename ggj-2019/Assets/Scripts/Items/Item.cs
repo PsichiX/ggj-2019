@@ -10,7 +10,7 @@ namespace GaryMoveOut
         public ItemType type;
         public GameObject prefab;
 
-        public Item(ItemScheme scheme)
+        public Item(ItemScheme_OLD scheme)
         {
             if (scheme == null)
             {

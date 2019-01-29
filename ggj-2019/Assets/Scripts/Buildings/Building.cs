@@ -49,7 +49,7 @@ namespace GaryMoveOut
             }
         }
 
-        public void SpawnItemsInside(List<ItemScheme> items)
+        public void SpawnItemsInside(List<ItemScheme_OLD> items)
         {
             if (this.floors.Count == 0)
             {

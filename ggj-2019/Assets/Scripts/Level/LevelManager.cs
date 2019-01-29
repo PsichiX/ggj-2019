@@ -24,7 +24,7 @@ namespace GaryMoveOut
             {
 
                 var itemsCount = Random.Range(5, 8);
-                var items = buildingsGenerator.ItemsDatabase.GetRandomItems(itemsCount);
+                var items = buildingsGenerator.ItemsDatabase.GetRandomItems_OLD(itemsCount);
 
                 building = buildingsGenerator.GenerateBuildingWithItems(homeRoot, floorSegmentsCount, buildingFloorsCount, stairsSegmentIndex, items);
             }

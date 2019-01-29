@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using GaryMoveOut.Items;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace GaryMoveOut
@@ -6,14 +7,17 @@ namespace GaryMoveOut
     public class BuildingsGenerator
     {
         public BuildingSegmentsDatabase BuildingsDatabase { get; private set; }
-        public ItemsDatabase ItemsDatabase { get; private set; }
+        [System.Obsolete] public ItemsDatabase ItemsDatabase { get; private set; }
+        public ItemsGenerator ItemsGenerator { get; private set; }
 
 
         public BuildingsGenerator()
         {
             BuildingsDatabase = Resources.Load<BuildingSegmentsDatabase>("Databases/BuildingSegmentsDatabase");
+
+            ItemsGenerator = new ItemsGenerator();
             ItemsDatabase = Resources.Load<ItemsDatabase>("Databases/ItemsDatabase");
-            ItemsDatabase.LoadItemsFromAssets();
+            ItemsDatabase.LoadItemsFromAssets_OLD();
         }
 
 
@@ -43,7 +47,7 @@ namespace GaryMoveOut
         }
 
 
-        public Building GenerateBuildingWithItems(Transform root, int floorSegmentsCount, int buildingFloorsCount, int stairsSegmentIndex, List<ItemScheme> items)
+        public Building GenerateBuildingWithItems(Transform root, int floorSegmentsCount, int buildingFloorsCount, int stairsSegmentIndex, List<ItemScheme_OLD> items)
         {
             var building = ConstructBuilding(root, floorSegmentsCount, buildingFloorsCount, stairsSegmentIndex);
             building.SpawnItemsInside(items);

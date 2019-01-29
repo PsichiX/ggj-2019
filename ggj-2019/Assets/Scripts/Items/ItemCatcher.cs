@@ -19,7 +19,7 @@ namespace GaryMoveOut
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            var itemScheme = other.GetComponent<ItemScheme>();
+            var itemScheme = other.GetComponent<ItemScheme_OLD>();
             if (itemScheme != null && floor != null)
             {
                 var item = itemScheme.assignedItem;
