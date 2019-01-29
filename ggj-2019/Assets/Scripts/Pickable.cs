@@ -1,31 +1,31 @@
 ﻿using DG.Tweening;
+using GaryMoveOut.Items;
 using UnityEngine;
 
 namespace GaryMoveOut
 {
-    [RequireComponent(typeof(ItemScheme_OLD))]
     [RequireComponent(typeof(Rigidbody2D))]
     public class Pickable : MonoBehaviour
     {
         private const float PICKUP_ANIM_TIME = 1 / 3;
 
         public bool IsPickedUp => m_rigidBody.bodyType == RigidbodyType2D.Kinematic;
-        public ItemScheme_OLD Scheme { get; private set; }
 
+        private Item item;
         private Rigidbody2D m_rigidBody;
         private Tweener m_currentTweener;
 
         private void Start()
         {
             m_rigidBody = GetComponent<Rigidbody2D>();
-            Scheme = GetComponent<ItemScheme_OLD>();
+            item = GetComponent<Item>();
         }
 
         public void PickUp(PlayerController.Side side)
         {
             m_rigidBody.bodyType = RigidbodyType2D.Kinematic;
             gameObject.layer = LayerMask.NameToLayer("FurnitureInUse");
-            if (Scheme.vertical)
+            if (item.Scheme.vertical)
             {
                 m_currentTweener = transform.DORotate(new Vector3(0, 0, 90), PICKUP_ANIM_TIME);
             }

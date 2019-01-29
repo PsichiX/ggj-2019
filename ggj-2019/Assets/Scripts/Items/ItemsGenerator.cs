@@ -30,6 +30,14 @@ namespace GaryMoveOut.Items
             if (scheme != null)
             {
                 itemGO = GameObject.Instantiate(scheme.itemPrefab);
+                if (itemGO != null)
+                {
+                    var item = itemGO.GetComponent<Item>();
+                    if (item != null)
+                    {
+                        item.Setup(scheme);
+                    }
+                }
             }
             return itemGO;
         }

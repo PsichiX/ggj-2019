@@ -1,28 +1,36 @@
-﻿using System;
+﻿using GaryMoveOut.Items;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace GaryMoveOut
 {
+    [System.Serializable]
+    public struct SegmentSize
+    {
+        public float Width;
+        public float Height;
+        public float Depth;
+    }
+
     public class Building
     {
         public Transform root;
         public Dictionary<int, Floor> floors;
         public Dictionary<int, DoorPortal> stairs;
 
-        public float SegmentWidth { get; private set; }
-        public float SegmentHeight { get; private set; }
-        public float SegmentDepth { get; private set; }
+        public SegmentSize SegmentSize { get; private set; }
+        //public float SegmentWidth { get; private set; }
+        //public float SegmentHeight { get; private set; }
+        //public float SegmentDepth { get; private set; }
 
 
-        public Building(float segmentWidth, float segmentHeight, float segmentDepth)
+        public Building(SegmentSize segmentSize)
         {
             floors = new Dictionary<int, Floor>();
             stairs = new Dictionary<int, DoorPortal>();
 
-            SegmentWidth = segmentWidth;
-            SegmentHeight = segmentHeight;
-            SegmentDepth = segmentDepth;
+            SegmentSize = segmentSize;
         }
 
 
@@ -45,8 +53,13 @@ namespace GaryMoveOut
                 {
                     GameObject.Destroy(segment);
                 }
-                floor.items.Clear();
+                floor.items_OLD.Clear();
             }
+        }
+
+        public void SpawnItemsInside(List<ItemScheme> items)
+        {
+
         }
 
         public void SpawnItemsInside(List<ItemScheme_OLD> items)
@@ -84,7 +97,7 @@ namespace GaryMoveOut
                     if (itemSlot != null)
                     {
                         var scheme = items[itemsPlaced++];
-                        var item = new Item(scheme);
+                        var item = new Item_OLD(scheme);
                         scheme.assignedItem = item;
                         SpawnItem(item, itemSlot, floor);
                         i++;
@@ -107,7 +120,7 @@ namespace GaryMoveOut
                     if (itemSlot != null && !itemSlot.isOccupied)
                     {
                         var scheme = items[itemsPlaced++];
-                        var item = new Item(scheme);
+                        var item = new Item_OLD(scheme);
                         scheme.assignedItem = item;
                         SpawnItem(item, itemSlot, floor);
                         itemsPlaced++;
@@ -118,7 +131,7 @@ namespace GaryMoveOut
             }
         }
 
-        public void SpawnItemsInside(List<Item> items)
+        public void SpawnItemsInside(List<Item_OLD> items)
         {
             if (this.floors.Count == 0)
             {
@@ -183,7 +196,7 @@ namespace GaryMoveOut
             }
         }
 
-        public void SpawnItemsInside(Dictionary<int, List<Item>> itemsByFloorIndex)
+        public void SpawnItemsInside(Dictionary<int, List<Item_OLD>> itemsByFloorIndex)
         {
             if (this.floors.Count == 0)
             {
@@ -191,7 +204,7 @@ namespace GaryMoveOut
             }
             
             int index = 0;
-            List<Item> unstackedItems = new List<Item>();
+            List<Item_OLD> unstackedItems = new List<Item_OLD>();
             foreach(var floor in floors)
             {
                 List<int> indices = new List<int>();
@@ -242,21 +255,21 @@ namespace GaryMoveOut
 
         }
 
-        private void SpawnItem(Item item, ItemSlot itemSlot, Floor floor)
+        private void SpawnItem(Item_OLD item, ItemSlot itemSlot, Floor floor)
         {
             var itemGO = GameObject.Instantiate(item.prefab, itemSlot.gameObject.transform);
             //itemGO.transform.SetParent(null);
             //floor.items.Add(item);
-            floor.AddItem(item, itemGO);
+            floor.AddItem_OLD(item, itemGO);
             itemSlot.isOccupied = true;
         }
 
-        public Dictionary<int, List<Item>> GetItems()
+        public Dictionary<int, List<Item_OLD>> GetItems()
         {
-            Dictionary<int, List<Item>> itemsByFloorsId = new Dictionary<int, List<Item>>();
+            Dictionary<int, List<Item_OLD>> itemsByFloorsId = new Dictionary<int, List<Item_OLD>>();
             foreach (var floor in floors)
             {
-                itemsByFloorsId.Add(floor.Key, new List<Item>(floor.Value.items));
+                itemsByFloorsId.Add(floor.Key, new List<Item_OLD>(floor.Value.items_OLD));
             }
             return itemsByFloorsId;
         }

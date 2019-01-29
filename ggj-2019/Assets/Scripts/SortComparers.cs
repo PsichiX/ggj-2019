@@ -6,9 +6,9 @@ namespace GaryMoveOut
     {
         public int Compare(Floor x, Floor y)
         {
-            if (x.items.Count > y.items.Count)
+            if (x.items_OLD.Count > y.items_OLD.Count)
                 return -1;
-            else if (x.items.Count == y.items.Count)
+            else if (x.items_OLD.Count == y.items_OLD.Count)
                 return 0;
             else
                 return 1;

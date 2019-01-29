@@ -12,6 +12,7 @@ namespace GaryMoveOut
         Fluffy = 3,
     }
 
+    [System.Obsolete]
     public class ItemScheme_OLD : MonoBehaviour
     {
 		public event Action<ItemScheme_OLD> NewItemInTruck;
@@ -22,7 +23,7 @@ namespace GaryMoveOut
         public float weight;
         public bool vertical;
         public ItemType type;
-        public Item assignedItem;
+        public Item_OLD assignedItem;
 
         private bool isAlive = true;
 

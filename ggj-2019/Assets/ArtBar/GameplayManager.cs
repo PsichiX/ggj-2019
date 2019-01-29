@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using GaryMoveOut.Items;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -45,7 +46,11 @@ namespace GaryMoveOut
         private Building buildingIn;
         [SerializeField] private Vector3 playerSpawnOffset;
 
-        private List<Item> items;
+        [System.Obsolete] private List<Item_OLD> items_old;
+        private List<ItemScheme> itemsInTruck;
+
+
+
         [SerializeField] private GameObject prefabPlayer;
         private int playersCount = 1;
 
@@ -217,23 +222,22 @@ namespace GaryMoveOut
                 var maxFreeSegments = (buildingConfig.floorSegmentsCount - 1) * buildingConfig.buildingFloorsCount;
                 var minItemsCount = (int)(buildingConfig.minItemsCountToMaxFreeSegmentsRatio * maxFreeSegments);
                 var itemsCount = UnityEngine.Random.Range(minItemsCount, maxFreeSegments);
-                var items = buildingsGenerator.ItemsDatabase.GetRandomItems_OLD(itemsCount);
 
-                if (this.items == null || this.items.Count == 0)
+                var items = buildingsGenerator.ItemsDatabase.GetRandomItems(itemsCount);
+                //var items_old = buildingsGenerator.ItemsDatabase.GetRandomItems_OLD(itemsCount);
+                var floorSize = new FloorSize()
                 {
-					buildingOut = buildingsGenerator.GenerateBuildingWithItems(placeBuildingOut.transform,
-                                                                               buildingConfig.floorSegmentsCount,
-                                                                               buildingConfig.buildingFloorsCount,
-                                                                               buildingConfig.stairsSegmentIndex,
-                                                                               items);
+                    segmentsCount = buildingConfig.floorSegmentsCount,
+                    stairsSegmentIndex = buildingConfig.stairsSegmentIndex
+                };
+
+                if (itemsInTruck == null || itemsInTruck.Count == 0)
+                {
+					buildingOut = buildingsGenerator.GenerateBuilding(placeBuildingOut.transform, buildingConfig.buildingFloorsCount, floorSize, items);
                 }
                 else
                 {
-					buildingOut = buildingsGenerator.GenerateBuildingWithItems(placeBuildingOut.transform,
-                                                           buildingConfig.floorSegmentsCount,
-                                                           buildingConfig.buildingFloorsCount,
-                                                           buildingConfig.stairsSegmentIndex,
-                                                           this.items);
+					buildingOut = buildingsGenerator.GenerateBuilding(placeBuildingOut.transform, buildingConfig.buildingFloorsCount, floorSize, itemsInTruck);
                 }
                 buildingFloorNumber = buildingConfig.buildingFloorsCount;
             }
@@ -250,7 +254,13 @@ namespace GaryMoveOut
             if (placeBuildingIn != null)
             {
                 var buildingConfig = buildingConfigurator.BuildingParameterGenerator(currentBuildingId);
-                buildingIn = buildingsGenerator.GenerateBuilding(placeBuildingIn.transform, buildingConfig.floorSegmentsCount, buildingConfig.buildingFloorsCount, buildingConfig.stairsSegmentIndex);
+                var floorSize = new FloorSize()
+                {
+                    segmentsCount = buildingConfig.floorSegmentsCount,
+                    stairsSegmentIndex = buildingConfig.stairsSegmentIndex
+                };
+
+                buildingIn = buildingsGenerator.GenerateBuilding(placeBuildingIn.transform, buildingConfig.buildingFloorsCount, floorSize);
             }
         }
 

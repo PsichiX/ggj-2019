@@ -18,16 +18,16 @@ namespace GaryMoveOut
         // Use this for initialization
         void Start()
         {
-            buildingsGenerator = new BuildingsGenerator();
+            //buildingsGenerator = new BuildingsGenerator();
 
-            if (homeRoot != null)
-            {
+            //if (homeRoot != null)
+            //{
 
-                var itemsCount = Random.Range(5, 8);
-                var items = buildingsGenerator.ItemsDatabase.GetRandomItems_OLD(itemsCount);
+            //    var itemsCount = Random.Range(5, 8);
+            //    var items = buildingsGenerator.ItemsDatabase.GetRandomItems_OLD(itemsCount);
 
-                building = buildingsGenerator.GenerateBuildingWithItems(homeRoot, floorSegmentsCount, buildingFloorsCount, stairsSegmentIndex, items);
-            }
+            //    building = buildingsGenerator.GenerateBuildingWithItems(homeRoot, floorSegmentsCount, buildingFloorsCount, stairsSegmentIndex, items);
+            //}
         }
     }
 

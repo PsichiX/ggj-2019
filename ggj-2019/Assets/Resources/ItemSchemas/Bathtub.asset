@@ -16,5 +16,5 @@ MonoBehaviour:
   weight: 6
   vertical: 0
   materialType: 5
-  itemPrefab: {fileID: 9087564763860325632, guid: 4fad0ab22da2dd74b84897605efa06b5,
+  itemPrefab: {fileID: 9087564763860325632, guid: dc03cf899493bb340881c9d2fbb346c7,
     type: 3}

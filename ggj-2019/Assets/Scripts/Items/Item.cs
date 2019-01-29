@@ -1,43 +1,22 @@
 ﻿using UnityEngine;
 
-namespace GaryMoveOut
+namespace GaryMoveOut.Items
 {
-    public class Item
+    public class Item : MonoBehaviour
     {
-        public float value;
-        public float weight;
-        public bool vertical;
-        public ItemType type;
-        public GameObject prefab;
+        [SerializeField] private AudioSource audioSource;
+        [SerializeField] private ItemScheme scheme;
+        public ItemScheme Scheme { get { return scheme; } }
 
-        public Item(ItemScheme_OLD scheme)
+
+        private void Start()
         {
-            if (scheme == null)
-            {
-                Debug.LogError("Could not create Item out of empty ITemScheme!");
-                return;
-            }
-            value = scheme.value;
-            weight = scheme.weight;
-            vertical = scheme.vertical;
-            type = scheme.type;
-            prefab = scheme.gameObject;
-
-            scheme.assignedItem = this;
+            audioSource = GetComponent<AudioSource>();
         }
 
-        public Item(Item scheme)
+        public void Setup(ItemScheme scheme)
         {
-            if (scheme == null)
-            {
-                Debug.LogError("Could not create Item out of empty Item!");
-                return;
-            }
-            value = scheme.value;
-            weight = scheme.weight;
-            vertical = scheme.vertical;
-            type = scheme.type;
-            prefab = scheme.prefab;
+            this.scheme = scheme;
         }
     }
 }

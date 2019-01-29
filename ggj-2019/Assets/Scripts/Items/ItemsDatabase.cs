@@ -48,6 +48,23 @@ namespace GaryMoveOut.Items
             }
         }
 
+        public List<ItemScheme> GetRandomItems(int itemsCount)
+        {
+            if (items.Count == 0)
+            {
+                return null;
+            }
+            else
+            {
+                List<ItemScheme> list = new List<ItemScheme>();
+                for(int i = 0; i < itemsCount; i++)
+                {
+                    list.Add(GetRandomItem());
+                }
+                return list;
+            }
+        }
+
         public ItemScheme GetRandomItem(ItemMaterialType materialType)
         {
             if (itemsByMaterialType.TryGetValue(materialType, out List<ItemScheme> itemList))

@@ -25,7 +25,7 @@ namespace GaryMoveOut
             Debug.LogWarning($"Eaaaarthhhh Quuuuaaaakeeeee on the {floorIndex} floor!");
 
 
-            var endPos = building.root.transform.position - new Vector3(0f, building.SegmentHeight, 0f);
+            var endPos = building.root.transform.position - new Vector3(0f, building.SegmentSize.Height, 0f);
             building.root.transform.DOMove(endPos, floorFallTime).SetEase(Ease.OutBounce);
 
             var force = 3f;
