@@ -33,7 +33,6 @@ namespace GaryMoveOut
 
         public int FloorIndex = 1;
 
-
         [SerializeField] private InputHandler m_inputHandler;
         [SerializeField] private float m_speed;
         [SerializeField] private Transform m_pickableOrigin;
@@ -41,6 +40,7 @@ namespace GaryMoveOut
         [SerializeField] private float m_aimingAngleSpeed = 1;
         [SerializeField] private float m_aimingStrengthSpeed = 1;
 		[SerializeField] private SkinnedMeshRenderer meshRenderer;
+		[SerializeField] private GameObject blood;
 
 		private Rigidbody2D m_rigidBody;
         private BoxCollider2D m_collider;
@@ -121,7 +121,9 @@ namespace GaryMoveOut
             {
                 m_inputBlocked = true;
                 InputLayout = InputHandler.Layout.None;
-                Destroy(this.gameObject);
+				HideMe();
+				// FixMe: not
+                //Destroy(this.gameObject, 0.5f);
             }
         }
 
@@ -303,7 +305,10 @@ namespace GaryMoveOut
         {
             if (other.tag == "Ground" && m_isAlive && groundKills == true)
             {
-                m_isAlive = false;
+				blood.SetActive(true);
+				blood.transform.SetParent(null);
+				aus.PlayOneShot(Resources.Load("Sounds/PlayerSplat") as AudioClip);
+				m_isAlive = false;
                 m_gameplayEvents.CallEvent(GamePhases.GameplayPhase.PlayerDie, this);
                 Debug.Log("player hit the ground");
             }
@@ -403,9 +408,10 @@ namespace GaryMoveOut
         private bool PickUp()
         {
             var pickable = GetInteractible<Pickable>();
-            if (pickable != null)
+            if (pickable != null && !isCarryingItem)
             {
-                m_pickedUp = pickable;
+				aus.PlayOneShot(Resources.Load("Sounds/PickUp") as AudioClip);
+				m_pickedUp = pickable;
                 m_pickedUp.PickUp(TurnToSide);
                 m_animator?.SetBool("PickedUp", true);
                 isCarryingItem = true;
@@ -468,7 +474,9 @@ namespace GaryMoveOut
 
         private void Throw()
         {
-            if (m_pickedUp != null && m_isAiming)
+			aus.PlayOneShot(Resources.Load("Sounds/Throw") as AudioClip);
+
+			if (m_pickedUp != null && m_isAiming)
             {
                 m_isAiming = false;
                 var angle = TurnToSide == Side.Left ? 180 - m_aimAngle : m_aimAngle;
