@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7504128949186760944}
   - component: {fileID: 6186131580384549813}
+  - component: {fileID: 913895366035690429}
   m_Layer: 0
   m_Name: Segment_Roof
   m_TagString: Untagged
@@ -58,6 +59,27 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2, y: 0.2295}
   m_EdgeRadius: 0
+--- !u!50 &913895366035690429
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5650563294753579848}
+  m_BodyType: 2
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 6200000, guid: 6d597cc65a4f2744d9b04a7ddc052736, type: 2}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1001 &2788931206657001848
 PrefabInstance:
   m_ObjectHideFlags: 0

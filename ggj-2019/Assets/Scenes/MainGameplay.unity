@@ -4829,7 +4829,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointsCollected: 0
-  truckSpeedModifier: 15
+  truckSpeedModifier: 20
   dustStorm: {fileID: 100000, guid: 1f7aa4d40edff6e48b549003cad031e1, type: 3}
   placeBuildingOut: {fileID: 5846282615831570882}
   placeBuildingIn: {fileID: 5846282614430594310}

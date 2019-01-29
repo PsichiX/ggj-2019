@@ -64,6 +64,7 @@ namespace GaryMoveOut
         private bool m_canTeleportDown = false;
         private bool m_isAlive = true;
 		private bool groundKills = false;
+		private Vector2 smallOffsetY = new Vector2(0, 0.01f);
 
 		private AudioSource aus;
 
@@ -262,14 +263,14 @@ namespace GaryMoveOut
                     if (m_inputHandler.Left)
                     {
                         //m_rigidBody.AddForce((Vector2.left * m_speed + Vector2.up) * dt * m_rigidBody.mass, ForceMode2D.Impulse);
-                        m_rigidBody.MovePosition(m_rigidBody.position + Vector2.left * m_speed * dt);
+                        m_rigidBody.MovePosition(m_rigidBody.position + (Vector2.left + smallOffsetY) * m_speed * dt);
                         Velocity = -m_speed;
                         TurnToSide = Side.Left;
                     }
                     else if (m_inputHandler.Right)
                     {
                         //m_rigidBody.AddForce((Vector2.right * m_speed + Vector2.up) * dt * m_rigidBody.mass, ForceMode2D.Impulse);
-                        m_rigidBody.MovePosition(m_rigidBody.position + Vector2.right * m_speed * dt);
+                        m_rigidBody.MovePosition(m_rigidBody.position + (Vector2.right + smallOffsetY) * m_speed * dt);
                         Velocity = m_speed;
                         TurnToSide = Side.Right;
                     }

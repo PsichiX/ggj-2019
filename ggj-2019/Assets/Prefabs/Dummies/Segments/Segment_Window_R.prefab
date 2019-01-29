@@ -1,5 +1,26 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!50 &8212969920443192865
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8558976584836231972}
+  m_BodyType: 2
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 6200000, guid: 6d597cc65a4f2744d9b04a7ddc052736, type: 2}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1001 &4989237577142485199
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -67,36 +88,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2428824600442980346, guid: bab7ab1877dac7549b12688f4a1b8b97,
-        type: 3}
-      propertyPath: addForce
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 2428824600442980346, guid: bab7ab1877dac7549b12688f4a1b8b97,
-        type: 3}
-      propertyPath: glassSheet
-      value: 
-      objectReference: {fileID: 6483791834073735740}
-    - target: {fileID: 2428824600442980346, guid: bab7ab1877dac7549b12688f4a1b8b97,
-        type: 3}
-      propertyPath: isInside
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2221220518099103701, guid: bab7ab1877dac7549b12688f4a1b8b97,
-        type: 3}
-      propertyPath: isInside
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2221220518099103701, guid: bab7ab1877dac7549b12688f4a1b8b97,
-        type: 3}
-      propertyPath: glassSheet
-      value: 
-      objectReference: {fileID: 6483791834073735740}
-    - target: {fileID: 2221220518099103701, guid: bab7ab1877dac7549b12688f4a1b8b97,
-        type: 3}
-      propertyPath: addForce
-      value: 
-      objectReference: {fileID: 5821237712779837082}
     - target: {fileID: 1582001518943583829, guid: bab7ab1877dac7549b12688f4a1b8b97,
         type: 3}
       propertyPath: shards.Array.data[0]
@@ -597,8 +588,44 @@ PrefabInstance:
       propertyPath: shards.Array.data[99]
       value: 
       objectReference: {fileID: 2619929626130323164}
+    - target: {fileID: 2428824600442980346, guid: bab7ab1877dac7549b12688f4a1b8b97,
+        type: 3}
+      propertyPath: isInside
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2428824600442980346, guid: bab7ab1877dac7549b12688f4a1b8b97,
+        type: 3}
+      propertyPath: addForce
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2428824600442980346, guid: bab7ab1877dac7549b12688f4a1b8b97,
+        type: 3}
+      propertyPath: glassSheet
+      value: 
+      objectReference: {fileID: 6483791834073735740}
+    - target: {fileID: 2221220518099103701, guid: bab7ab1877dac7549b12688f4a1b8b97,
+        type: 3}
+      propertyPath: isInside
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2221220518099103701, guid: bab7ab1877dac7549b12688f4a1b8b97,
+        type: 3}
+      propertyPath: addForce
+      value: 
+      objectReference: {fileID: 5821237712779837082}
+    - target: {fileID: 2221220518099103701, guid: bab7ab1877dac7549b12688f4a1b8b97,
+        type: 3}
+      propertyPath: glassSheet
+      value: 
+      objectReference: {fileID: 6483791834073735740}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bab7ab1877dac7549b12688f4a1b8b97, type: 3}
+--- !u!1 &6483791834073735740 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2073445242527343347, guid: bab7ab1877dac7549b12688f4a1b8b97,
+    type: 3}
+  m_PrefabInstance: {fileID: 4989237577142485199}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &5821237712779837082 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1582001518943583829, guid: bab7ab1877dac7549b12688f4a1b8b97,
@@ -1055,9 +1082,9 @@ Rigidbody:
     type: 3}
   m_PrefabInstance: {fileID: 4989237577142485199}
   m_PrefabAsset: {fileID: 0}
---- !u!54 &6603217493909350329 stripped
-Rigidbody:
-  m_CorrespondingSourceObject: {fileID: 2206203578228893558, guid: bab7ab1877dac7549b12688f4a1b8b97,
+--- !u!1 &8558976584836231972 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3745520441282229227, guid: bab7ab1877dac7549b12688f4a1b8b97,
     type: 3}
   m_PrefabInstance: {fileID: 4989237577142485199}
   m_PrefabAsset: {fileID: 0}
@@ -1067,9 +1094,9 @@ Rigidbody:
     type: 3}
   m_PrefabInstance: {fileID: 4989237577142485199}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &6483791834073735740 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2073445242527343347, guid: bab7ab1877dac7549b12688f4a1b8b97,
+--- !u!54 &3914775778668252529 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 8316256184114400702, guid: bab7ab1877dac7549b12688f4a1b8b97,
     type: 3}
   m_PrefabInstance: {fileID: 4989237577142485199}
   m_PrefabAsset: {fileID: 0}
@@ -1133,15 +1160,15 @@ Rigidbody:
     type: 3}
   m_PrefabInstance: {fileID: 4989237577142485199}
   m_PrefabAsset: {fileID: 0}
---- !u!54 &3876544084586538479 stripped
+--- !u!54 &6603217493909350329 stripped
 Rigidbody:
-  m_CorrespondingSourceObject: {fileID: 8138309547459077408, guid: bab7ab1877dac7549b12688f4a1b8b97,
+  m_CorrespondingSourceObject: {fileID: 2206203578228893558, guid: bab7ab1877dac7549b12688f4a1b8b97,
     type: 3}
   m_PrefabInstance: {fileID: 4989237577142485199}
   m_PrefabAsset: {fileID: 0}
---- !u!54 &3914775778668252529 stripped
+--- !u!54 &8689438738191703491 stripped
 Rigidbody:
-  m_CorrespondingSourceObject: {fileID: 8316256184114400702, guid: bab7ab1877dac7549b12688f4a1b8b97,
+  m_CorrespondingSourceObject: {fileID: 4443438036364336396, guid: bab7ab1877dac7549b12688f4a1b8b97,
     type: 3}
   m_PrefabInstance: {fileID: 4989237577142485199}
   m_PrefabAsset: {fileID: 0}
@@ -1211,9 +1238,9 @@ Rigidbody:
     type: 3}
   m_PrefabInstance: {fileID: 4989237577142485199}
   m_PrefabAsset: {fileID: 0}
---- !u!54 &8689438738191703491 stripped
+--- !u!54 &3876544084586538479 stripped
 Rigidbody:
-  m_CorrespondingSourceObject: {fileID: 4443438036364336396, guid: bab7ab1877dac7549b12688f4a1b8b97,
+  m_CorrespondingSourceObject: {fileID: 8138309547459077408, guid: bab7ab1877dac7549b12688f4a1b8b97,
     type: 3}
   m_PrefabInstance: {fileID: 4989237577142485199}
   m_PrefabAsset: {fileID: 0}
