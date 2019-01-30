@@ -608,8 +608,8 @@ namespace GaryMoveOut
         private void PhaseFewDaysLater()
         {
             events.CallEvent(GamePhases.GameplayPhase.FewDaysLater, null);
-            //itemsFromLastInBuilding = buildingIn.GetItems();
-            buildingsGenerator.DestroyBuildingOut(ref buildingIn);
+			var itemsFromLastInBuilding = buildingIn.GetItems();
+			buildingsGenerator.DestroyBuildingOut(ref buildingIn);
             float delay = 1f;
             DOVirtual.DelayedCall(delay, PhaseStartGame);
             Debug.Log("PhaseFewDaysLater");

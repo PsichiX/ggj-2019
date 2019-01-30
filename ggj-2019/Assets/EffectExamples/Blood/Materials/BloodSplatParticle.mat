@@ -9,8 +9,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: BloodSplatParticle
   m_Shader: {fileID: 45, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: _ALPHABLEND_ON _EMISSION _NORMALMAP
-  m_LightmapFlags: 1
+  m_ShaderKeywords: _ALPHABLEND_ON _NORMALMAP
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: 3000
@@ -66,7 +66,7 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 10
     - _GlossMapScale: 1
-    - _Glossiness: 0.446
+    - _Glossiness: 0.423
     - _GlossyReflections: 1
     - _InvFade: 1
     - _Metallic: 0
@@ -79,7 +79,7 @@ Material:
     - _UVSec: 0
     - _ZWrite: 0
     m_Colors:
-    - _Color: {r: 0.2830189, g: 0.020024918, b: 0.020024918, a: 0.89411765}
+    - _Color: {r: 0.4056604, g: 0.017221425, b: 0.017221425, a: 1}
     - _EmissionColor: {r: 0.24264705, g: 0, b: 0, a: 1}
-    - _SpecColor: {r: 0.120538324, g: 0.0981221, b: 0.14150941, a: 1}
+    - _SpecColor: {r: 0, g: 0, b: 0, a: 1}
     - _TintColor: {r: 0.30882353, g: 0, b: 0, a: 0.5}

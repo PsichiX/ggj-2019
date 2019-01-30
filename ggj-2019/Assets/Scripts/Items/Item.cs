@@ -10,10 +10,11 @@ namespace GaryMoveOut.Items
         [SerializeField] private Pickable pickable;
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private ItemScheme scheme;
+		public bool IsAlive { get; private set; }
         public ItemScheme Scheme { get { return scheme; } }
+		public bool cantKillMe = false;
 
-
-        private void Start()
+		private void Start()
         {
             boxCollider2D = GetComponent<BoxCollider2D>();
             itemRigidbody2D = GetComponent<Rigidbody2D>();
@@ -50,8 +51,6 @@ namespace GaryMoveOut.Items
             }
 		}
 
-        public bool cantKillMe = false;
-        public bool IsAlive { get; private set; }
 
         public void DestroyOnGround()
         {
