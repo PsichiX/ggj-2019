@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcc529896a4670c4886a88b1246adf71, type: 3}
   m_Name: Bathtub
   m_EditorClassIdentifier: 
-  value: 0
-  weight: 0
+  value: 10
+  weight: 10
   vertical: 0
-  materialType: 0
+  materialType: 5
   itemPrefab: {fileID: 9087564763860325632, guid: dc03cf899493bb340881c9d2fbb346c7,
     type: 3}
-  explosion: {fileID: 0}
+  explosion: {fileID: 1000013462590818, guid: ecdd96beb7f93494880c052dfccf9dc1, type: 3}

@@ -57,7 +57,7 @@ namespace GaryMoveOut
             glassSheet.SetActive(false);
             addForce.gameObject.SetActive(true);
             addForce.right = toTheRight;
-            addForce.Peknij();
+            addForce.TearMeApart();
         }
     }
 }
