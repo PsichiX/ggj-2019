@@ -618,6 +618,16 @@ PrefabInstance:
       propertyPath: glassSheet
       value: 
       objectReference: {fileID: 6483791834073735740}
+    - target: {fileID: 2289283776977261856, guid: bab7ab1877dac7549b12688f4a1b8b97,
+        type: 3}
+      propertyPath: m_Offset.x
+      value: 1.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2289283776977261856, guid: bab7ab1877dac7549b12688f4a1b8b97,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bab7ab1877dac7549b12688f4a1b8b97, type: 3}
 --- !u!1 &6483791834073735740 stripped

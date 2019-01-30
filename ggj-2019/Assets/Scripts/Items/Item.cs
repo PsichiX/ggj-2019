@@ -26,10 +26,6 @@ namespace GaryMoveOut.Items
             this.scheme = scheme;
         }
 
-
-
-
-
         public void InTruck()
         {
             audioSource.PlayOneShot(Resources.Load("Sounds/gain") as AudioClip);    // => Fix me: sounds manager needed
@@ -95,5 +91,16 @@ namespace GaryMoveOut.Items
 
             cantKillMe = true;
         }
-    }
+
+		private void OnTriggerEnter2D(Collider2D collision)
+		{
+			if (collision.gameObject.tag == "Ground")
+			{
+				if (itemRigidbody2D.velocity.magnitude > 1f)
+				{
+					DestroyOnGround();
+				}
+			}
+		}
+	}
 }
