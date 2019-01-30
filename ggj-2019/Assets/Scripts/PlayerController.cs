@@ -64,6 +64,7 @@ namespace GaryMoveOut
         private bool m_canTeleportUp = false;
         private bool m_canTeleportDown = false;
         private bool m_isAlive = true;
+		private bool m_isJumping = false;
 		private bool groundKills = false;
 		private Vector2 smallOffsetY = new Vector2(0, 0.01f);
 
@@ -76,10 +77,12 @@ namespace GaryMoveOut
             m_gameplay = GameplayManager.GetGameplayManager();
         }
 
-        private void Start()
+		private InputHandler.Layout cachedLayout;
+		private void Start()
         {
 			Setup();
-        }
+			cachedLayout = m_inputHandler.InputLayout;
+		}
 
 		public void Setup()
 		{
@@ -121,8 +124,9 @@ namespace GaryMoveOut
         {
             if (obj is PlayerController && obj as PlayerController == this)
             {
+				Debug.Log("<color=blue> Player died");
                 m_inputBlocked = true;
-                InputLayout = InputHandler.Layout.None;
+                //InputLayout = InputHandler.Layout.None;
 				HideMe();
 				// FixMe: not
                 //Destroy(this.gameObject, 0.5f);
@@ -301,7 +305,15 @@ namespace GaryMoveOut
                     m_aimStrength
                 );
             }
-        }
+			if (m_isJumping == true && m_rigidBody.velocity.magnitude < 0.1f)
+			{
+				m_animator.SetBool("isJumping", false);
+				m_isJumping = false;
+				m_inputBlocked = false;
+				m_inputHandler.InputLayout = cachedLayout;
+				GetComponent<BoxCollider2D>().size = new Vector2(1, 2);
+			}
+		}
 
 		private void OnTriggerEnter2D(Collider2D other)
         {
@@ -363,8 +375,8 @@ namespace GaryMoveOut
 
 		private void HideMe()
 		{
-			GetComponentInChildren<BoxCollider2D>().enabled = false;
 			m_rigidBody.Sleep();
+			GetComponentInChildren<BoxCollider2D>().enabled = false;
 			GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
 		}
 
@@ -520,14 +532,15 @@ namespace GaryMoveOut
 			GetComponent<AudioSource>().Play();
             if (m_window != null && m_isAiming)
             {
-                m_isAiming = false;
+				m_isJumping = true;
+				m_isAiming = false;
                 InputLayout = InputHandler.Layout.None;
                 var angle = TurnToSide == Side.Left ? 180 - m_aimAngle : m_aimAngle;
                 var force = Quaternion.Euler(0, 0, angle) * Vector2.right * m_aimStrength;
                 m_rigidBody.AddForce(force, ForceMode2D.Impulse);
                 m_rigidBody.constraints = RigidbodyConstraints2D.None;
                 m_rigidBody.MovePosition(m_rigidBody.position + new Vector2(0, 1));
-                m_collider.size = new Vector2(0.5f, 0.5f);
+                //m_collider.size = new Vector2(0.5f, 0.5f);
                 m_animator.SetBool("isJumping", true);
                 m_window = null;
             }

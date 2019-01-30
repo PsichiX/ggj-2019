@@ -560,6 +560,7 @@ namespace GaryMoveOut
 			{
 				// FixMe : here be bugs
 				players[i].transform.position = truckManager.Truck.transform.position + new Vector3(0, 0.5f, 0);
+				players[i].transform.DOLocalRotate(Vector3.zero, 0.1f);
 				//p.GetComponent<PlayerController>().Setup();
 				players[i].InputLayout = (InputHandler.Layout)(playerInputs[i]);
 				cameraTargets.Add(players[i].gameObject);
@@ -567,15 +568,15 @@ namespace GaryMoveOut
 			currentPlayersInTruck = 0;
 			cameraTargets.Add(placeBuildingIn);
 			multiTargetCamera.SetTargets(cameraTargets.ToArray());
+			cachedTruckItems = new List<Item>();
 			foreach (var i in truckManager.GetTruckItemList())
 			{
+				cachedTruckItems.Add(i);
 				i.transform.position = truckManager.Truck.transform.position;
 				i.UnKillMe();
 			}
-			// Fixme:
-			cachedTruckItems = truckManager.GetTruckItemList();
-			Destroy(truckManager.Truck);
 			truckManager.ResetTruckItemList();
+			Destroy(truckManager.Truck);
 			events.CallEvent(GamePhases.GameplayPhase.DeEvacuation, null);
 			InvokeRepeating("AreThereTruckItemsLeft", 1f, 0.5f);
         }
@@ -597,12 +598,12 @@ namespace GaryMoveOut
 
         private void ReactionLastItemShot(object param)
         {
-            truckManager.ResetTruckItemList();
-            events.CallEvent(GamePhases.GameplayPhase.FadeOut, null);
-            float delay = 1f;
-            DOVirtual.DelayedCall(delay, PhaseFewDaysLater);
-            Debug.Log("FadeOut");
-        }
+			truckManager.ResetTruckItemList();
+			events.CallEvent(GamePhases.GameplayPhase.FadeOut, null);
+			float delay = 1f;
+			DOVirtual.DelayedCall(delay, PhaseFewDaysLater);
+			Debug.Log("FadeOut");
+		}
 
         private void PhaseFewDaysLater()
         {
