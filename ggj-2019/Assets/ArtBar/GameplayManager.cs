@@ -569,7 +569,22 @@ namespace GaryMoveOut
 			Destroy(truckManager.Truck);
 			truckManager.ResetTruckItemList();
 			events.CallEvent(GamePhases.GameplayPhase.DeEvacuation, null);
+			InvokeRepeating("AreThereTruckItemsLeft", 1f, 0.5f);
         }
+
+		private bool AreThereTruckItemsLeft()
+		{
+			foreach (var i in truckManager.GetTruckItemList())
+			{
+				if (i != null)
+				{
+					return true;
+				}
+			}
+			CancelInvoke();
+			events.CallEvent(GamePhases.GameplayPhase.FewDaysLater, null);
+			return false;
+		}
 
         private void ReactionLastItemShot(object param)
         {

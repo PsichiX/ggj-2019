@@ -24,9 +24,18 @@ namespace GaryMoveOut
         {
             Debug.LogWarning($"Eaaaarthhhh Quuuuaaaakeeeee on the {floorIndex} floor!");
 
+			var players = GameObject.FindGameObjectsWithTag("Player");
+			foreach (var p in players)
+			{
+				if (p.GetComponent<PlayerController>().m_inputBlocked == false)
+				{
+					p.transform.parent = building.root;
+				}
+			}
 
             var endPos = building.root.transform.position - new Vector3(0f, building.SegmentSize.Height, 0f);
-            building.root.transform.DOMove(endPos, floorFallTime).SetEase(Ease.OutBounce);
+            building.root.transform.DOMove(endPos, floorFallTime).SetEase(Ease.OutBounce).
+				OnComplete(() => DeparentPlayers(players));
 
             //var force = 3f;
             //foreach (var floor in building.floors)
@@ -52,5 +61,13 @@ namespace GaryMoveOut
                 building.DestroyFloor(floorIndex);
             });
         }
+
+		private void DeparentPlayers(GameObject[] players)
+		{
+			foreach (var p in players)
+			{
+				p.transform.SetParent(null);
+			}
+		}
     }
 }

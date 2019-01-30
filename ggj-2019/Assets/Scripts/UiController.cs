@@ -140,6 +140,7 @@ namespace GaryMoveOut
 
 		private void ReactionFadeOut(object obj)
 		{
+			backgroundMusic.DOFade(0, 0.6f);
 			black.DOColor(new Color(0, 0, 0, 1), 1f);
 		}
 

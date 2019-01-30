@@ -36,7 +36,7 @@ namespace GaryMoveOut.Items
         private void FreezeMe()
         {
             Destroy(pickable);
-            Destroy(itemRigidbody2D);
+            itemRigidbody2D.Sleep();
             transform.parent = null;
             boxCollider2D.enabled = false;
         }
@@ -58,9 +58,10 @@ namespace GaryMoveOut.Items
             {
                 return;
             }
+			itemRigidbody2D.Sleep();
             IsAlive = false;
             var ex = Instantiate(Scheme.explosion, transform);
-
+			HideMe();
             ex.transform.localPosition = Vector3.zero;
             audioSource.Play();
             DOVirtual.DelayedCall(0.6f, KillMe);
@@ -69,17 +70,19 @@ namespace GaryMoveOut.Items
 
         private void KillMe()
         {
-            transform.parent = null;
+			if (transform == null)
+			{
+				return;
+			}
+            transform.SetParent(null);
             Destroy(gameObject, 0.2f);
         }
 
         public void UnKillMe()
         {
-            if (itemRigidbody2D == null)
-            {
-                itemRigidbody2D = gameObject.AddComponent<Rigidbody2D>();
-            }
-            if (pickable == null)
+			itemRigidbody2D.WakeUp();
+
+			if (pickable == null)
             {
                 gameObject.AddComponent<Pickable>();
             }

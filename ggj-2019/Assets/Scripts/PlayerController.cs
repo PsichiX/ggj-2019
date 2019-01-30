@@ -33,6 +33,8 @@ namespace GaryMoveOut
 
         public int FloorIndex = 1;
 
+        public bool m_inputBlocked = false;
+
         [SerializeField] private InputHandler m_inputHandler;
         [SerializeField] private float m_speed;
         [SerializeField] private Transform m_pickableOrigin;
@@ -55,7 +57,6 @@ namespace GaryMoveOut
         private UiController m_ui;
         private GameplayEvents m_gameplayEvents;
         private GameplayManager m_gameplay;
-        private bool m_inputBlocked = false;
         private Animator m_animator;
         private bool isCarryingItem;
         private WindowJumpSite m_window;

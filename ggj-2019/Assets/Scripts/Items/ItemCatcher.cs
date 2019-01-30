@@ -36,19 +36,22 @@ namespace GaryMoveOut
             }
             if (addForce != null)
             {
-                isBroken = true;
-                var rigid = other.GetComponent<Rigidbody2D>();
-                if (rigid)
-                {
-                    if (rigid.velocity.x > 0)
-                    {
-                        YouAreTearingMeApartItem(true);
-                    }
-                    else
-                    {
-                        YouAreTearingMeApartItem(false);
-                    }
-                }
+				if (isBroken == false)
+				{
+					var rigid = other.GetComponent<Rigidbody2D>();
+					if (rigid)
+					{
+						if (rigid.velocity.x > 0)
+						{
+							YouAreTearingMeApartItem(true);
+						}
+						else
+						{
+							YouAreTearingMeApartItem(false);
+						}
+					}
+					isBroken = true;
+				}
             }
         }
 
