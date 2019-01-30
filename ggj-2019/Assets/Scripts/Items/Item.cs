@@ -5,6 +5,7 @@ namespace GaryMoveOut.Items
 {
     public class Item : MonoBehaviour
     {
+        private GameplayEvents gameplayEvents;
         [SerializeField] private BoxCollider2D boxCollider2D;
         [SerializeField] private Rigidbody2D itemRigidbody2D;
         [SerializeField] private Pickable pickable;
@@ -65,6 +66,10 @@ namespace GaryMoveOut.Items
 			HideMe();
             ex.transform.localPosition = Vector3.zero;
             audioSource.Play();
+
+            gameplayEvents = GameplayEvents.GetGameplayEvents();
+            gameplayEvents.CallItemDestroyed(this);
+
             DOVirtual.DelayedCall(0.6f, KillMe);
             // TODO: destroy viz
         }

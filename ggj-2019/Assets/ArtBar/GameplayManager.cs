@@ -51,6 +51,7 @@ namespace GaryMoveOut
         [SerializeField] private GameObject prefabPlayer;
         private int playersCount = 1;
 
+        public GamePhases.GameplayPhase CurrentPhase { get; private set; }
         private int currentPlayersInTruck = 0;
         private int currentPlayersDead = 0;
 
@@ -229,11 +230,11 @@ namespace GaryMoveOut
 
                 if (itemsInTruck == null || itemsInTruck.Count == 0)
                 {
-					buildingOut = buildingsGenerator.GenerateBuilding(placeBuildingOut.transform, buildingConfig.buildingFloorsCount, floorSize, items);
+					buildingOut = buildingsGenerator.GenerateBuilding(placeBuildingOut.transform, buildingConfig.buildingFloorsCount, floorSize, false, items);
                 }
                 else
                 {
-					buildingOut = buildingsGenerator.GenerateBuilding(placeBuildingOut.transform, buildingConfig.buildingFloorsCount, floorSize, itemsInTruck);
+					buildingOut = buildingsGenerator.GenerateBuilding(placeBuildingOut.transform, buildingConfig.buildingFloorsCount, floorSize, false, itemsInTruck);
                 }
                 buildingFloorNumber = buildingConfig.buildingFloorsCount;
             }
@@ -256,7 +257,7 @@ namespace GaryMoveOut
                     stairsSegmentIndex = buildingConfig.stairsSegmentIndex
                 };
 
-                buildingIn = buildingsGenerator.GenerateBuilding(placeBuildingIn.transform, buildingConfig.buildingFloorsCount, floorSize);
+                buildingIn = buildingsGenerator.GenerateBuilding(placeBuildingIn.transform, buildingConfig.buildingFloorsCount, floorSize, true);
             }
         }
 
@@ -529,7 +530,7 @@ namespace GaryMoveOut
         {
 			// fade out?
             events.CallEvent(GamePhases.GameplayPhase.TruckStop, null);
-            buildingsGenerator.DestroyBuildingOut(ref buildingOut);
+            buildingsGenerator.DestroyBuilding(ref buildingOut);
 
             float delay = 1f;
 			DOVirtual.DelayedCall(delay, PhaseDeEvacuation);
@@ -572,28 +573,42 @@ namespace GaryMoveOut
 				i.transform.position = truckManager.Truck.transform.position;
 				i.UnKillMe();
 			}
-			// Fixme:
-			cachedTruckItems = truckManager.GetTruckItemList();
+            // Fixme:
+            cachedTruckItems.Clear();
+			cachedTruckItems.AddRange(truckManager.GetTruckItemList());
 			Destroy(truckManager.Truck);
 			truckManager.ResetTruckItemList();
-			events.CallEvent(GamePhases.GameplayPhase.DeEvacuation, null);
-			InvokeRepeating("AreThereTruckItemsLeft", 1f, 0.5f);
+            //events.ItemDestroyed += AreThereTruckItemsLeft;
+            //events.ItemAddedToFloor += AreThereTruckItemsLeft;
+            events.CallEvent(GamePhases.GameplayPhase.DeEvacuation, null);
+            InvokeRepeating("AreThereTruckItemsLeft", 1f, 0.5f);
         }
 
 		private List<Item> cachedTruckItems;
-		private bool AreThereTruckItemsLeft()
+		private void AreThereAnyTruckItemsLeft(Item item)
 		{
-			foreach (var i in cachedTruckItems)
-			{
-				if (i != null)
-				{
-					return true;
-				}
-			}
-			CancelInvoke();
-			PhaseFewDaysLater();
-			return false;
-		}
+            cachedTruckItems.Remove(item);
+            if (cachedTruckItems.Count == 0)
+            {
+                events.ItemDestroyed -= AreThereAnyTruckItemsLeft;
+                events.ItemAddedToFloor -= AreThereAnyTruckItemsLeft;
+                float delay = 1f;
+                DOVirtual.DelayedCall(delay, PhaseFewDaysLater);
+            }
+        }
+        private bool AreThereTruckItemsLeft()
+        {
+            foreach (var i in cachedTruckItems)
+            {
+                if (i != null)
+                {
+                    return true;
+                }
+            }
+            CancelInvoke();
+            PhaseFewDaysLater();
+            return false;
+        }
 
         private void ReactionLastItemShot(object param)
         {
@@ -608,7 +623,7 @@ namespace GaryMoveOut
         {
             events.CallEvent(GamePhases.GameplayPhase.FewDaysLater, null);
             //itemsFromLastInBuilding = buildingIn.GetItems();
-            buildingsGenerator.DestroyBuildingOut(ref buildingIn);
+            buildingsGenerator.DestroyBuilding(ref buildingIn);
             float delay = 1f;
             DOVirtual.DelayedCall(delay, PhaseStartGame);
             Debug.Log("PhaseFewDaysLater");

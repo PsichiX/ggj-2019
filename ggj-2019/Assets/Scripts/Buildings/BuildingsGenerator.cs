@@ -18,19 +18,11 @@ namespace GaryMoveOut
         }
 
 
-        public void DestroyBuildingOut(ref Building buildingOut)
+        public void DestroyBuilding(ref Building buildingOut)
         {
             foreach(var floor in buildingOut.Floors)
             {
                 buildingOut.DestroyFloor(floor.Key);
-                //foreach(var segment in floor.segments)
-                //{
-                //    GameObject.Destroy(segment);
-                //}
-                //floor.segments.Clear();
-
-                //floor.items.Clear();
-
                 GameObject.Destroy(floor.Value.gameObject);
             }
             buildingOut.Floors.Clear();
@@ -38,9 +30,9 @@ namespace GaryMoveOut
 
 
         #region Building generator
-        public Building GenerateBuilding(Transform root, int buildingFloorsCount, FloorSize floorSize,  List<ItemScheme> items = null)
+        public Building GenerateBuilding(Transform root, int buildingFloorsCount, FloorSize floorSize, bool isBuildingIn,  List<ItemScheme> items = null)
         {
-            var building = ConstructBuilding(root, buildingFloorsCount, floorSize);
+            var building = ConstructBuilding(root, buildingFloorsCount, floorSize, isBuildingIn);
             if (items != null)
             {
                 building.SpawnItemsInside(items);
@@ -49,7 +41,7 @@ namespace GaryMoveOut
             return building;
         }
 
-        private Building ConstructBuilding(Transform root, int buildingFloorsCount, FloorSize floorSize)
+        private Building ConstructBuilding(Transform root, int buildingFloorsCount, FloorSize floorSize, bool isBuildingIn)
         {
             var floorScheme = BuildingsDatabase.GetRandomFloorScheme();
             var segmentSize = new SegmentSize()
@@ -66,31 +58,39 @@ namespace GaryMoveOut
             Vector3 position = root.position;
             Quaternion rotation = root.rotation;
 
-            GenerateFloor(ref building, floorScheme, root, position, root.rotation, floorSize, 0, FloorType.GroundFloor);
+            GenerateFloor(ref building, floorScheme, root, position, root.rotation, floorSize, 0, FloorType.GroundFloor, isBuildingIn);
 
             int index = 1;
             for (; index <= buildingFloorsCount; index++)
             {
                 position += new Vector3(0f, floorScheme.segmentHeight, 0f);
-                GenerateFloor(ref building, floorScheme, root, position, root.rotation, floorSize, index, FloorType.MiddleFloor);
+                GenerateFloor(ref building, floorScheme, root, position, root.rotation, floorSize, index, FloorType.MiddleFloor, isBuildingIn);
             }
 
             position += new Vector3(0f, floorScheme.segmentHeight, 0f);
             var roofScheme = BuildingsDatabase.GetRandomRoofScheme();
-            GenerateFloor(ref building, roofScheme, root, position, root.rotation, floorSize, index, FloorType.Roof);
+            GenerateFloor(ref building, roofScheme, root, position, root.rotation, floorSize, index, FloorType.Roof, isBuildingIn);
 
             return building;
         }
 
-        private void GenerateFloor(ref Building building, FloorScheme scheme, Transform floorParent, Vector3 position, Quaternion rotation, FloorSize floorSize, int floorIndex, FloorType type)
+        private void GenerateFloor(ref Building building,
+                                   FloorScheme scheme,
+                                   Transform parent,
+                                   Vector3 position,
+                                   Quaternion rotation,
+                                   FloorSize floorSize,
+                                   int floorIndex,
+                                   FloorType type,
+                                   bool isBuildingIn)
         {
             if (!building.Floors.TryGetValue(floorIndex, out Floor floor))
             {
-                floor = Object.Instantiate(BuildingsDatabase.floorPrefab, floorParent.position, floorParent.rotation);
+                floor = Object.Instantiate(BuildingsDatabase.floorPrefab, parent.position, parent.rotation);
                 building.Floors.Add(floorIndex, floor);
             }
             floor.Type = type;
-            floor.transform.SetParent(floorParent);
+            floor.transform.SetParent(parent);
             GameObject prefab = null;
 
             // add the right side:
@@ -107,11 +107,6 @@ namespace GaryMoveOut
                     break;
             }
             var segment = GameObject.Instantiate(prefab, position, rotation, floor.transform) as GameObject;
-            var itemCatcher = segment.GetComponent<ItemCatcher>();
-            if (itemCatcher != null)
-            {
-                itemCatcher.Setup(floor);
-            }
             floor.segments.Add(segment);
 
             // add floor middle segments:
@@ -161,56 +156,20 @@ namespace GaryMoveOut
                     break;
             }
             segment = GameObject.Instantiate(prefab, position, rotation, floor.transform) as GameObject;
-            itemCatcher = segment.GetComponent<ItemCatcher>();
-            if (itemCatcher != null)
-            {
-                itemCatcher.Setup(floor);
-            }
             floor.segments.Add(segment);
+
+            // generate ItemCatcher game object:
+            if (type != FloorType.Roof)
+            {
+                var floorWidth = Vector3.Distance(floor.segments[0].transform.position, floor.segments[floor.segments.Count - 2].transform.position);
+                var widthRation = isBuildingIn ? 0.9f : 1.2f;
+                var realFloorSize = new Vector3((floorWidth + scheme.segmentWidth) * widthRation, scheme.segmentHeight * 0.8f);
+                var center = new Vector3(floor.transform.position.x + floorWidth * 0.5f, position.y + scheme.segmentHeight * 0.5f);
+                var itemCatcher = new GameObject("ItemCatcher").AddComponent<ItemCatcher>();
+                itemCatcher.gameObject.transform.SetParent(floor.gameObject.transform);
+                itemCatcher.Setup(center, realFloorSize, floor);
+            }
         }
         #endregion
-
-
-
-        //// TBR
-        //[System.Obsolete]
-        //public Building GenerateBuildingWithItems(Transform root, int floorSegmentsCount, int buildingFloorsCount, int stairsSegmentIndex, List<ItemScheme_OLD> items)
-        //{
-        //    var floorSize = new FloorSize()
-        //    {
-        //        segmentsCount = floorSegmentsCount,
-        //        stairsSegmentIndex = stairsSegmentIndex
-        //    };
-        //    var building = ConstructBuilding(root, buildingFloorsCount, floorSize);
-        //    building.SpawnItemsInside(items);
-        //    Debug.Log($"Generated building with {floorSize.segmentsCount} segments width, {buildingFloorsCount} floors and stairs at each {floorSize.stairsSegmentIndex} floor segment");
-        //    return building;
-        //}
-        //[System.Obsolete]
-        //public Building GenerateBuildingWithItems(Transform root, int floorSegmentsCount, int buildingFloorsCount, int stairsSegmentIndex, List<Item_OLD> items)
-        //{
-        //    var floorSize = new FloorSize()
-        //    {
-        //        segmentsCount = floorSegmentsCount,
-        //        stairsSegmentIndex = stairsSegmentIndex
-        //    };
-        //    var building = ConstructBuilding(root, buildingFloorsCount, floorSize);
-        //    building.SpawnItemsInside(items);
-        //    Debug.Log($"Generated building with {floorSize.segmentsCount} segments width, {buildingFloorsCount} floors and stairs at each {floorSize.stairsSegmentIndex} floor segment");
-        //    return building;
-        //}
-        //[System.Obsolete]
-        //public Building GenerateBuildingWithItems(Transform root, int floorSegmentsCount, int buildingFloorsCount, int stairsSegmentIndex, Dictionary<int, List<Item_OLD>> items)
-        //{
-        //    var floorSize = new FloorSize()
-        //    {
-        //        segmentsCount = floorSegmentsCount,
-        //        stairsSegmentIndex = stairsSegmentIndex
-        //    };
-        //    var building = ConstructBuilding(root, buildingFloorsCount, floorSize);
-        //    building.SpawnItemsInside(items);
-        //    Debug.Log($"Generated building with {floorSize.segmentsCount} segments width, {buildingFloorsCount} floors and stairs at each {floorSize.stairsSegmentIndex} floor segment");
-        //    return building;
-        //}
     }
 }

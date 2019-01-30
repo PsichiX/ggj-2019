@@ -50,11 +50,13 @@ namespace GaryMoveOut
             return false;
         }
 
+        public event System.Action<GamePhases.GameplayPhase> GameplayPhaseChanged;
         public void CallEvent(GamePhases.GameplayPhase gamePhase, object param)
         {
             if (eventDict.ContainsKey(gamePhase))
             {
                 eventDict[gamePhase]?.Invoke(param);
+                GameplayPhaseChanged?.Invoke(gamePhase);
             }
         }
 
@@ -64,6 +66,16 @@ namespace GaryMoveOut
             PlayerDied?.Invoke(go);
         }
 
+        public event System.Action<Items.Item> ItemDestroyed;
+        public void CallItemDestroyed(Items.Item item)
+        {
+            ItemDestroyed?.Invoke(item);
+        }
 
+        public event System.Action<Items.Item> ItemAddedToFloor;
+        public void CallItemAddedToFloor(Items.Item item)
+        {
+            ItemAddedToFloor?.Invoke(item);
+        }
     }
 }
