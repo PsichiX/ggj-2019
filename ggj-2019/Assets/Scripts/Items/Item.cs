@@ -39,19 +39,16 @@ namespace GaryMoveOut.Items
             itemRigidbody2D.Sleep();
             transform.parent = null;
             boxCollider2D.enabled = false;
-        }
+			cantKillMe = true;
+		}
 
-        public void HideMe()
+		public void HideMe()
         {
-			if (gameObject == null)
-			{
-				return;
-			}
             foreach (var mr in GetComponentsInChildren<MeshRenderer>())
             {
                 mr.enabled = false;
             }
-        }
+		}
 
         public bool cantKillMe = false;
         public bool IsAlive { get; private set; }
@@ -84,19 +81,19 @@ namespace GaryMoveOut.Items
 
         public void UnKillMe()
         {
+            cantKillMe = true;
+            boxCollider2D.enabled = true;
 			itemRigidbody2D.WakeUp();
+			itemRigidbody2D.velocity = Vector2.zero;
 
 			if (pickable == null)
             {
-                gameObject.AddComponent<Pickable>();
+				pickable = gameObject.AddComponent<Pickable>();
             }
             foreach (var mr in GetComponentsInChildren<MeshRenderer>())
             {
                 mr.enabled = true;
             }
-            boxCollider2D.enabled = true;
-
-            cantKillMe = true;
         }
 
 		private void OnTriggerEnter2D(Collider2D collision)

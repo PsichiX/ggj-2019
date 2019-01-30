@@ -323,7 +323,6 @@ namespace GaryMoveOut
             {
 				m_animator.SetBool("isJumping", false);
 				m_gameplayEvents.CallEvent(GamePhases.GameplayPhase.PlayerInTruck, null);
-                Debug.Log("player in truck");
 				aus.PlayOneShot(Resources.Load("Sounds/gain") as AudioClip);
 				HideMe();
             }

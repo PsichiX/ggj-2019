@@ -402,6 +402,9 @@ namespace GaryMoveOut
 
         private bool EndEvacuation()
         {
+			Debug.Log(currentPlayersDead + " currentPlayersDead");
+			Debug.Log(currentPlayersInTruck + " currentPlayersInTruck");
+			Debug.Log(playersCount + " playersCount");
             if (currentPlayersDead + currentPlayersInTruck == playersCount)
             {
                 isEvacuation = false;
@@ -485,7 +488,7 @@ namespace GaryMoveOut
 
         private void ReactionPlayerInTruck(object param)
         {
-            currentPlayersInTruck++;
+			currentPlayersInTruck++;
             EndEvacuation();
         }
 
@@ -510,7 +513,10 @@ namespace GaryMoveOut
 
 			foreach (var i in truckManager.GetTruckItemList())
 			{
-				i.HideMe();
+				if (i != null)
+				{
+					i.HideMe();
+				}
 			}
 
 			float delay = Vector2.Distance(placeBuildingOut.transform.position, placeBuildingIn.transform.position) / truckSpeedModifier;
@@ -558,6 +564,7 @@ namespace GaryMoveOut
 				players[i].InputLayout = (InputHandler.Layout)(playerInputs[i]);
 				cameraTargets.Add(players[i].gameObject);
 			}
+			currentPlayersInTruck = 0;
 			cameraTargets.Add(placeBuildingIn);
 			multiTargetCamera.SetTargets(cameraTargets.ToArray());
 			foreach (var i in truckManager.GetTruckItemList())
@@ -566,15 +573,17 @@ namespace GaryMoveOut
 				i.UnKillMe();
 			}
 			// Fixme:
+			cachedTruckItems = truckManager.GetTruckItemList();
 			Destroy(truckManager.Truck);
 			truckManager.ResetTruckItemList();
 			events.CallEvent(GamePhases.GameplayPhase.DeEvacuation, null);
 			InvokeRepeating("AreThereTruckItemsLeft", 1f, 0.5f);
         }
 
+		private List<Item> cachedTruckItems;
 		private bool AreThereTruckItemsLeft()
 		{
-			foreach (var i in truckManager.GetTruckItemList())
+			foreach (var i in cachedTruckItems)
 			{
 				if (i != null)
 				{
