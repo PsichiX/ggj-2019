@@ -7,7 +7,7 @@ public class AddForce : MonoBehaviour
 	[SerializeField] private Rigidbody[] shards;
 	public bool right;
 
-	public void Peknij()
+	public void TearMeApart()
 	{
 		if (right)
 		{

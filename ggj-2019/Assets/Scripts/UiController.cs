@@ -26,6 +26,7 @@ namespace GaryMoveOut
 		[SerializeField] private GameObject manyMonthsLater;
 		[SerializeField] private UnityEngine.UI.Image black;
 		[SerializeField] private AudioSource backgroundMusic;
+		[SerializeField] private AudioSource catastrophyAudio;
 
 		public int CurrentFloorBadEvent { get { return gameplayManager.currentFloorBadEvent; } }
 		public EvecuationDirection CurrentEvecuationDirection { get { return gameplayManager.currentEvacuationDirection; } }
@@ -68,10 +69,11 @@ namespace GaryMoveOut
 		private void Attach()
 		{
 			gameplayEvents = GameplayEvents.GetGameplayEvents();
-			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.GameOver, ShowGameOverText);
+			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.BadEventStart, SetActionMusic);
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.Summary, ShowWinText);
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.BadEventStart, ReactionFadeIn);
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.GameOver, ReactionFadeOut);
+			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.GameOver, ShowGameOverText);
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.TruckStart, ReactionPlayerInTruck);
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.FewDaysLater, ReactionFewDaysLater);
 
@@ -87,15 +89,28 @@ namespace GaryMoveOut
 		{
 			manyMonthsLater.SetActive(true);
 			backgroundMusic.DOFade(0, 1.2f);
-			DOVirtual.DelayedCall(3f, SetActionMusic);
+			DOVirtual.DelayedCall(3f, () => SetActionMusic(null));
 		}
 
-		private void SetActionMusic()
+		private void SetActionMusic(object obj)
 		{
 			manyMonthsLater.SetActive(false);
-			backgroundMusic.clip = Resources.Load("Sounds/katastrofa") as AudioClip;
-			backgroundMusic.Play();
-			backgroundMusic.DOFade(1, 2f);
+			var type = gameplayManager.currentCatastrophy.Type;
+			if (type == CatastrophyType.UFO)
+			{
+				catastrophyAudio.clip = Resources.Load("Sounds/Ufo") as AudioClip;
+			}
+			else if (type == CatastrophyType.Fire)
+			{
+				catastrophyAudio.clip = Resources.Load("Sounds/Fire") as AudioClip;
+			}
+			DOVirtual.DelayedCall(5f, () => catastrophyAudio.Play());
+			if (backgroundMusic.volume != 1)
+			{
+				backgroundMusic.clip = Resources.Load("Sounds/katastrofa") as AudioClip;
+				backgroundMusic.Play();
+				backgroundMusic.DOFade(1, 2f);
+			}
 		}
 
 		private void SetCalmMusic()

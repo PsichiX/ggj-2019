@@ -260,7 +260,7 @@ namespace GaryMoveOut
             }
         }
 
-        private BaseCatastrophy currentCatastrophy;
+        public BaseCatastrophy currentCatastrophy;
         private void SetupCatastrophy()
         {
             currentCatastrophy = catastrophiesDatabase.GetRandomCatastrophy();
@@ -368,6 +368,7 @@ namespace GaryMoveOut
 
         private void NextFloorBadEvent()
         {
+			// FixMe: this needs fixing
             bool isGameOver = false;
             switch (currentEvacuationDirection)
             {
