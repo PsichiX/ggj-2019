@@ -255,7 +255,7 @@ namespace GaryMoveOut
                         m_lastDown = down;
                         if (down)
                         {
-                            if (m_isNearPortal && m_canTeleportUp)
+                            if (m_isNearPortal && m_canTeleportDown)
                             {
                                 TeleportDown();
                             }
