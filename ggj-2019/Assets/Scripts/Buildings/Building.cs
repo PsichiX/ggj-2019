@@ -44,8 +44,6 @@ namespace GaryMoveOut
             }
         }
 
-
-
         private List<int> segmentIndicesTemp = new List<int>();
 
         public Vector3? GetSpawnPosition()

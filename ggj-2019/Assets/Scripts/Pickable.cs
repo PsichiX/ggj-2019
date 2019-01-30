@@ -23,6 +23,7 @@ namespace GaryMoveOut
 
         public void PickUp(PlayerController.Side side)
         {
+			item.cantKillMe = true;
             m_rigidBody.bodyType = RigidbodyType2D.Kinematic;
             gameObject.layer = LayerMask.NameToLayer("FurnitureInUse");
             if (item.Scheme.vertical)
@@ -33,6 +34,7 @@ namespace GaryMoveOut
 
         public void PutDown()
         {
+			item.cantKillMe = false;
             m_rigidBody.bodyType = RigidbodyType2D.Dynamic;
             gameObject.layer = LayerMask.NameToLayer("Furniture");
             if (m_currentTweener != null)
