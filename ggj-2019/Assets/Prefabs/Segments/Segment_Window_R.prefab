@@ -618,6 +618,16 @@ PrefabInstance:
       propertyPath: glassSheet
       value: 
       objectReference: {fileID: 6483791834073735740}
+    - target: {fileID: 3916112047534730789, guid: bab7ab1877dac7549b12688f4a1b8b97,
+        type: 3}
+      propertyPath: m_TagString
+      value: InteractibleRoot
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058930226266089706, guid: bab7ab1877dac7549b12688f4a1b8b97,
+        type: 3}
+      propertyPath: m_Offset.x
+      value: 0.01
+      objectReference: {fileID: 0}
     - target: {fileID: 2289283776977261856, guid: bab7ab1877dac7549b12688f4a1b8b97,
         type: 3}
       propertyPath: m_Offset.x

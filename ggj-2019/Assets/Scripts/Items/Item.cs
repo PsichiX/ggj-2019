@@ -43,6 +43,10 @@ namespace GaryMoveOut.Items
 
         public void HideMe()
         {
+			if (gameObject == null)
+			{
+				return;
+			}
             foreach (var mr in GetComponentsInChildren<MeshRenderer>())
             {
                 mr.enabled = false;

@@ -582,7 +582,7 @@ namespace GaryMoveOut
 				}
 			}
 			CancelInvoke();
-			events.CallEvent(GamePhases.GameplayPhase.FewDaysLater, null);
+			PhaseFewDaysLater();
 			return false;
 		}
 
