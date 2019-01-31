@@ -559,6 +559,10 @@ namespace GaryMoveOut
 			cameraTargets.Clear();
 			for (int i = 0; i < currentPlayersInTruck; i++)
 			{
+				if (players[i] == null)
+				{
+					return;
+				}
 				// FixMe : here be bugs
 				players[i].transform.position = truckManager.Truck.transform.position + new Vector3(0, 0.5f, 0);
 				players[i].ResetPlayer();
