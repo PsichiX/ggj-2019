@@ -440,6 +440,7 @@ namespace GaryMoveOut
 					instance.transform.position = pos + playerSpawnOffset;
 					instance.transform.rotation = Quaternion.identity;
 					var player = players[i] = instance.GetComponent<PlayerController>();
+					player.SetPlayerId(i);
 
 					AddMultiCameraTarget(instance.gameObject);
 					player.InputLayout = (InputHandler.Layout)(playerInputs[i]);

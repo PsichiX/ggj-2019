@@ -42,7 +42,7 @@ namespace GaryMoveOut
 		[SerializeField] private Vector2 m_aimStrengthRange = new Vector2(1, 10);
 		[SerializeField] private float m_aimingAngleSpeed = 1;
 		[SerializeField] private float m_aimingStrengthSpeed = 1;
-		[SerializeField] private SkinnedMeshRenderer meshRenderer;
+		[SerializeField] private SkinnedMeshRenderer[] meshRenderers;
 		[SerializeField] private GameObject blood;
 
 		private Rigidbody2D m_rigidBody;
@@ -79,6 +79,13 @@ namespace GaryMoveOut
 		}
 
 		private InputHandler.Layout cachedLayout;
+		private int whichPlayerIsThis;
+		public void SetPlayerId(int which)
+		{
+			whichPlayerIsThis = which;
+			StartConfig.GetStartConfig().SetOutfit(whichPlayerIsThis, this);
+		}
+
 		private void Start()
 		{
 			Setup();
@@ -113,7 +120,10 @@ namespace GaryMoveOut
 
 		private void SetRandomColor()
 		{
-			meshRenderer.materials[0].color = UnityEngine.Random.ColorHSV(0, 1, 0.6f, 1f);
+			foreach (var m in meshRenderers)
+			{
+				m.materials[0].color = UnityEngine.Random.ColorHSV(0, 1, 0.6f, 1f);
+			}
 		}
 
 		private void OnGameOver(object obj)
@@ -163,6 +173,11 @@ namespace GaryMoveOut
 
 		private void FixedUpdate()
 		{
+			if (transform.position.y < -50)
+			{
+				Destroy(gameObject);
+				return;
+			}
 			Velocity = 0;
 			if (m_inputHandler != null && m_inputBlocked == false)
 			{
@@ -389,7 +404,10 @@ namespace GaryMoveOut
 		{
 			m_rigidBody.Sleep();
 			GetComponentInChildren<BoxCollider2D>().enabled = false;
-			GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
+			foreach (var m in meshRenderers)
+			{
+				m.enabled = false;
+			}
 		}
 
 		private void UnHideMe()
@@ -624,6 +642,20 @@ namespace GaryMoveOut
 			m_animator.SetBool("isJumping", false);
 			m_animator?.SetBool("PickedUp", false);
 			transform.DORotate(Vector3.zero, 0.1f);
+		}
+
+		[SerializeField] private GameObject[] outfits;
+		public void SetOutfit(int whichOutfit)
+		{
+			if (whichOutfit == 0) //Default outfit
+			{
+				foreach (var o in outfits)
+				{
+					o.SetActive(false);
+				}
+				return;
+			}
+			outfits[whichOutfit - 1].SetActive(true);
 		}
 	}
 }

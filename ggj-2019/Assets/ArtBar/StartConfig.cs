@@ -2,83 +2,116 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StartConfig : MonoBehaviour
+namespace GaryMoveOut
 {
-    private static StartConfig _instance;
-    public static StartConfig GetStartConfig()
-    {
-        return _instance;
-    }
+	public class StartConfig : MonoBehaviour
+	{
+		public Dictionary<int, Outfit> playersChoosenOutfits = new Dictionary<int, Outfit>();
+		public List<Sprite> outfitSprites = new List<Sprite>();
+		public enum Outfit
+		{
+			Default,
+			Shark
+		}
+		public Sprite ChooseOutfit(int player, int outfit)
+		{
+			if (playersChoosenOutfits.ContainsKey(player))
+			{
+				playersChoosenOutfits[player] = (Outfit)outfit;
+			}
+			else
+			{
+				playersChoosenOutfits.Add(player, (Outfit)outfit);
+			}
+			return outfitSprites[(int)outfit];
+		}
 
-    public bool[] players;
-    private int playerMaxNumber = 3;
+		public void SetOutfit(int player, PlayerController pc)
+		{
+			int outFitChosen = 0;
+			if (playersChoosenOutfits.ContainsKey(player))
+			{
+				outFitChosen = (int)playersChoosenOutfits[player];
+			}
+			pc.SetOutfit(outFitChosen);
+		}
 
-    void Awake()
-    {
-        if (_instance != null && _instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        else
-        {
-            _instance = this;
-            DontDestroyOnLoad(this);
-            InitPlayers();
-        }
+		private static StartConfig _instance;
+		public static StartConfig GetStartConfig()
+		{
+			return _instance;
+		}
 
-    }
+		public bool[] players;
+		private int playerMaxNumber = 3;
 
-    private void InitPlayers()
-    {
-        players = new bool[playerMaxNumber];
-        for(int i=0; i<playerMaxNumber; i++)
-        {
-            players[i] = false;
-        }
-    }
+		void Awake()
+		{
+			if (_instance != null && _instance != this)
+			{
+				Destroy(gameObject);
+				return;
+			}
+			else
+			{
+				_instance = this;
+				DontDestroyOnLoad(this);
+				InitPlayers();
+			}
+		}
 
-	private int lastPlayer;
-    public void ActivePlayer(int playerNumber)
-    {
-        if( playerNumber > 0 && playerNumber <= playerMaxNumber)
-        {
-            players[playerNumber-1] = !players[playerNumber - 1];
-        }
-    }
+		private void InitPlayers()
+		{
+			players = new bool[playerMaxNumber];
+			for (int i = 0; i < playerMaxNumber; i++)
+			{
+				players[i] = false;
+			}
+		}
 
-    public void DeactivePlayer(int playerNumber)
-    {
-        if (playerNumber > 0 && playerNumber <= playerMaxNumber)
-        {
-            players[playerNumber-1] = false;
-        }
-    }
-    
-    public int GetMaxPlayerNumber()
-    {
-        return playerMaxNumber;
-    }
+		private int lastPlayer;
+		public void ActivePlayer(int playerNumber)
+		{
+			if (playerNumber > 0 && playerNumber <= playerMaxNumber)
+			{
+				players[playerNumber - 1] = !players[playerNumber - 1];
+			}
+		}
 
-    public int GetActivePlayerCount()
-    {
-        int activePlayersCounter = 0;
-        for (int i = 0; i < playerMaxNumber; i++)
-        {
-            if( players[i] )
-            {
-                activePlayersCounter++;
-            }
-        }
-        return activePlayersCounter;
-    }
+		public void DeactivePlayer(int playerNumber)
+		{
+			if (playerNumber > 0 && playerNumber <= playerMaxNumber)
+			{
+				players[playerNumber - 1] = false;
+			}
+		}
 
-    public bool IsPlayerActive(int playerNumber)
-    {
-        if (playerNumber > 0 && playerNumber <= playerMaxNumber)
-        {
-            return players[playerNumber - 1];
-        }
-        return false;
-    }
+		public int GetMaxPlayerNumber()
+		{
+			return playerMaxNumber;
+		}
+
+		public int GetActivePlayerCount()
+		{
+			int activePlayersCounter = 0;
+			for (int i = 0; i < playerMaxNumber; i++)
+			{
+				if (players[i])
+				{
+					activePlayersCounter++;
+				}
+			}
+			return activePlayersCounter;
+		}
+
+		public bool IsPlayerActive(int playerNumber)
+		{
+			if (playerNumber > 0 && playerNumber <= playerMaxNumber)
+			{
+				return players[playerNumber - 1];
+			}
+			return false;
+		}
+	}
+
 }
