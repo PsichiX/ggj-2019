@@ -1274,7 +1274,7 @@ Transform:
   - {fileID: 919023256}
   m_Father: {fileID: 1254310052}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -20.541204, y: -30.589558, z: -33.06005}
+  m_LocalEulerAnglesHint: {x: -20.27625, y: -30.81136, z: -32.4919}
 --- !u!61 &882972766
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1388,7 +1388,7 @@ Transform:
   - {fileID: 370009868}
   m_Father: {fileID: 859094503}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -10.198014, y: 42.46225, z: 51.72403}
+  m_LocalEulerAnglesHint: {x: -9.439255, y: 43.302914, z: 46.679707}
 --- !u!1 &968016453
 GameObject:
   m_ObjectHideFlags: 0
@@ -1419,7 +1419,7 @@ Transform:
   - {fileID: 1468881252}
   m_Father: {fileID: 1165046776}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 90, y: 0.5239364, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 5.3694997, z: 0}
 --- !u!1 &988270874
 GameObject:
   m_ObjectHideFlags: 0
@@ -5126,7 +5126,7 @@ Transform:
   - {fileID: 859094503}
   m_Father: {fileID: 1468881252}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0.28895926, y: -7.170001, z: -7.3292713}
+  m_LocalEulerAnglesHint: {x: 0.30081928, y: -7.192697, z: -7.764575}
 --- !u!1 &1257228011
 GameObject:
   m_ObjectHideFlags: 0
@@ -5376,7 +5376,7 @@ Transform:
   - {fileID: 1254310052}
   m_Father: {fileID: 968016454}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -2.692301, y: 9.023309, z: 16.47749}
+  m_LocalEulerAnglesHint: {x: -2.0690885, y: 9.178732, z: 12.589842}
 --- !u!1 &1475337052
 GameObject:
   m_ObjectHideFlags: 0
@@ -6837,7 +6837,7 @@ MonoBehaviour:
   placeBuildingOut: {fileID: 5846282615831570882}
   placeBuildingIn: {fileID: 5846282614430594310}
   playerSpawnOffset: {x: 0, y: 0, z: 0}
-  prefabPlayer: {fileID: 8141853408582077109, guid: b1a4ca32a7a67514bb17d94f369601ff,
+  prefabPlayer: {fileID: 8141853408582077109, guid: d34ef202e1f00cd4995c4b1fa1f1f4b9,
     type: 3}
   cameraTargets: []
   currentCatastrophy: {fileID: 0}
