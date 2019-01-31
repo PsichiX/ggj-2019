@@ -70,7 +70,7 @@ namespace GaryMoveOut.Items
 
         private void KillMe()
         {
-			if (transform == null)
+			if (gameObject == null || transform == null)
 			{
 				return;
 			}

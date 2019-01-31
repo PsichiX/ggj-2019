@@ -560,10 +560,10 @@ namespace GaryMoveOut
 			{
 				// FixMe : here be bugs
 				players[i].transform.position = truckManager.Truck.transform.position + new Vector3(0, 0.5f, 0);
-				players[i].transform.DOLocalRotate(Vector3.zero, 0.1f);
-				//p.GetComponent<PlayerController>().Setup();
+				players[i].ResetPlayer();
 				players[i].InputLayout = (InputHandler.Layout)(playerInputs[i]);
 				cameraTargets.Add(players[i].gameObject);
+				//p.GetComponent<PlayerController>().Setup();
 			}
 			currentPlayersInTruck = 0;
 			cameraTargets.Add(placeBuildingIn);
