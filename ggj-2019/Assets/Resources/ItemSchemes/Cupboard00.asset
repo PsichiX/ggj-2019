@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Cupboard00
   m_EditorClassIdentifier: 
   value: 10
-  weight: 10
+  weight: 9
   vertical: 0
   materialType: 1
   itemPrefab: {fileID: 6162459562674995683, guid: 977a1515772948b43bc4feaf66220b55,

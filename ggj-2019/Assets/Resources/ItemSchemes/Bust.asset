@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcc529896a4670c4886a88b1246adf71, type: 3}
   m_Name: Bust
   m_EditorClassIdentifier: 
-  value: 10
+  value: 50
   weight: 10
   vertical: 0
   materialType: 5

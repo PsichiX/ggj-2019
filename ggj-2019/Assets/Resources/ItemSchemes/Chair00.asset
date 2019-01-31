@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Chair00
   m_EditorClassIdentifier: 
   value: 10
-  weight: 10
+  weight: 5
   vertical: 0
   materialType: 1
   itemPrefab: {fileID: 5284254135968452904, guid: 3e80df02658128f4e9cbd4bcff155a88,
