@@ -8,7 +8,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8558976584836231972}
-  m_BodyType: 2
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -18,8 +18,8 @@ Rigidbody2D:
   m_GravityScale: 1
   m_Material: {fileID: 6200000, guid: 6d597cc65a4f2744d9b04a7ddc052736, type: 2}
   m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_SleepingMode: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!1001 &4989237577142485199
 PrefabInstance:
@@ -88,15 +88,35 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5917958495341000690, guid: bab7ab1877dac7549b12688f4a1b8b97,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.824
+      objectReference: {fileID: 0}
+    - target: {fileID: 5977260281057181759, guid: bab7ab1877dac7549b12688f4a1b8b97,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.106
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689776535810563318, guid: bab7ab1877dac7549b12688f4a1b8b97,
+        type: 3}
+      propertyPath: m_Name
+      value: ItemCatcherIn
+      objectReference: {fileID: 0}
     - target: {fileID: 2732429860240710919, guid: bab7ab1877dac7549b12688f4a1b8b97,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.259
+      value: -2.633
       objectReference: {fileID: 0}
     - target: {fileID: 3916112047534730789, guid: bab7ab1877dac7549b12688f4a1b8b97,
         type: 3}
       propertyPath: m_TagString
       value: InteractibleRoot
+      objectReference: {fileID: 0}
+    - target: {fileID: 3916112047534730789, guid: bab7ab1877dac7549b12688f4a1b8b97,
+        type: 3}
+      propertyPath: m_Name
+      value: ItemCatcherOut
       objectReference: {fileID: 0}
     - target: {fileID: 6058930226266089706, guid: bab7ab1877dac7549b12688f4a1b8b97,
         type: 3}

@@ -37,7 +37,7 @@ namespace GaryMoveOut.Items
         private void FreezeMe()
         {
             Destroy(pickable);
-            itemRigidbody2D.Sleep();
+            itemRigidbody2D.simulated = false;
             transform.parent = null;
             boxCollider2D.enabled = false;
 			cantKillMe = true;
@@ -58,8 +58,8 @@ namespace GaryMoveOut.Items
             {
                 return;
             }
-			itemRigidbody2D.Sleep();
-            IsAlive = false;
+			itemRigidbody2D.simulated = false;
+			IsAlive = false;
             var ex = Instantiate(Scheme.explosion, transform);
 			HideMe();
             ex.transform.localPosition = Vector3.zero;
@@ -82,7 +82,7 @@ namespace GaryMoveOut.Items
         {
             cantKillMe = true;
             boxCollider2D.enabled = true;
-			itemRigidbody2D.WakeUp();
+			itemRigidbody2D.simulated = true;
 			itemRigidbody2D.velocity = Vector2.zero;
 
 			if (pickable == null)

@@ -8,9 +8,7 @@ namespace GaryMoveOut
         [SerializeField] private bool isInside = true;
         [SerializeField] private AddForce addForce;
         [SerializeField] private GameObject glassSheet;
-		private bool isBroken = false;
-        private Collider coll;
-
+		public bool isBroken = false;
         private Floor floor;
 
         public void Setup(Floor floor)
@@ -18,9 +16,9 @@ namespace GaryMoveOut
             this.floor = floor;
         }
 
-        private void OnTriggerEnter2D(Collider2D other)
+        private void OnTriggerStay2D(Collider2D other)
         {
-            var item = other.GetComponentInParent<Item>();
+            var item = other.GetComponent<Item>();
             if (item != null && floor != null)
             {
                 if (isInside)
@@ -45,12 +43,12 @@ namespace GaryMoveOut
 						{
 							YouAreTearingMeApartItem(true);
 						}
-						else
+						else if (rigid.velocity.magnitude != 0)
 						{
 							YouAreTearingMeApartItem(false);
 						}
+						isBroken = true;
 					}
-					isBroken = true;
 				}
             }
         }

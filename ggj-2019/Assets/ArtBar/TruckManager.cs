@@ -60,7 +60,7 @@ namespace GaryMoveOut
             return truckLoader.GetItemList();
         }
 
-        public void StartTruckMovement(float duration)
+		public void StartTruckMovement(float duration)
         {
 			truckAudio = Truck.GetComponent<AudioSource>();
 			if (truckAudio != null)

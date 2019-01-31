@@ -601,6 +601,18 @@ namespace GaryMoveOut
 			return false;
 		}
 
+		public void RemoveItemFromCachedList(Item it)
+		{
+			if (cachedTruckItems == null)
+			{
+				return;
+			}
+			if (cachedTruckItems.Contains(it))
+			{
+				cachedTruckItems.Remove(it);
+			}
+		}
+
         private void ReactionLastItemShot(object param)
         {
 			truckManager.ResetTruckItemList();

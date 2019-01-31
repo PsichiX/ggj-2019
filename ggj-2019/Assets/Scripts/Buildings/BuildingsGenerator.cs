@@ -107,7 +107,7 @@ namespace GaryMoveOut
                     break;
             }
             var segment = GameObject.Instantiate(prefab, position, rotation, floor.transform) as GameObject;
-            var itemCatcher = segment.GetComponent<ItemCatcher>();
+            var itemCatcher = segment.GetComponentInChildren<ItemCatcher>();
             if (itemCatcher != null)
             {
                 itemCatcher.Setup(floor);
