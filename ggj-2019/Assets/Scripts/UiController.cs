@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using static GaryMoveOut.GameplayManager;
 
 namespace GaryMoveOut
@@ -27,10 +28,11 @@ namespace GaryMoveOut
 		[SerializeField] private UnityEngine.UI.Image black;
 		[SerializeField] private AudioSource backgroundMusic;
 		[SerializeField] private AudioSource catastrophyAudio;
+		[SerializeField] private GameObject dangerNotification;
+		[SerializeField] private Image dangerSlider;
 
 		public int CurrentFloorBadEvent { get { return gameplayManager.currentFloorBadEvent; } }
 		public EvecuationDirection CurrentEvecuationDirection { get { return gameplayManager.currentEvacuationDirection; } }
-
 
 		private PlayerController[] m_players;
 		private DoorPortal[] m_portals;
@@ -72,12 +74,24 @@ namespace GaryMoveOut
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.BadEventStart, SetActionMusic);
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.Summary, ShowWinText);
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.BadEventStart, ReactionFadeIn);
+			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.FloorEvacuationBreakPoint, ReactionBreakPoint);
+			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.FloorEvacuationEnd, ReactionEvacuationEnd);
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.GameOver, ReactionFadeOut);
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.GameOver, ShowGameOverText);
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.TruckStart, ReactionPlayerInTruck);
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.FewDaysLater, ReactionFewDaysLater);
 
 			GameplayManager.GetGameplayManager().PointsCollectedUpdate += UpdatePointsOnItemAdd;
+		}
+
+		private void ReactionBreakPoint(object obj)
+		{
+			dangerNotification.SetActive(true);
+		}
+
+		private void ReactionEvacuationEnd(object obj)
+		{
+			dangerNotification.SetActive(false);
 		}
 
 		private void ReactionPlayerInTruck(object obj)
@@ -234,9 +248,9 @@ namespace GaryMoveOut
 					var aim = m_aims[i];
 					aim.anchoredPosition = sp;
 					aim.rotation = Quaternion.Euler(0, 0, angle);
-					var sf = Mathf.InverseLerp(m_arrowScaleMapFrom.x, m_arrowScaleMapFrom.y, strength);
-					var st = Mathf.Lerp(m_arrowScaleMapTo.x, m_arrowScaleMapTo.y, sf);
-					aim.localScale = new Vector3(st, 1, 1);
+					//var sf = Mathf.InverseLerp(m_arrowScaleMapFrom.x, m_arrowScaleMapFrom.y, strength);
+					//var st = Mathf.Lerp(m_arrowScaleMapTo.x, m_arrowScaleMapTo.y, sf);
+					aim.GetComponent<RectTransform>().sizeDelta = new Vector2(50 + (strength * 10), 32);
 				}
 			}
 		}

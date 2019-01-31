@@ -88,6 +88,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2732429860240710919, guid: bab7ab1877dac7549b12688f4a1b8b97,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.259
+      objectReference: {fileID: 0}
+    - target: {fileID: 3916112047534730789, guid: bab7ab1877dac7549b12688f4a1b8b97,
+        type: 3}
+      propertyPath: m_TagString
+      value: InteractibleRoot
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058930226266089706, guid: bab7ab1877dac7549b12688f4a1b8b97,
+        type: 3}
+      propertyPath: m_Offset.x
+      value: 0.01
+      objectReference: {fileID: 0}
     - target: {fileID: 1582001518943583829, guid: bab7ab1877dac7549b12688f4a1b8b97,
         type: 3}
       propertyPath: shards.Array.data[0]
@@ -588,21 +603,6 @@ PrefabInstance:
       propertyPath: shards.Array.data[99]
       value: 
       objectReference: {fileID: 2619929626130323164}
-    - target: {fileID: 2428824600442980346, guid: bab7ab1877dac7549b12688f4a1b8b97,
-        type: 3}
-      propertyPath: isInside
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2428824600442980346, guid: bab7ab1877dac7549b12688f4a1b8b97,
-        type: 3}
-      propertyPath: addForce
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 2428824600442980346, guid: bab7ab1877dac7549b12688f4a1b8b97,
-        type: 3}
-      propertyPath: glassSheet
-      value: 
-      objectReference: {fileID: 6483791834073735740}
     - target: {fileID: 2221220518099103701, guid: bab7ab1877dac7549b12688f4a1b8b97,
         type: 3}
       propertyPath: isInside
@@ -618,16 +618,21 @@ PrefabInstance:
       propertyPath: glassSheet
       value: 
       objectReference: {fileID: 6483791834073735740}
-    - target: {fileID: 3916112047534730789, guid: bab7ab1877dac7549b12688f4a1b8b97,
+    - target: {fileID: 2428824600442980346, guid: bab7ab1877dac7549b12688f4a1b8b97,
         type: 3}
-      propertyPath: m_TagString
-      value: InteractibleRoot
+      propertyPath: isInside
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6058930226266089706, guid: bab7ab1877dac7549b12688f4a1b8b97,
+    - target: {fileID: 2428824600442980346, guid: bab7ab1877dac7549b12688f4a1b8b97,
         type: 3}
-      propertyPath: m_Offset.x
-      value: 0.01
+      propertyPath: addForce
+      value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2428824600442980346, guid: bab7ab1877dac7549b12688f4a1b8b97,
+        type: 3}
+      propertyPath: glassSheet
+      value: 
+      objectReference: {fileID: 6483791834073735740}
     - target: {fileID: 2289283776977261856, guid: bab7ab1877dac7549b12688f4a1b8b97,
         type: 3}
       propertyPath: m_Offset.x

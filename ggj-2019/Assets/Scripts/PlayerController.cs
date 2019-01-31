@@ -325,6 +325,8 @@ namespace GaryMoveOut
 			if (m_isJumping == true && m_rigidBody.velocity.magnitude < 0.1f)
 			{
 				m_animator.SetBool("isJumping", false);
+				m_rigidBody.freezeRotation = true;
+				transform.localRotation = Quaternion.identity;
 				m_isJumping = false;
 				m_inputBlocked = false;
 				m_inputHandler.InputLayout = cachedLayout;
@@ -416,6 +418,7 @@ namespace GaryMoveOut
 			GetComponentInChildren<BoxCollider2D>().enabled = true;
 			GetComponentInChildren<BoxCollider2D>().size = new Vector2(1, 2);
 			m_rigidBody.WakeUp();
+			transform.localRotation = Quaternion.identity;
 			m_rigidBody.freezeRotation = true;
 			GetComponentInChildren<SkinnedMeshRenderer>().enabled = true;
 		}
@@ -639,8 +642,9 @@ namespace GaryMoveOut
 
 		public void ResetPlayer()
 		{
-			m_rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
 			m_animator.SetBool("isJumping", false);
+			transform.localRotation = Quaternion.identity;
+			m_rigidBody.freezeRotation = true;
 			m_animator?.SetBool("PickedUp", false);
 			transform.DORotate(Vector3.zero, 0.1f);
 		}
