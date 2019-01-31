@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b10261e0fd998b42aeced4050621b70, type: 3}
+  m_Name: OutfitIconsDatabase
+  m_EditorClassIdentifier: 
+  outfitSprites:
+  - {fileID: 21300000, guid: 570cf9bd997794e4ab592f15e5e2fae1, type: 3}
+  - {fileID: 21300000, guid: e24d8c7b6d4156c4c979b8cc409dba7d, type: 3}

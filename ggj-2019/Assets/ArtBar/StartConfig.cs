@@ -7,14 +7,20 @@ namespace GaryMoveOut
 	public class StartConfig : MonoBehaviour
 	{
 		public Dictionary<int, Outfit> playersChoosenOutfits = new Dictionary<int, Outfit>();
-		public List<Sprite> outfitSprites = new List<Sprite>();
+		public OutfitIconsDatabase outfitIcons;
+
 		public enum Outfit
 		{
 			Default,
 			Shark
 		}
+
 		public Sprite ChooseOutfit(int player, int outfit)
 		{
+			if (outfitIcons == null)
+			{
+				outfitIcons = Resources.Load("Databases/OutfitIconsDatabase") as OutfitIconsDatabase;
+			}
 			if (playersChoosenOutfits.ContainsKey(player))
 			{
 				playersChoosenOutfits[player] = (Outfit)outfit;
@@ -23,7 +29,7 @@ namespace GaryMoveOut
 			{
 				playersChoosenOutfits.Add(player, (Outfit)outfit);
 			}
-			return outfitSprites[(int)outfit];
+			return outfitIcons.outfitSprites[(int)outfit];
 		}
 
 		public void SetOutfit(int player, PlayerController pc)
@@ -75,7 +81,6 @@ namespace GaryMoveOut
 			}
 		}
 
-		private int lastPlayer;
 		public void ActivePlayer(int playerNumber)
 		{
 			if (playerNumber > 0 && playerNumber <= playerMaxNumber)

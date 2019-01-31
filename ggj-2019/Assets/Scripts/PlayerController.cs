@@ -160,6 +160,7 @@ namespace GaryMoveOut
 				m_gameplayEvents.DetachFromEvent(GamePhases.GameplayPhase.PlayerDie, OnPlayerDie);
 				m_gameplayEvents.DetachFromEvent(GamePhases.GameplayPhase.FloorEvacuationEnd, OnEvacuationEnd);
 				m_gameplayEvents.DetachFromEvent(GamePhases.GameplayPhase.GameOver, OnGameOver);
+				m_gameplayEvents.CallEvent(GamePhases.GameplayPhase.GameOver, null);
 			}
 		}
 
