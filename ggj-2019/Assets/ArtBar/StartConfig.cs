@@ -39,6 +39,12 @@ namespace GaryMoveOut
 		private static StartConfig _instance;
 		public static StartConfig GetStartConfig()
 		{
+			if (_instance == null)
+			{
+				var ob = new GameObject("startConfig");
+				ob.AddComponent<StartConfig>();
+				return ob.GetComponent<StartConfig>();
+			}
 			return _instance;
 		}
 
