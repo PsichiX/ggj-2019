@@ -89,10 +89,10 @@ namespace GaryMoveOut
             multiTargetCamera = camera.GetComponent<CameraMultiTarget>();
             cameraTargets.Clear();
 
-            NewItemInTruck += OnNewItemInTruck;
+            NewItemInTruck += GainPointsForItem;
         }
 
-        private void OnNewItemInTruck(ItemScheme scheme)
+        public void GainPointsForItem(ItemScheme scheme)
         {
             pointsCollected += (int)scheme.value;
             PointsCollectedUpdate?.Invoke(pointsCollected);
@@ -619,7 +619,7 @@ namespace GaryMoveOut
 		}
 
 		private bool atLeastOneItemInNewBuilding;
-		public void RemoveItemFromCachedList(Item it)
+		public void RemoveFromCachedList(Item it)
 		{
 			if (cachedTruckItems == null)
 			{
@@ -627,6 +627,18 @@ namespace GaryMoveOut
 			}
 			if (cachedTruckItems.Contains(it))
 			{
+				cachedTruckItems.Remove(it);
+			}
+		}
+		public void SetItemInBuilding(Item it)
+		{
+			if (cachedTruckItems == null)
+			{
+				return;
+			}
+			if (cachedTruckItems.Contains(it))
+			{
+				Debug.Log(it.name + " still in list");
 				atLeastOneItemInNewBuilding = true;
 			}
 		}

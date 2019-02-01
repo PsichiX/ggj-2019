@@ -30,7 +30,7 @@ namespace GaryMoveOut
             if (!items.Contains(item))
             {
                 items.Add(item);
-				GameplayManager.GetGameplayManager().RemoveItemFromCachedList(item);
+				GameplayManager.GetGameplayManager().SetItemInBuilding(item);
 			}
         }
         

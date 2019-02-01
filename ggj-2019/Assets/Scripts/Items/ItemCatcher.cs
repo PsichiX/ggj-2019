@@ -1,4 +1,5 @@
 ﻿using GaryMoveOut.Items;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace GaryMoveOut
@@ -16,21 +17,23 @@ namespace GaryMoveOut
             this.floor = floor;
         }
 
+		//List<Item> alreadyPaid = new List<Item>();
         private void OnTriggerStay2D(Collider2D other)
         {
             var item = other.GetComponent<Item>();
             if (item != null && floor != null)
             {
-                if (isInside)
+                if (/*isInside && */floor.items.Contains(item) == false)
                 {
                     Debug.Log("Added " + item.name + "to floor " + floor.Type);
                     floor.AddItem(item);
-                }
-                else
-                {
-                    Debug.Log("Removed " + item.name + "from floor " + floor.Type);
-                    floor.RemoveItem(item);
-                }
+					GameplayManager.GetGameplayManager().GainPointsForItem(item.Scheme);
+				}
+                //else if (floor.items.Contains(item) == true)
+                //{
+                //    Debug.Log("Removed " + item.name + "from floor " + floor.Type);
+                //    floor.RemoveItem(item);
+                //}
             }
             if (addForce != null)
             {

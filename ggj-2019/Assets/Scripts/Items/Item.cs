@@ -22,7 +22,12 @@ namespace GaryMoveOut.Items
             audioSource = GetComponent<AudioSource>();
         }
 
-        public void Setup(ItemScheme scheme)
+		private void OnDestroy()
+		{
+			GameplayManager.GetGameplayManager().RemoveFromCachedList(this);
+		}
+
+		public void Setup(ItemScheme scheme)
         {
             this.scheme = scheme;
         }

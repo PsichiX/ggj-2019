@@ -27,7 +27,7 @@ namespace GaryMoveOut
 			var players = GameObject.FindGameObjectsWithTag("Player");
 			foreach (var p in players)
 			{
-				if (p.GetComponent<PlayerController>().m_inputBlocked == false)
+				if (p.GetComponent<PlayerController>().m_inputBlocked == false || p.GetComponent<PlayerController>().m_isJumping == false)
 				{
 					p.transform.parent = building.root;
 				}

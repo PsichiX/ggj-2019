@@ -35,6 +35,7 @@ namespace GaryMoveOut
 		public int FloorIndex = 1;
 
 		public bool m_inputBlocked = false;
+		public bool m_isJumping = false;
 
 		[SerializeField] private InputHandler m_inputHandler;
 		[SerializeField] private float m_speed;
@@ -65,7 +66,6 @@ namespace GaryMoveOut
 		private bool m_canTeleportUp = false;
 		private bool m_canTeleportDown = false;
 		private bool m_isAlive = true;
-		private bool m_isJumping = false;
 		private bool groundKills = false;
 		private Vector2 smallOffsetY = new Vector2(0, 0.01f);
 

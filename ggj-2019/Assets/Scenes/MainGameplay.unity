@@ -784,6 +784,11 @@ PrefabInstance:
       propertyPath: m_isInputParsingRequired
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5370255786327671283, guid: 68081029321b2ce438cc755b7fd3f758,
+        type: 3}
+      propertyPath: m_text
+      value: THE END
+      objectReference: {fileID: 0}
     - target: {fileID: 1867282451, guid: 68081029321b2ce438cc755b7fd3f758, type: 3}
       propertyPath: m_FillAmount
       value: 0

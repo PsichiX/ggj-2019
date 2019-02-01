@@ -68,6 +68,7 @@ namespace GaryMoveOut
 		{
 			if (transform.position.y < -50)
 			{
+				// invoke or something, to tell its destroyed?
 				Destroy(gameObject);
 			}
 		}
