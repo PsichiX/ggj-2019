@@ -40,6 +40,7 @@ namespace GaryMoveOut
         private PlayerController[] players;
 
 		[SerializeField] private GameObject dustStorm;
+		[SerializeField] private GameObject loongo;
 		[SerializeField] private GameObject placeBuildingOut;
         [SerializeField] private GameObject placeBuildingIn;
         [SerializeField] private Vector3 playerSpawnOffset;
@@ -179,6 +180,9 @@ namespace GaryMoveOut
 			{
 				Destroy(buildingIn.root.GetChild(0).gameObject);
 			}
+			var pos = placeBuildingIn.transform.position;
+			pos.y = 0;
+			placeBuildingIn.transform.position = pos;
 			SetupBuildingOut(useOldBuilding);
             SetupTruck();
             SetupCatastrophy();
@@ -333,12 +337,12 @@ namespace GaryMoveOut
 			}
         }
 
-        private int buildingFloorNumber = 0;
         public int currentFloorBadEvent = 0;
         public int currentBuildingId = 0;
+        public float evacuationTimeStartToEnd = 12f;           //start to end
+        private float evacuationTimeStartToBreakPoint = 7f;     //start to break point
         private bool isEvacuation = false;
-        private float evacuationTimeStartToBreakPoint = 5f;     //start to break point
-        private float evacuationTimeStartToEnd = 10f;           //start to end
+        private int buildingFloorNumber = 0;
 
         public EvecuationDirection currentEvacuationDirection;
         private float currentEvacuationTime = 0;
@@ -519,9 +523,10 @@ namespace GaryMoveOut
 				}
 			}
 
-			if (currentBuildingId > 0)
+			if (currentBuildingId > 1)
 			{
 				truckSpeedModifier *= 2.5f;
+				loongo.SetActive(false);
 			}
 			float delay = Vector2.Distance(placeBuildingOut.transform.position, placeBuildingIn.transform.position) / truckSpeedModifier;
             truckManager.StartTruckMovement(delay);
@@ -597,6 +602,14 @@ namespace GaryMoveOut
 			{
 				if (i != null)
 				{
+					justInCaseTimer++;
+					if (justInCaseTimer > 60)
+					{
+						justInCaseTimer = 0;
+						CancelInvoke();
+						ReactionLastItemShot(null);
+						return false;
+					}
 					return true;
 				}
 			}
@@ -617,6 +630,8 @@ namespace GaryMoveOut
 				atLeastOneItemInNewBuilding = true;
 			}
 		}
+
+		private int justInCaseTimer = 0;
 
         private void ReactionLastItemShot(object param)
         {
@@ -646,8 +661,8 @@ namespace GaryMoveOut
 				{
 					Destroy(i.gameObject);
 				}
-				cachedTruckItems.Remove(i);
 			}
+			cachedTruckItems.Clear();
 			float delay = 1f;
             DOVirtual.DelayedCall(delay, () => PhaseStartGame(true));
             Debug.Log("PhaseFewDaysLater");

@@ -24,9 +24,12 @@ namespace GaryMoveOut
 
         public void PickUp(PlayerController.Side side)
         {
+
 			item.cantKillMe = true;
             m_rigidBody.bodyType = RigidbodyType2D.Kinematic;
-            gameObject.layer = LayerMask.NameToLayer("FurnitureInUse");
+			m_rigidBody.velocity = Vector2.zero;
+
+			gameObject.layer = LayerMask.NameToLayer("FurnitureInUse");
             if (item.Scheme.vertical)
             {
                 m_currentTweener = transform.DORotate(new Vector3(0, 0, 90), PICKUP_ANIM_TIME);

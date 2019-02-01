@@ -76,13 +76,21 @@ namespace GaryMoveOut
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.FadeIn, ReactionFadeIn);
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.Summary, ShowWinText);
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.FloorEvacuationBreakPoint, ReactionBreakPoint);
+			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.FloorEvacuationStart, ReactionStart);
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.FloorEvacuationEnd, ReactionEvacuationEnd);
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.GameOver, ReactionFadeOut);
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.GameOver, ShowGameOverText);
-			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.TruckStart, ReactionPlayerInTruck);
+			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.TruckStart, ReactionTruckStart);
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.ManyMonthsLater, ReactionFewDaysLater);
 
 			GameplayManager.GetGameplayManager().PointsCollectedUpdate += UpdatePointsOnItemAdd;
+		}
+
+		private void ReactionStart(object obj)
+		{
+			dangerSlider.gameObject.SetActive(true);
+			dangerSlider.fillAmount = 0;
+			dangerSlider.DOFillAmount(1, gameplayManager.evacuationTimeStartToEnd).SetEase(Ease.Linear);
 		}
 
 		private void ReactionBreakPoint(object obj)
@@ -93,10 +101,15 @@ namespace GaryMoveOut
 		private void ReactionEvacuationEnd(object obj)
 		{
 			dangerNotification.SetActive(false);
+			dangerSlider.fillAmount = 0;
+			dangerSlider.DOKill();
+			dangerSlider.DOFillAmount(1, gameplayManager.evacuationTimeStartToEnd).SetEase(Ease.Linear);
 		}
 
-		private void ReactionPlayerInTruck(object obj)
+		private void ReactionTruckStart(object obj)
 		{
+			dangerSlider.gameObject.SetActive(false);
+			dangerNotification.SetActive(false);
 			backgroundMusic.DOFade(0, 5f).OnComplete(SetCalmMusic);
 		}
 

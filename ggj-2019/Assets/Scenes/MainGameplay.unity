@@ -407,6 +407,12 @@ Transform:
   m_Father: {fileID: 2105267873}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -0.4083278, y: 9.406345, z: 2.4632416}
+--- !u!1 &241510866 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6875782808139388060, guid: 7a1e3acff03b86f4593f5f1d0975412d,
+    type: 3}
+  m_PrefabInstance: {fileID: 694697289}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &290110439
 GameObject:
   m_ObjectHideFlags: 0
@@ -777,6 +783,14 @@ PrefabInstance:
         type: 3}
       propertyPath: m_isInputParsingRequired
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1867282451, guid: 68081029321b2ce438cc755b7fd3f758, type: 3}
+      propertyPath: m_FillAmount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1867282451, guid: 68081029321b2ce438cc755b7fd3f758, type: 3}
+      propertyPath: m_Color.g
+      value: 0.28152826
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 68081029321b2ce438cc755b7fd3f758, type: 3}
@@ -6539,6 +6553,7 @@ MonoBehaviour:
   pointsCollected: 0
   truckSpeedModifier: 15
   dustStorm: {fileID: 100000, guid: 1f7aa4d40edff6e48b549003cad031e1, type: 3}
+  loongo: {fileID: 241510866}
   placeBuildingOut: {fileID: 5846282615831570882}
   placeBuildingIn: {fileID: 5846282614430594310}
   playerSpawnOffset: {x: 0, y: 0, z: 0}
@@ -6548,6 +6563,7 @@ MonoBehaviour:
   currentCatastrophy: {fileID: 0}
   currentFloorBadEvent: 0
   currentBuildingId: 0
+  evacuationTimeStartToEnd: 10
   currentEvacuationDirection: 0
 --- !u!114 &5846282615991518750
 MonoBehaviour:
