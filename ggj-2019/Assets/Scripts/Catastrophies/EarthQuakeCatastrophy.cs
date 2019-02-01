@@ -2,7 +2,7 @@
 using UnityEngine;
 using static GaryMoveOut.GameplayManager;
 
-namespace GaryMoveOut
+namespace GaryMoveOut.Catastrophies
 {
     [CreateAssetMenu(menuName = "ScriptableObjects/Catastrophies/Earth Quake")]
     public class EarthQuakeCatastrophy : BaseCatastrophy
@@ -18,6 +18,11 @@ namespace GaryMoveOut
         public override void Initialize()
         {
             buildingsDatabase = Resources.Load<BuildingSegmentsDatabase>("Databases/BuildingSegmentsDatabase");
+        }
+
+        public override void Dispose()
+        {
+            buildingsDatabase = null;
         }
 
         public override void DestroyFloor(Building building, int floorIndex)

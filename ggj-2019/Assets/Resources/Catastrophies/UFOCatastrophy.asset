@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 795c2f2a9628ab14aa6dc27cd5b1820f, type: 3}
+  m_Name: UFOCatastrophy
+  m_EditorClassIdentifier: 
+  ufoPrefab: {fileID: 4694886235785070615, guid: 8a12ef0faf5084a4392fa2f6e79c8c58,
+    type: 3}
+  ufoStartPos: {x: 0, y: 50, z: 0}
+  ufoIdlePos: {x: 20, y: 100, z: 0}
+  ufoAboveFloorPos: {x: 0, y: 10, z: 0}
+  ufoFlightDuration: 4
+  ufoTakeOffDelay: 2.5

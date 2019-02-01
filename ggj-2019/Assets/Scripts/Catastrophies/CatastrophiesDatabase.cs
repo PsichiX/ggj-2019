@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace GaryMoveOut
+namespace GaryMoveOut.Catastrophies
 {
     [CreateAssetMenu(menuName = "ScriptableObjects/Catastrophies Database")]
     public class CatastrophiesDatabase : ScriptableObject
     {
         public BaseCatastrophy defaultCatastrophy;
+        public bool alwaysUseDefault = false;
 
         public List<BaseCatastrophy> database = new List<BaseCatastrophy>();
 
@@ -25,15 +26,20 @@ namespace GaryMoveOut
 
         public BaseCatastrophy GetRandomCatastrophy()
         {
-            //return defaultCatastrophy;
-
-            if (database.Count > 0)
+            if (alwaysUseDefault)
             {
-                return database[Random.Range(0, database.Count)];
+                return defaultCatastrophy;
             }
             else
             {
-                return null;
+                if (database.Count > 0)
+                {
+                    return database[Random.Range(0, database.Count)];
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
     }

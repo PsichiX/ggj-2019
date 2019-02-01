@@ -100,7 +100,7 @@ namespace GaryMoveOut
 		{
 			if (!building.Floors.TryGetValue(floorIndex, out Floor floor))
 			{
-				floor = Object.Instantiate(BuildingsDatabase.floorPrefab, floorParent.position, floorParent.rotation);
+				floor = Object.Instantiate(BuildingsDatabase.floorPrefab, position, floorParent.rotation);
 				building.Floors.Add(floorIndex, floor);
 			}
 			floor.Type = type;

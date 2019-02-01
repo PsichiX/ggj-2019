@@ -1,4 +1,4 @@
-﻿namespace GaryMoveOut
+﻿namespace GaryMoveOut.Catastrophies
 {
     public enum CatastrophyType
     {
