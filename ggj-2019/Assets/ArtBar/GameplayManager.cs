@@ -41,15 +41,16 @@ namespace GaryMoveOut
 
 		[SerializeField] private GameObject dustStorm;
 		[SerializeField] private GameObject placeBuildingOut;
-        private Building buildingOut;
         [SerializeField] private GameObject placeBuildingIn;
-        private Building buildingIn;
         [SerializeField] private Vector3 playerSpawnOffset;
+        [SerializeField] private GameObject prefabPlayer;
+        private Building buildingOut;
+        private Building buildingIn;
 
         private List<ItemScheme> itemsInTruck;
+		private Dictionary<int, List<ItemScheme>> itemsFromLastInBuilding;
 
-        [SerializeField] private GameObject prefabPlayer;
-        private int playersCount = 1;
+		private int playersCount = 1;
 
         private int currentPlayersInTruck = 0;
         private int currentPlayersDead = 0;
@@ -173,9 +174,17 @@ namespace GaryMoveOut
             PhaseStartGame();
         }
 
-        private void PhaseStartGame()
+        private void PhaseStartGame(bool useOldBuilding = false)
         {
-            SetupBuildingOut();
+			SetupBuildingOut(useOldBuilding);
+			//if (useOldBuilding)
+			//{
+			//	MoveBuildingInToOut();
+			//}
+			//else
+			//{
+			//	SetupBuildingOut();
+			//}
             SetupTruck();
             SetupCatastrophy();
 
@@ -187,7 +196,13 @@ namespace GaryMoveOut
             Debug.Log("PhaseStart");
         }
 
-        private void SetupTruck()
+		private void MoveBuildingInToOut()
+		{
+			buildingIn.root.position = placeBuildingOut.transform.position;
+			//buildingsGenerator.DestroyBuildingOut(ref buildingIn);
+		}
+
+		private void SetupTruck()
         {
             var truckOutPosition = placeBuildingOut.transform.position;
             truckOutPosition.x += 20f;
@@ -200,11 +215,10 @@ namespace GaryMoveOut
             if (truckManager.CreateTruck(gameObject.transform, truckOutPosition, truckInPosition))
             {
                 AddMultiCameraTarget(truckManager.Truck.gameObject);
-
             }
         }
 
-        private void SetupBuildingOut()
+        private void SetupBuildingOut(bool useOldItems = false)
         {
             if (buildingsGenerator == null)
             {
@@ -217,24 +231,24 @@ namespace GaryMoveOut
                 var buildingConfig = buildingConfigurator.BuildingParameterGenerator(currentBuildingId);
 
                 var maxFreeSegments = (buildingConfig.floorSegmentsCount - 1) * buildingConfig.buildingFloorsCount;
-                var minItemsCount = (int)(buildingConfig.minItemsCountToMaxFreeSegmentsRatio * maxFreeSegments);
-                var itemsCount = UnityEngine.Random.Range(minItemsCount, maxFreeSegments);
 
-                var items = buildingsGenerator.ItemsSpawner.ItemsDatabase.GetRandomItems(itemsCount);
-                var floorSize = new FloorSize()
-                {
-                    segmentsCount = buildingConfig.floorSegmentsCount,
-                    stairsSegmentIndex = buildingConfig.stairsSegmentIndex
-                };
-
-                if (itemsInTruck == null || itemsInTruck.Count == 0)
-                {
+				if (useOldItems == false)
+				{
+					var minItemsCount = (int)(buildingConfig.minItemsCountToMaxFreeSegmentsRatio * maxFreeSegments);
+					var itemsCount = UnityEngine.Random.Range(minItemsCount, maxFreeSegments);
+					var items = buildingsGenerator.ItemsSpawner.ItemsDatabase.GetRandomItems(itemsCount);
+	                var floorSize = new FloorSize()
+		            {
+					    segmentsCount = buildingConfig.floorSegmentsCount,
+				        stairsSegmentIndex = buildingConfig.stairsSegmentIndex
+			        };
 					buildingOut = buildingsGenerator.GenerateBuilding(placeBuildingOut.transform, buildingConfig.buildingFloorsCount, floorSize, items);
                 }
                 else
                 {
-					buildingOut = buildingsGenerator.GenerateBuilding(placeBuildingOut.transform, buildingConfig.buildingFloorsCount, floorSize, itemsInTruck);
-                }
+					buildingOut = buildingsGenerator.GenerateBuilding(placeBuildingOut.transform, oldFloorCount, oldFloorSize, itemsFromLastInBuilding);
+
+				}
                 buildingFloorNumber = buildingConfig.buildingFloorsCount;
             }
         }
@@ -597,10 +611,11 @@ namespace GaryMoveOut
 				}
 			}
 			CancelInvoke();
-			PhaseFewDaysLater();
+			ReactionLastItemShot(null);
 			return false;
 		}
 
+		private bool atLeastOneItemInNewBuilding;
 		public void RemoveItemFromCachedList(Item it)
 		{
 			if (cachedTruckItems == null)
@@ -609,6 +624,7 @@ namespace GaryMoveOut
 			}
 			if (cachedTruckItems.Contains(it))
 			{
+				atLeastOneItemInNewBuilding = true;
 				cachedTruckItems.Remove(it);
 			}
 		}
@@ -617,18 +633,26 @@ namespace GaryMoveOut
         {
 			truckManager.ResetTruckItemList();
 			events.CallEvent(GamePhases.GameplayPhase.FadeOut, null);
+			if (atLeastOneItemInNewBuilding == false)
+			{
+				events.CallEvent(GamePhases.GameplayPhase.Summary, null);
+			}
+			atLeastOneItemInNewBuilding = false;
 			float delay = 1f;
-			DOVirtual.DelayedCall(delay, PhaseFewDaysLater);
+			DOVirtual.DelayedCall(delay, PhaseManyMonthsLater);
 			Debug.Log("FadeOut");
 		}
 
-        private void PhaseFewDaysLater()
+		private int oldFloorCount;
+		private FloorSize oldFloorSize;
+        private void PhaseManyMonthsLater()
         {
             events.CallEvent(GamePhases.GameplayPhase.FewDaysLater, null);
-			var itemsFromLastInBuilding = buildingIn.GetItems();
-			buildingsGenerator.DestroyBuildingOut(ref buildingIn);
-            float delay = 1f;
-            DOVirtual.DelayedCall(delay, PhaseStartGame);
+			oldFloorCount = buildingIn.Floors.Count;
+			oldFloorSize = buildingIn.FloorSize;
+			itemsFromLastInBuilding = buildingIn.GetItems();
+			float delay = 1f;
+            DOVirtual.DelayedCall(delay, () => PhaseStartGame(true));
             Debug.Log("PhaseFewDaysLater");
         }
     }

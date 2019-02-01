@@ -17,6 +17,7 @@ namespace GaryMoveOut
 
         private void Start()
         {
+			InvokeRepeating("Tick", 10f, 1f);
             m_rigidBody = GetComponent<Rigidbody2D>();
             item = GetComponent<Item>();
         }
@@ -59,5 +60,13 @@ namespace GaryMoveOut
                 m_currentTweener = null;
             }
         }
+
+		private void Tick()
+		{
+			if (transform.position.y < -50)
+			{
+				Destroy(gameObject);
+			}
+		}
     }
 }

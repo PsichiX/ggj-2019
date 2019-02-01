@@ -17,15 +17,17 @@ namespace GaryMoveOut
         public Transform root;
         public Dictionary<int, Floor> Floors { get; private set; }
         public Dictionary<int, DoorPortal> Stairs { get; private set; }
+		public FloorSize FloorSize;
         public SegmentSize SegmentSize { get; private set; }
 
         private ItemsSpawner itemsSpawner;
 
 
-        public Building(ItemsSpawner itemsSpawner, SegmentSize segmentSize)
+        public Building(ItemsSpawner itemsSpawner, SegmentSize segmentSize, FloorSize floorSize)
         {
             Floors = new Dictionary<int, Floor>();
             Stairs = new Dictionary<int, DoorPortal>();
+			FloorSize = floorSize;
 
             this.itemsSpawner = itemsSpawner;
             SegmentSize = segmentSize;
@@ -69,7 +71,66 @@ namespace GaryMoveOut
             return itemsByFloorsId;
         }
 
-        public void SpawnItemsInside(List<ItemScheme> items)
+		public void SpawnItemsInside(Dictionary<int, List<ItemScheme>> oldItems)
+		{
+			if (this.Floors.Count == 0 || oldItems == null)
+			{
+				return;
+			}
+			for (int i = 0; i < Floors.Count; i++)
+			{
+				if (oldItems.ContainsKey(i))
+				{
+					if (oldItems[i] != null && oldItems[i].Count > 0)
+					{
+						for (int itemId = 0; itemId < oldItems[i].Count; itemId++)
+						{
+							for (int s = 0; s < Floors[i].segments.Count; s++)
+							{
+								var itemSlot = Floors[i].segments[s].GetComponentInChildren<ItemSlot>();
+								if (itemSlot != null && itemSlot.isOccupied == false)
+								{
+									if (oldItems[i][itemId] != null)
+									{
+										SpawnItem(oldItems[i][itemId], itemSlot, Floors[i]);
+										break;
+									}
+								}
+							}
+						}
+						var dif = oldItems[i].Count - Floors[i].segments.Count;
+						// FixMe: If more segments, should move to another floor;
+						if (dif > 0)
+						{
+
+						}
+					}
+				}
+
+			}
+
+			//while (itemsPlaced < items.Count && i < this.Floors.Count)
+			//{
+			//	if (this.Floors[i].Type == FloorType.GroundFloor)
+			//	{
+			//		continue;
+			//	}
+			//	var floor = this.Floors[i];
+			//	foreach (var segment in floor.segments)
+			//	{
+			//		var itemSlot = segment.GetComponentInChildren<ItemSlot>();
+			//		if (itemSlot != null && !itemSlot.isOccupied)
+			//		{
+			//			var scheme = items[itemsPlaced++];
+			//			SpawnItem(scheme, itemSlot, floor);
+			//			itemsPlaced++;
+			//			break;
+			//		}
+			//	}
+			//}
+		}
+
+		public void SpawnItemsInside(List<ItemScheme> items)
         {
             if (this.Floors.Count == 0)
             {
