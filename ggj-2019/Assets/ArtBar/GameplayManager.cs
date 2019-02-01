@@ -198,7 +198,10 @@ namespace GaryMoveOut
 
 		private void SetupTruck()
         {
-            var truckOutPosition = placeBuildingOut.transform.position;
+			var pos = placeBuildingOut.transform.position;
+			pos.y = 0;
+			placeBuildingOut.transform.position = pos;
+			var truckOutPosition = placeBuildingOut.transform.position;
             truckOutPosition.x += 20f;
             //truckOutPosition.z += -3.5f;
 

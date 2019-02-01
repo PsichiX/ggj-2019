@@ -470,7 +470,7 @@ namespace GaryMoveOut
 					isCarryingItem = false;
 				}
 			}
-			if (pickable != null && !isCarryingItem)
+			if (pickable != null && !isCarryingItem && !pickable.IsPickedUp)
 			{
 				aus.PlayOneShot(Resources.Load("Sounds/PickUp") as AudioClip);
 				m_pickedUp = pickable;
