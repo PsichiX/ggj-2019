@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CatastrophiesDatabase
   m_EditorClassIdentifier: 
   defaultCatastrophy: {fileID: 11400000, guid: d2cf64fd2412696499cf77cc5c4d6951, type: 2}
-  alwaysUseDefault: 1
+  alwaysUseDefault: 0
   database:
   - {fileID: 11400000, guid: 22b9c1661cb77984f85d1388694795ac, type: 2}
   - {fileID: 11400000, guid: 596c3b75fbc6e5a43acb90b1e4fce1bb, type: 2}

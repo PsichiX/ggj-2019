@@ -141,7 +141,7 @@ namespace GaryMoveOut
 					prefab = scheme.EmptyWall;
 					if (useOldColor)
 					{
-						building.wallsColor = Random.ColorHSV();
+						building.wallsColor = Random.ColorHSV(0,1,0,1,0.65f,0.95f);
 						var mr = prefab.GetComponentInChildren<MeshRenderer>();
 						mr.sharedMaterial.color = building.wallsColor;
 					}

@@ -61,7 +61,6 @@ namespace GaryMoveOut
 
 		private void Awake()
 		{
-
 			m_players = new PlayerController[m_aims.Count];
 			m_portals = new DoorPortal[Mathf.Min(portalUpArrows.Count, portalDownArrows.Count)];
 
@@ -81,9 +80,17 @@ namespace GaryMoveOut
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.GameOver, ReactionFadeOut);
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.GameOver, ShowGameOverText);
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.TruckStart, ReactionTruckStart);
+			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.DeEvacuation, ReactionDeEvacuation);
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.ManyMonthsLater, ReactionFewDaysLater);
 
 			GameplayManager.GetGameplayManager().PointsCollectedUpdate += UpdatePointsOnItemAdd;
+		}
+
+		private void ReactionDeEvacuation(object obj)
+		{
+			dangerSlider.gameObject.SetActive(true);
+			dangerSlider.fillAmount = 1;
+			dangerSlider.DOFillAmount(0, 30);
 		}
 
 		private void ReactionStart(object obj)
@@ -115,6 +122,8 @@ namespace GaryMoveOut
 
 		private void ReactionFewDaysLater(object obj)
 		{
+			dangerSlider.gameObject.SetActive(false);
+			dangerSlider.fillAmount = 0;
 			manyMonthsLater.SetActive(true);
 			backgroundMusic.DOFade(0, 1.2f);
 			DOVirtual.DelayedCall(3f, () => SetActionMusic(null));
