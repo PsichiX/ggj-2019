@@ -72,8 +72,9 @@ namespace GaryMoveOut
 		{
 			gameplayEvents = GameplayEvents.GetGameplayEvents();
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.BadEventStart, SetActionMusic);
-			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.Summary, ShowWinText);
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.BadEventStart, ReactionFadeIn);
+			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.FadeIn, ReactionFadeIn);
+			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.Summary, ShowWinText);
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.FloorEvacuationBreakPoint, ReactionBreakPoint);
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.FloorEvacuationEnd, ReactionEvacuationEnd);
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.GameOver, ReactionFadeOut);
@@ -108,7 +109,10 @@ namespace GaryMoveOut
 
 		private void SetActionMusic(object obj)
 		{
-			manyMonthsLater.SetActive(false);
+			if (manyMonthsLater != null)
+			{
+				manyMonthsLater.SetActive(false);
+			}
 			var type = gameplayManager.currentCatastrophy.Type;
 			if (type == CatastrophyType.UFO)
 			{

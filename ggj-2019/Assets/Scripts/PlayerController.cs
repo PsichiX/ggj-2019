@@ -405,8 +405,8 @@ namespace GaryMoveOut
 
 		private void HideMe()
 		{
-			m_rigidBody.Sleep();
-			GetComponentInChildren<BoxCollider2D>().enabled = false;
+			m_rigidBody.simulated = false;
+			//GetComponentInChildren<BoxCollider2D>().enabled = false;
 			foreach (var m in meshRenderers)
 			{
 				m.enabled = false;
@@ -415,11 +415,11 @@ namespace GaryMoveOut
 
 		private void UnHideMe()
 		{
-			GetComponentInChildren<BoxCollider2D>().enabled = true;
-			GetComponentInChildren<BoxCollider2D>().size = new Vector2(1, 2);
-			m_rigidBody.WakeUp();
-			transform.localRotation = Quaternion.identity;
+			//GetComponentInChildren<BoxCollider2D>().enabled = true;
+			//GetComponentInChildren<BoxCollider2D>().size = new Vector2(1, 2);
+			m_rigidBody.simulated = true;
 			m_rigidBody.freezeRotation = true;
+			transform.localRotation = Quaternion.identity;
 			GetComponentInChildren<SkinnedMeshRenderer>().enabled = true;
 		}
 

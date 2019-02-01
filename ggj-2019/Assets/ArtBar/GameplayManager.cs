@@ -131,7 +131,6 @@ namespace GaryMoveOut
         private void AttachReactionsToEvents()
         {
             events.AttachToEvent(GamePhases.GameplayPhase.FadeIn, ReactionFadeIn);
-            events.AttachToEvent(GamePhases.GameplayPhase.FadeOut, ReactionFadeOut);
             events.AttachToEvent(GamePhases.GameplayPhase.PlayerJump, ReactionPlayerJump);
             events.AttachToEvent(GamePhases.GameplayPhase.PlayerInTruck, ReactionPlayerInTruck);
             events.AttachToEvent(GamePhases.GameplayPhase.LastItemShot, ReactionLastItemShot);
@@ -176,15 +175,11 @@ namespace GaryMoveOut
 
         private void PhaseStartGame(bool useOldBuilding = false)
         {
+			if (buildingIn != null)
+			{
+				Destroy(buildingIn.root.GetChild(0).gameObject);
+			}
 			SetupBuildingOut(useOldBuilding);
-			//if (useOldBuilding)
-			//{
-			//	MoveBuildingInToOut();
-			//}
-			//else
-			//{
-			//	SetupBuildingOut();
-			//}
             SetupTruck();
             SetupCatastrophy();
 
@@ -195,12 +190,6 @@ namespace GaryMoveOut
             DOVirtual.DelayedCall(fadeDelay, PhaseBadEventStart);
             Debug.Log("PhaseStart");
         }
-
-		private void MoveBuildingInToOut()
-		{
-			buildingIn.root.position = placeBuildingOut.transform.position;
-			//buildingsGenerator.DestroyBuildingOut(ref buildingIn);
-		}
 
 		private void SetupTruck()
         {
@@ -469,15 +458,6 @@ namespace GaryMoveOut
             }
         }
 
-        private void ReactionFadeOut(object param)
-        {
-            for (var i = 0; i < players.Length; ++i)
-            {
-                //GameObject.Destroy(players[i]);
-                //players[i] = null;
-            }
-        }
-
         private void ReactionPlayerDie(object param)
         {
             if (param is PlayerController)
@@ -630,23 +610,21 @@ namespace GaryMoveOut
 			if (cachedTruckItems.Contains(it))
 			{
 				atLeastOneItemInNewBuilding = true;
-				cachedTruckItems.Remove(it);
 			}
 		}
 
         private void ReactionLastItemShot(object param)
         {
-			truckManager.ResetTruckItemList();
 			if (atLeastOneItemInNewBuilding == false)
 			{
 				GameSummary();
 				return;
 			}
-			events.CallEvent(GamePhases.GameplayPhase.FadeOut, null);
+			//events.CallEvent(GamePhases.GameplayPhase.FadeIn, null);
 			atLeastOneItemInNewBuilding = false;
 			float delay = 1f;
 			DOVirtual.DelayedCall(delay, PhaseManyMonthsLater);
-			Debug.Log("FadeOut");
+			Debug.Log("FadeIn");
 		}
 
 		private int oldFloorCount;
@@ -657,7 +635,11 @@ namespace GaryMoveOut
 			oldFloorCount = buildingIn.Floors.Count;
 			oldFloorSize = buildingIn.FloorSize;
 			itemsFromLastInBuilding = buildingIn.GetItems();
-			truckManager.ResetTruckItemList();
+			foreach (var i in cachedTruckItems)
+			{
+				Destroy(i.gameObject);
+				cachedTruckItems.Remove(i);
+			}
 			float delay = 1f;
             DOVirtual.DelayedCall(delay, () => PhaseStartGame(true));
             Debug.Log("PhaseFewDaysLater");
