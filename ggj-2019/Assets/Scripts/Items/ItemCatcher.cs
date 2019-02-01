@@ -27,7 +27,8 @@ namespace GaryMoveOut
                 {
                     Debug.Log("Added " + item.name + "to floor " + floor.Type);
                     floor.AddItem(item);
-					GameplayManager.GetGameplayManager().GainPointsForItem(item.Scheme);
+					item.Scheme.value *= 0.75f;
+					GameplayManager.GetGameplayManager().GainPointsForItem(item);
 				}
                 //else if (floor.items.Contains(item) == true)
                 //{

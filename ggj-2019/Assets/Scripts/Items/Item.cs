@@ -35,7 +35,7 @@ namespace GaryMoveOut.Items
         public void InTruck()
         {
             audioSource.PlayOneShot(Resources.Load("Sounds/gain") as AudioClip);    // => Fix me: sounds manager needed
-            GameplayManager.GetGameplayManager().CallNewItemInTruckEvent(Scheme);
+            GameplayManager.GetGameplayManager().CallNewItemInTruckEvent(this);
             FreezeMe();
         }
 

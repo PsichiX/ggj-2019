@@ -17,10 +17,10 @@ namespace GaryMoveOut
         }
 
         public event System.Action<int> PointsCollectedUpdate;
-        public event System.Action<ItemScheme> NewItemInTruck;
-        public void CallNewItemInTruckEvent(ItemScheme scheme)
+        public event System.Action<Item> NewItemInTruck;
+        public void CallNewItemInTruckEvent(Item item)
         {
-            NewItemInTruck?.Invoke(scheme);
+            NewItemInTruck?.Invoke(item);
         }
         public int pointsCollected = 0;
 
@@ -92,9 +92,10 @@ namespace GaryMoveOut
             NewItemInTruck += GainPointsForItem;
         }
 
-        public void GainPointsForItem(ItemScheme scheme)
+        public void GainPointsForItem(Item item)
         {
-            pointsCollected += (int)scheme.value;
+			RemoveFromCachedList(item);
+            pointsCollected += (int)item.Scheme.value;
             PointsCollectedUpdate?.Invoke(pointsCollected);
         }
 
@@ -580,7 +581,7 @@ namespace GaryMoveOut
 			}
 			currentPlayersInTruck = 0;
 			//cameraTargets.Add(placeBuildingIn);
-			cameraTargets.Add(buildingIn.Floors[buildingIn.Floors.Count - 1].segments[0].gameObject);
+			cameraTargets.Add(buildingIn.Floors[(int)buildingIn.Floors.Count / 2].segments[0].gameObject);
 			multiTargetCamera.SetTargets(cameraTargets.ToArray());
 			cachedTruckItems = new List<Item>();
 			foreach (var i in truckManager.GetTruckItemList())
@@ -638,7 +639,6 @@ namespace GaryMoveOut
 			}
 			if (cachedTruckItems.Contains(it))
 			{
-				Debug.Log(it.name + " still in list");
 				atLeastOneItemInNewBuilding = true;
 			}
 		}
