@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using static GaryMoveOut.GameplayManager;
 
-namespace GaryMoveOut
+namespace GaryMoveOut.Catastrophies
 {
     public abstract class BaseCatastrophy : ScriptableObject
     {
@@ -9,6 +9,8 @@ namespace GaryMoveOut
         public abstract EvecuationDirection EvacuationDirection { get; }
 
         public abstract void Initialize();
+
+        public abstract void Dispose();
 
         public abstract void DestroyFloor(Building building, int floorIndex);
     }

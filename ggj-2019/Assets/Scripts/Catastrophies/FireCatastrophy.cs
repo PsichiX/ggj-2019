@@ -3,7 +3,7 @@ using UnityEngine;
 using static GaryMoveOut.GameplayManager;
 using DG.Tweening;
 
-namespace GaryMoveOut
+namespace GaryMoveOut.Catastrophies
 {
     [CreateAssetMenu(menuName = "ScriptableObjects/Catastrophies/Fire")]
     public class FireCatastrophy : BaseCatastrophy
@@ -22,6 +22,10 @@ namespace GaryMoveOut
         }
 
         public override void Initialize()
+        {
+        }
+
+        public override void Dispose()
         {
         }
 

@@ -127,11 +127,11 @@ namespace GaryMoveOut
 				manyMonthsLater.SetActive(false);
 			}
 			var type = gameplayManager.currentCatastrophy.Type;
-			if (type == CatastrophyType.UFO)
+			if (type == Catastrophies.CatastrophyType.UFO)
 			{
 				catastrophyAudio.clip = Resources.Load("Sounds/Ufo") as AudioClip;
 			}
-			else if (type == CatastrophyType.Fire)
+			else if (type == Catastrophies.CatastrophyType.Fire)
 			{
 				catastrophyAudio.clip = Resources.Load("Sounds/Fire") as AudioClip;
 			}
