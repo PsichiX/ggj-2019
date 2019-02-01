@@ -14,6 +14,7 @@ namespace GaryMoveOut
 
     public class Building
     {
+		public Color wallsColor;
         public Transform root;
         public Dictionary<int, Floor> Floors { get; private set; }
         public Dictionary<int, DoorPortal> Stairs { get; private set; }
