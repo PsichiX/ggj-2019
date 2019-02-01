@@ -123,6 +123,38 @@ namespace GaryMoveOut
 			}
 			return false;
 		}
+
+		public void ChangeGameName(TMPro.TMP_InputField field)
+		{
+			gameName = field.text;
+		}
+
+		private string gameName = "UnnamedPlayer";
+		public void SaveHiScore(int score)
+		{
+			var m_Path = Application.dataPath;
+			if (gameName == string.Empty)
+			{
+				gameName = "UnnamedPlayer";
+			}
+			string hiscore = System.IO.File.ReadAllText(m_Path + "/StreamingAssets/hiscore.txt");
+			System.IO.File.WriteAllText(m_Path + "/StreamingAssets/hiscore.txt", hiscore + "#" + gameName + " : " + score.ToString());
+		}
+
+		public void FillHiScores()
+		{
+			var m_Path = Application.dataPath;
+			Highscores hScores = FindObjectOfType<Highscores>();
+			string hiscore = System.IO.File.ReadAllText(m_Path + "/StreamingAssets/hiscore.txt");
+			string[] hiscoresPlays = hiscore.Split(new char[] { '#' });
+			foreach (var play in hiscoresPlays)
+			{
+				if (play != string.Empty)
+				{
+					hScores.Fill(play);
+				}
+			}
+		}
 	}
 
 }

@@ -498,8 +498,14 @@ namespace GaryMoveOut
 
         private void ReactionGameOver(object param)
         {
-            Debug.Log("GameOver");
+			SaveHiScore();
+			Debug.Log("GameOver");
         }
+
+		private void SaveHiScore()
+		{
+			StartConfig.GetStartConfig().SaveHiScore(pointsCollected);
+		}
 
         private void ReactionPlayerInTruck(object param)
         {
@@ -548,13 +554,13 @@ namespace GaryMoveOut
 
             float delay = 1f;
 			DOVirtual.DelayedCall(delay, PhaseDeEvacuation);
-			//GameSummary();
 			Debug.Log("PhaseTruckStop");
         }
 
         private void GameSummary()
         {
-            events.CallEvent(GamePhases.GameplayPhase.Summary, null);
+			SaveHiScore();
+			events.CallEvent(GamePhases.GameplayPhase.Summary, null);
             float delay = 4f;
 
             DOVirtual.DelayedCall(delay, LoadMainMenu);
@@ -632,11 +638,12 @@ namespace GaryMoveOut
         private void ReactionLastItemShot(object param)
         {
 			truckManager.ResetTruckItemList();
-			events.CallEvent(GamePhases.GameplayPhase.FadeOut, null);
 			if (atLeastOneItemInNewBuilding == false)
 			{
 				events.CallEvent(GamePhases.GameplayPhase.Summary, null);
+				return;
 			}
+			events.CallEvent(GamePhases.GameplayPhase.FadeOut, null);
 			atLeastOneItemInNewBuilding = false;
 			float delay = 1f;
 			DOVirtual.DelayedCall(delay, PhaseManyMonthsLater);
