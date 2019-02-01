@@ -16,7 +16,7 @@
         ItemShot = 11,
         LastItemShot = 12, // Player Gameplay Input OFF
         FadeOut = 13,
-        FewDaysLater = 14,
+        ManyMonthsLater = 14,
         GameOver = 15,      // summary
         PlayerDie = 16,
         StartNewGame = 17,

@@ -459,9 +459,17 @@ namespace GaryMoveOut
 			}
 		}
 
+		private Pickable carryingItem;
 		private bool PickUp()
 		{
 			var pickable = GetInteractible<Pickable>();
+			if (isCarryingItem)
+			{
+				if (m_pickedUp == null)
+				{
+					isCarryingItem = false;
+				}
+			}
 			if (pickable != null && !isCarryingItem)
 			{
 				aus.PlayOneShot(Resources.Load("Sounds/PickUp") as AudioClip);

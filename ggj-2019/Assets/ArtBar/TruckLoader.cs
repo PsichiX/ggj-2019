@@ -17,6 +17,10 @@ namespace GaryMoveOut
 
         public void ResetTruckItemList()
         {
+			foreach (var item in itemsInTruck)
+			{
+				Destroy(item.gameObject);
+			}
 			itemsInTruck.Clear();
 		}
 

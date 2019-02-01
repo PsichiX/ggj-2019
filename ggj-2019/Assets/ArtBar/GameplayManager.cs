@@ -247,7 +247,6 @@ namespace GaryMoveOut
                 else
                 {
 					buildingOut = buildingsGenerator.GenerateBuilding(placeBuildingOut.transform, oldFloorCount, oldFloorSize, itemsFromLastInBuilding);
-
 				}
                 buildingFloorNumber = buildingConfig.buildingFloorsCount;
             }
@@ -561,7 +560,7 @@ namespace GaryMoveOut
         {
 			SaveHiScore();
 			events.CallEvent(GamePhases.GameplayPhase.Summary, null);
-            float delay = 4f;
+            float delay = 2f;
 
             DOVirtual.DelayedCall(delay, LoadMainMenu);
         }
@@ -640,7 +639,7 @@ namespace GaryMoveOut
 			truckManager.ResetTruckItemList();
 			if (atLeastOneItemInNewBuilding == false)
 			{
-				events.CallEvent(GamePhases.GameplayPhase.Summary, null);
+				GameSummary();
 				return;
 			}
 			events.CallEvent(GamePhases.GameplayPhase.FadeOut, null);
@@ -654,10 +653,11 @@ namespace GaryMoveOut
 		private FloorSize oldFloorSize;
         private void PhaseManyMonthsLater()
         {
-            events.CallEvent(GamePhases.GameplayPhase.FewDaysLater, null);
+            events.CallEvent(GamePhases.GameplayPhase.ManyMonthsLater, null);
 			oldFloorCount = buildingIn.Floors.Count;
 			oldFloorSize = buildingIn.FloorSize;
 			itemsFromLastInBuilding = buildingIn.GetItems();
+			truckManager.ResetTruckItemList();
 			float delay = 1f;
             DOVirtual.DelayedCall(delay, () => PhaseStartGame(true));
             Debug.Log("PhaseFewDaysLater");

@@ -79,7 +79,7 @@ namespace GaryMoveOut
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.GameOver, ReactionFadeOut);
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.GameOver, ShowGameOverText);
 			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.TruckStart, ReactionPlayerInTruck);
-			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.FewDaysLater, ReactionFewDaysLater);
+			gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.ManyMonthsLater, ReactionFewDaysLater);
 
 			GameplayManager.GetGameplayManager().PointsCollectedUpdate += UpdatePointsOnItemAdd;
 		}
