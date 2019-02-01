@@ -259,7 +259,7 @@ namespace GaryMoveOut
                 };
 
                 buildingIn = buildingsGenerator.GenerateBuilding(placeBuildingIn.transform, buildingConfig.buildingFloorsCount, floorSize);
-            }
+			}
         }
 
         public BaseCatastrophy currentCatastrophy;
@@ -519,6 +519,10 @@ namespace GaryMoveOut
 				}
 			}
 
+			if (currentBuildingId > 0)
+			{
+				truckSpeedModifier *= 2.5f;
+			}
 			float delay = Vector2.Distance(placeBuildingOut.transform.position, placeBuildingIn.transform.position) / truckSpeedModifier;
             truckManager.StartTruckMovement(delay);
             DOVirtual.DelayedCall(delay, PhaseTruckStop);
@@ -570,7 +574,8 @@ namespace GaryMoveOut
 				//p.GetComponent<PlayerController>().Setup();
 			}
 			currentPlayersInTruck = 0;
-			cameraTargets.Add(placeBuildingIn);
+			//cameraTargets.Add(placeBuildingIn);
+			cameraTargets.Add(buildingIn.Floors[buildingIn.Floors.Count - 1].segments[0].gameObject);
 			multiTargetCamera.SetTargets(cameraTargets.ToArray());
 			cachedTruckItems = new List<Item>();
 			foreach (var i in truckManager.GetTruckItemList())
@@ -637,7 +642,10 @@ namespace GaryMoveOut
 			itemsFromLastInBuilding = buildingIn.GetItems();
 			foreach (var i in cachedTruckItems)
 			{
-				Destroy(i.gameObject);
+				if (i != null)
+				{
+					Destroy(i.gameObject);
+				}
 				cachedTruckItems.Remove(i);
 			}
 			float delay = 1f;
