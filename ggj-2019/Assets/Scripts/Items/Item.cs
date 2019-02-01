@@ -83,8 +83,9 @@ namespace GaryMoveOut.Items
             Destroy(gameObject, 0.2f);
         }
 
-        public void UnKillMe()
+        public void UnHideMe()
         {
+			transform.parent = null;
             cantKillMe = true;
             boxCollider2D.enabled = true;
 			itemRigidbody2D.simulated = true;

@@ -40,6 +40,7 @@ namespace GaryMoveOut
 		#region Building generator
 		public Building GenerateBuilding(Transform root, int buildingFloorsCount, FloorSize floorSize, List<ItemScheme> items = null)
 		{
+			useOldColor = true;
 			var building = ConstructBuilding(root, buildingFloorsCount, floorSize);
 			if (items != null)
 			{
@@ -49,8 +50,10 @@ namespace GaryMoveOut
 			return building;
 		}
 
-		public Building GenerateBuilding(Transform root, int oldHeight, FloorSize oldFloorSize, Dictionary<int, List<ItemScheme>> oldItems)
+		private bool useOldColor;
+		public Building GenerateBuildingBasedOnOldOne(Transform root, int oldHeight, FloorSize oldFloorSize, Dictionary<int, List<ItemScheme>> oldItems, Color oldColor)
 		{
+			useOldColor = false;
 			var building = ConstructBuilding(root, oldHeight, oldFloorSize);
 			if (oldItems != null && oldItems.Count > 0)
 			{
@@ -117,6 +120,7 @@ namespace GaryMoveOut
 					prefab = scheme.SideWindowR;
 					break;
 			}
+
 			var segment = GameObject.Instantiate(prefab, position, rotation, floor.transform) as GameObject;
 			var itemCatcher = segment.GetComponentInChildren<ItemCatcher>();
 			if (itemCatcher != null)
@@ -135,6 +139,12 @@ namespace GaryMoveOut
 				else
 				{
 					prefab = scheme.EmptyWall;
+					if (useOldColor)
+					{
+						building.wallsColor = Random.ColorHSV();
+						var mr = prefab.GetComponentInChildren<MeshRenderer>();
+						mr.sharedMaterial.color = building.wallsColor;
+					}
 				}
 
 				segment = GameObject.Instantiate(prefab, position, rotation, floor.transform) as GameObject;
@@ -171,6 +181,7 @@ namespace GaryMoveOut
 					prefab = scheme.GetRandomSideWall(rightSide: false);
 					break;
 			}
+
 			segment = GameObject.Instantiate(prefab, position, rotation, floor.transform) as GameObject;
 			itemCatcher = segment.GetComponent<ItemCatcher>();
 			if (itemCatcher != null)

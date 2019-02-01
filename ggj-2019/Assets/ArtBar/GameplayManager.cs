@@ -244,7 +244,7 @@ namespace GaryMoveOut
                 }
                 else
                 {
-					buildingOut = buildingsGenerator.GenerateBuilding(placeBuildingOut.transform, oldFloorCount, oldFloorSize, itemsFromLastInBuilding);
+					buildingOut = buildingsGenerator.GenerateBuildingBasedOnOldOne(placeBuildingOut.transform, oldFloorCount, oldFloorSize, itemsFromLastInBuilding, buildingIn.wallsColor);
 				}
                 buildingFloorNumber = buildingConfig.buildingFloorsCount;
             }
@@ -518,13 +518,12 @@ namespace GaryMoveOut
         {
             events.CallEvent(GamePhases.GameplayPhase.TruckStart, null);
             currentBuildingId++;
-            SetupBuildingIn();
 
 			foreach (var i in truckManager.GetTruckItemList())
 			{
 				if (i != null)
 				{
-					i.HideMe();
+					i.transform.parent = truckManager.Truck.transform;
 				}
 			}
 
@@ -535,6 +534,7 @@ namespace GaryMoveOut
 			}
 			float delay = Vector2.Distance(placeBuildingOut.transform.position, placeBuildingIn.transform.position) / truckSpeedModifier;
             truckManager.StartTruckMovement(delay);
+            DOVirtual.DelayedCall(delay / 2, SetupBuildingIn);
             DOVirtual.DelayedCall(delay, PhaseTruckStop);
             Debug.Log("PhaseTruckStart");
         }
@@ -592,7 +592,7 @@ namespace GaryMoveOut
 			{
 				cachedTruckItems.Add(i);
 				i.transform.position = truckManager.Truck.transform.position;
-				i.UnKillMe();
+				i.UnHideMe();
 			}
 			truckManager.ResetTruckItemList();
 			Destroy(truckManager.Truck);
@@ -665,11 +665,13 @@ namespace GaryMoveOut
 
 		private int oldFloorCount;
 		private FloorSize oldFloorSize;
+		private Color oldColor;
         private void PhaseManyMonthsLater()
         {
             events.CallEvent(GamePhases.GameplayPhase.ManyMonthsLater, null);
 			oldFloorCount = buildingIn.Floors.Count;
 			oldFloorSize = buildingIn.FloorSize;
+			oldColor = buildingIn.wallsColor;
 			itemsFromLastInBuilding = buildingIn.GetItems();
 			foreach (var i in cachedTruckItems)
 			{
