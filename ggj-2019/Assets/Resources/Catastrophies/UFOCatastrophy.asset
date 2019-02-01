@@ -17,5 +17,5 @@ MonoBehaviour:
   ufoStartPos: {x: 0, y: 50, z: 0}
   ufoIdlePos: {x: 20, y: 100, z: 0}
   ufoAboveFloorPos: {x: 0, y: 10, z: 0}
-  ufoFlightDuration: 4
+  ufoFlightDuration: 3
   ufoTakeOffDelay: 2.5

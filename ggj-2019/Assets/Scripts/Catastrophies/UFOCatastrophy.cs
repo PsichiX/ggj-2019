@@ -1,4 +1,5 @@
-﻿using DG.Tweening;
+﻿using System;
+using DG.Tweening;
 using UnityEngine;
 using static GaryMoveOut.GameplayManager;
 
@@ -16,7 +17,9 @@ namespace GaryMoveOut.Catastrophies
 
         private GameObject ufo;
         private GameplayManager gameplayManager;
+        private GameplayEvents gameplayEvents;
         private Vector3 currentUfoPos;
+        private Sequence sequence;
 
 
         public override CatastrophyType Type { get { return CatastrophyType.UFO; } }
@@ -25,8 +28,21 @@ namespace GaryMoveOut.Catastrophies
 
         public override void Initialize()
         {
+            gameplayEvents = GameplayEvents.GetGameplayEvents();
+            gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.TruckStart, OnTruckStart);
+
             ufo = GameObject.Instantiate(ufoPrefab, ufoStartPos, Quaternion.identity);
+            ufo.transform.Rotate(new Vector3(0f, 180f, 0f));
             gameplayManager = GameplayManager.GetGameplayManager();
+        }
+
+        private void OnTruckStart(object obj)
+        {
+            OnFinish();
+            DOVirtual.DelayedCall(2f, () =>
+            {
+                Dispose();
+            });
         }
 
         public override void Dispose()
@@ -41,9 +57,9 @@ namespace GaryMoveOut.Catastrophies
             if (building.Floors.TryGetValue(floorIndex, out Floor floor))
             {
                 currentUfoPos = floor.gameObject.transform.position + ufoAboveFloorPos;
-                ufo.transform.DOMove(currentUfoPos, ufoFlightDuration).SetEase(Ease.InCirc).OnComplete(() => 
+                ufo.transform.DOMove(currentUfoPos, ufoFlightDuration).SetEase(Ease.InCirc).OnComplete(() =>
                 {
-                    var sequence = DOTween.Sequence();
+                    sequence = DOTween.Sequence();
                     sequence.Append(DOVirtual.DelayedCall(1f, () =>
                     {
                         // to do: play ufo beam
@@ -51,12 +67,12 @@ namespace GaryMoveOut.Catastrophies
                     }));
                     sequence.Append(DOVirtual.DelayedCall(1f, () =>
                     {
-                        for(int i = 0; i < floor.items.Count; i++)
+                        for (int i = 0; i < floor.items.Count; i++)
                         {
                             var item = floor.items[i];
                             item.gameObject.transform.SetParent(null);
                             var time = UnityEngine.Random.Range(1.5f, 2.5f);
-                            item.gameObject.transform.DOMove(ufo.transform.position, time).SetEase(Ease.InOutExpo).OnComplete(() => 
+                            item.gameObject.transform.DOMove(ufo.transform.position, time).SetEase(Ease.InOutExpo).OnComplete(() =>
                             {
                                 GameObject.Destroy(item.gameObject);
                             });
@@ -76,14 +92,20 @@ namespace GaryMoveOut.Catastrophies
                         floor.segments.Clear();
 
                     }));
-                    sequence.Append(DOVirtual.DelayedCall(ufoTakeOffDelay, () =>
-                    {
-                        gameplayManager.RemoveMultiCameraTarget(ufo);
-                        currentUfoPos += ufoIdlePos;
-                        ufo.transform.DOMove(currentUfoPos, ufoFlightDuration).SetEase(Ease.InOutExpo);
-                    }));
+                    sequence.Append(DOVirtual.DelayedCall(ufoTakeOffDelay, OnFinish));
                 });
             }
+        }
+
+        private void OnFinish()
+        {
+            if (sequence != null)
+            {
+                sequence.Kill();
+            }
+            gameplayManager.RemoveMultiCameraTarget(ufo);
+            currentUfoPos += ufoIdlePos;
+            ufo.transform.DOMove(currentUfoPos, ufoFlightDuration).SetEase(Ease.InOutExpo);
         }
     }
 }
