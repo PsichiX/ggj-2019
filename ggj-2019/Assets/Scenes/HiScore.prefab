@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4111217988859644865}
   - component: {fileID: 5781374540321452505}
   - component: {fileID: 4275055837578046154}
+  - component: {fileID: 1350325163}
   m_Layer: 5
   m_Name: HiScore
   m_TagString: Untagged
@@ -89,6 +90,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   txt: {fileID: 8292278550717296642}
+--- !u!114 &1350325163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6054943494529970728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1679637790, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: 200
+  m_MinHeight: 40
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!1 &6771055359064500903
 GameObject:
   m_ObjectHideFlags: 0

@@ -183,6 +183,13 @@ namespace GaryMoveOut
 			SetOldGameName();
 			CheckHighscores();
 			HighscoresPanel hScores = FindObjectOfType<HighscoresPanel>();
+			foreach (Transform c in hScores.transform)
+			{
+				if (c.name != "ClearHighscoresButton")
+				{
+					Destroy(c.gameObject);
+				}
+			}
 			if (hScores == null)
 			{
 				return;
@@ -195,7 +202,14 @@ namespace GaryMoveOut
 			allHighScores.Sort();
 			foreach (var score in allHighScores)
 			{
-				hScores.Fill(score.playName + colonString + score.points);
+				if (hScores.transform.childCount < 10)
+				{
+					hScores.Fill(score.playName + colonString + score.points);
+				}
+				else
+				{
+					break;
+				}
 			}
 		}
 
@@ -205,6 +219,12 @@ namespace GaryMoveOut
 			{
 				File.Create(hiScoresPath);
 			}
+		}
+
+		public void ClearHighscores()
+		{
+			File.WriteAllText(hiScoresPath, string.Empty);
+			FillHiScores();
 		}
 	}
 }
