@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace GaryMoveOut
 {
-	public class Highscores : MonoBehaviour
+	public class HighscoresPanel : MonoBehaviour
 	{
-		[SerializeField] private HiScore hiScorePrefab;
+		[SerializeField] private HiScoreUI hiScorePrefab;
 
 		private void Start()
 		{

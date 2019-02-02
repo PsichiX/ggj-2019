@@ -590,9 +590,12 @@ namespace GaryMoveOut
 			cachedTruckItems = new List<Item>();
 			foreach (var i in truckManager.GetTruckItemList())
 			{
-				cachedTruckItems.Add(i);
-				i.transform.position = truckManager.Truck.transform.position;
-				i.UnHideMe();
+				if (i != null)
+				{
+					cachedTruckItems.Add(i);
+					i.transform.position = truckManager.Truck.transform.position;
+					i.UnHideMe();
+				}
 			}
 			truckManager.ResetTruckItemList();
 			Destroy(truckManager.Truck);

@@ -105,7 +105,10 @@ namespace GaryMoveOut.Catastrophies
             }
             gameplayManager.RemoveMultiCameraTarget(ufo);
             currentUfoPos += ufoIdlePos;
-            ufo.transform.DOMove(currentUfoPos, ufoFlightDuration).SetEase(Ease.InOutExpo);
+			if (ufo != null)
+			{
+				ufo.transform.DOMove(currentUfoPos, ufoFlightDuration).SetEase(Ease.InOutExpo);
+			}
         }
     }
 }
