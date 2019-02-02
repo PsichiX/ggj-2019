@@ -61,6 +61,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: beam
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: ff3a08f222d9c4e4fbb6114d1b3f405d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: ff3a08f222d9c4e4fbb6114d1b3f405d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

@@ -28,4 +28,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3976fd1344c9b114c989d9e1cac3b7b3, type: 2}
   - {fileID: 11400000, guid: d3f2afa54a554e149aac7a76e5f25388, type: 2}
   - {fileID: 11400000, guid: d2945d450b4dbf14fb3e8e32a550a3d1, type: 2}
+  - {fileID: 11400000, guid: 3bfbfea772df2a840a6209ba09426310, type: 2}
   prefabsPath: Assets/Resources/ItemSchemes/
