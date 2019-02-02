@@ -463,6 +463,7 @@ namespace GaryMoveOut
 					AddMultiCameraTarget(truckManager.Truck);
 					multiTargetCamera.SetTargets(cameraTargets.ToArray());
 					players[i].transform.position = pos + playerSpawnOffset;
+					players[i].UnAim();
 				}
             }
         }

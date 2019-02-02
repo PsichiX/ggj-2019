@@ -39,8 +39,8 @@ namespace GaryMoveOut.Items
                 scheme.itemPrefab = item as GameObject;
                 scheme.name = item.name;
                 var path = $"{prefabsPath}{scheme.name}.asset";
-                UnityEditor.AssetDatabase.CreateFolder("Resources", "ItemSchemes");
-                UnityEditor.AssetDatabase.CreateAsset(scheme, path);
+                //UnityEditor.AssetDatabase.CreateFolder("Resources", "ItemSchemes");
+                //UnityEditor.AssetDatabase.CreateAsset(scheme, path);
             }
         }
 

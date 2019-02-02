@@ -543,21 +543,27 @@ namespace GaryMoveOut
 		{
 			aus.PlayOneShot(Resources.Load("Sounds/Throw") as AudioClip);
 
-			if (m_pickedUp != null && m_isAiming)
+			UnAim();
+			if (m_pickedUp != null)
 			{
-				m_isAiming = false;
 				var angle = TurnToSide == Side.Left ? 180 - m_aimAngle : m_aimAngle;
 				var force = Quaternion.Euler(0, 0, angle) * Vector2.right * m_aimStrength;
 				m_pickedUp.Throw(force);
-				m_animator?.SetBool("PickedUp", false);
-				isCarryingItem = false;
-				CarryItemEnd?.Invoke();
 				m_pickedUp = null;
 			}
 			if (m_ui != null)
 			{
 				m_ui.DeactivateAim(this);
 			}
+		}
+
+		public void UnAim()
+		{
+			CarryItemEnd?.Invoke();
+			isCarryingItem = false;
+			m_isAiming = false;
+			m_animator?.SetBool("PickedUp", false);
+			m_ui.DeactivateAim(this);
 		}
 
 		private void AimMe()
