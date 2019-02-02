@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Cupboard00
   m_EditorClassIdentifier: 
   isSmall: 0
-  value: 10
+  canSpawnOnTop: 1
+  value: 5.625
   weight: 2.5
   vertical: 0
   materialType: 1

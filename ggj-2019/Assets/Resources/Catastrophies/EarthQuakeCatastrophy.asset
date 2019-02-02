@@ -13,3 +13,6 @@ MonoBehaviour:
   m_Name: EarthQuakeCatastrophy
   m_EditorClassIdentifier: 
   floorFallTime: 0.6
+  sounds:
+  - {fileID: 8300000, guid: 18a4fa602014bae4b99da473b82e3e62, type: 3}
+  - {fileID: 8300000, guid: 6d475a594892d344e95b34321ad6084d, type: 3}

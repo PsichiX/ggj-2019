@@ -156,7 +156,8 @@ namespace GaryMoveOut
                     segmentIndicesTemp.Add(i);
                 }
 
-                for (i = 0; i < itemsPerFloor && segmentIndicesTemp.Count > 0;)
+				ItemSlot bigItemSlot = null;
+				for (i = 0; i < itemsPerFloor && segmentIndicesTemp.Count > 0;)
                 {
                     var index = UnityEngine.Random.Range(0, segmentIndicesTemp.Count);
                     var si = segmentIndicesTemp[index];
@@ -166,7 +167,22 @@ namespace GaryMoveOut
                     if (itemSlot != null)
                     {
                         var scheme = items[itemsPlaced++];
-                        SpawnItem(scheme, itemSlot, floor);
+						if (scheme.isSmall == false && scheme.canSpawnOnTop)
+						{
+							SpawnItem(scheme, itemSlot, floor);
+							bigItemSlot = itemSlot;
+						}
+						else if (scheme.isSmall == true && bigItemSlot != null)
+						{
+							SpawnItem(scheme, bigItemSlot, floor, true);
+							// comment this if you want many items ontop of one
+							bigItemSlot = null;
+						}
+						else
+						{
+							SpawnItem(scheme, itemSlot, floor);
+						}
+
                         i++;
                     }
                 }
@@ -196,11 +212,15 @@ namespace GaryMoveOut
             }
         }
 
-        private void SpawnItem(ItemScheme scheme, ItemSlot itemSlot, Floor floor)
+        private void SpawnItem(ItemScheme scheme, ItemSlot itemSlot, Floor floor, bool addYTransform = false)
         {
             if (scheme != null && itemSlot != null)
             {
                 var itemGO = itemsSpawner.SpawnItem(scheme, itemSlot.transform);
+				if (addYTransform)
+				{
+					itemGO.transform.position += new Vector3(0, 1);
+				}
                 var item = itemGO.GetComponent<Item>();
                 floor.AddItem(item);
                 itemSlot.isOccupied = true;

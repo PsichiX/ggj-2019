@@ -6,6 +6,7 @@ namespace GaryMoveOut.Items
     public class ItemScheme : ScriptableObject
     {
         public bool isSmall;
+        public bool canSpawnOnTop;
         public float value;
         public float weight;
         public bool vertical;

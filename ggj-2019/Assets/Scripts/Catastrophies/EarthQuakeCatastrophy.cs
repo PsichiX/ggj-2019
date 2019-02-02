@@ -8,15 +8,17 @@ namespace GaryMoveOut.Catastrophies
     public class EarthQuakeCatastrophy : BaseCatastrophy
     {
         public float floorFallTime = 0.4f;
+		public AudioClip[] sounds;
 
         public override CatastrophyType Type { get { return CatastrophyType.EarthQuake; } }
         public override EvecuationDirection EvacuationDirection { get { return EvecuationDirection.Up; } }
 
         private BuildingSegmentsDatabase buildingsDatabase;
-
+		private AudioSource aus;
 
         public override void Initialize()
         {
+			aus = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioSource>();
             buildingsDatabase = Resources.Load<BuildingSegmentsDatabase>("Databases/BuildingSegmentsDatabase");
         }
 
@@ -61,9 +63,10 @@ namespace GaryMoveOut.Catastrophies
             //        }
             //    }
             //}
+			aus.PlayOneShot(sounds[Random.Range(0, sounds.Length)]);
             DOVirtual.DelayedCall(floorFallTime, () =>
             {
-                building.DestroyFloor(floorIndex);
+				building.DestroyFloor(floorIndex);
             });
         }
 

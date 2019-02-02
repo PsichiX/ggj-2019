@@ -11,6 +11,7 @@ ModelImporter:
     400004: //RootNode
     2100000: Door
     2100002: Wall
+    2100004: Wall.002
     2300000: Cube.004
     2300002: Cube.009
     3300000: Cube.004

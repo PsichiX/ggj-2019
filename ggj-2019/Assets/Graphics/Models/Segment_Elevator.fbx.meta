@@ -14,6 +14,8 @@ ModelImporter:
     2100000: Wall
     2100002: Elevator
     2100004: BuildingSegment.002
+    2100006: Wall.001
+    2100008: BuildingSegment.000
     2300000: Cube.007
     2300002: Cube.008
     2300004: Cube.006

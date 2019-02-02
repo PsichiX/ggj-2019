@@ -45,6 +45,7 @@ namespace GaryMoveOut
 		[SerializeField] private float m_aimingStrengthSpeed = 1;
 		[SerializeField] private SkinnedMeshRenderer[] meshRenderers;
 		[SerializeField] private GameObject blood;
+		[SerializeField] private AudioClip elevatorSound;
 
 		private Rigidbody2D m_rigidBody;
 		private BoxCollider2D m_collider;
@@ -94,7 +95,7 @@ namespace GaryMoveOut
 
 		public void Setup()
 		{
-			aus = GameObject.FindGameObjectsWithTag("Audio")[0].GetComponent<AudioSource>();
+			aus = GetComponent<AudioSource>();
 			m_rigidBody = GetComponent<Rigidbody2D>();
 			m_collider = GetComponent<BoxCollider2D>();
 			m_animator = GetComponentInChildren<Animator>();
@@ -505,6 +506,7 @@ namespace GaryMoveOut
 			var portal = GetInteractible<DoorPortal>();
 			if (portal != null && portal.CanGoUp && portal.building.Stairs.TryGetValue(portal.floorIndexAbove, out DoorPortal portalAbove))
 			{
+				PlayElevatorSound();
 				var pos = portalAbove.transform.position;
 				transform.position = new Vector3(pos.x, pos.y, transform.position.z);
 
@@ -517,12 +519,18 @@ namespace GaryMoveOut
 			var portal = GetInteractible<DoorPortal>();
 			if (portal != null && portal.CanGoDown)
 			{
+				PlayElevatorSound();
 				var portalBelow = portal.building.Stairs[portal.floorIndexBelow];
 				var pos = portalBelow.transform.position;
 				transform.position = new Vector3(pos.x, pos.y, transform.position.z);
 
 				FloorIndex = portal.floorIndexBelow;
 			}
+		}
+
+		private void PlayElevatorSound()
+		{
+			aus.PlayOneShot(elevatorSound);
 		}
 
 		private void Aim()
@@ -587,7 +595,7 @@ namespace GaryMoveOut
 
 		private void ThrowMe()
 		{
-			GetComponent<AudioSource>().Play();
+			aus.Play();
 			if (m_window != null && m_isAiming)
 			{
 				m_isJumping = true;

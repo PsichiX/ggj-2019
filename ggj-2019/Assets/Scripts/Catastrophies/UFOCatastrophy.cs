@@ -20,7 +20,7 @@ namespace GaryMoveOut.Catastrophies
         private GameplayEvents gameplayEvents;
         private Vector3 currentUfoPos;
         private Sequence sequence;
-
+		private AudioSource ufoAudio;
 
         public override CatastrophyType Type { get { return CatastrophyType.UFO; } }
         public override EvecuationDirection EvacuationDirection { get { return EvecuationDirection.Down; } }
@@ -34,7 +34,8 @@ namespace GaryMoveOut.Catastrophies
 
             ufo = GameObject.Instantiate(ufoPrefab, ufoStartPos, Quaternion.identity);
             ufo.transform.Rotate(new Vector3(0f, 180f, 0f));
-            gameplayManager = GameplayManager.GetGameplayManager();
+			ufoAudio = ufo.GetComponent<AudioSource>();
+			gameplayManager = GameplayManager.GetGameplayManager();
         }
 
 		private void JustDispose(object obj)
@@ -72,12 +73,15 @@ namespace GaryMoveOut.Catastrophies
                     sequence = DOTween.Sequence();
                     sequence.Append(DOVirtual.DelayedCall(1f, () =>
                     {
-                        // to do: play ufo beam
-                        gameplayManager.AddMultiCameraTarget(ufo);
+						ufoAudio.Play();
+
+						gameplayManager.AddMultiCameraTarget(ufo);
                     }));
                     sequence.Append(DOVirtual.DelayedCall(1f, () =>
                     {
-                        for (int i = 0; i < floor.items.Count; i++)
+						
+
+						for (int i = 0; i < floor.items.Count; i++)
                         {
                             var item = floor.items[i];
 							if (item == null)
