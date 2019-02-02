@@ -462,7 +462,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: f6598965661eeb546a91b2b864bb61c4, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -572,4 +572,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e72b3814051f41248b499a1f850e4dc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  boxCollider2D: {fileID: 0}
+  itemRigidbody2D: {fileID: 0}
+  pickable: {fileID: 0}
+  audioSource: {fileID: 0}
   scheme: {fileID: 0}
+  cantKillMe: 0

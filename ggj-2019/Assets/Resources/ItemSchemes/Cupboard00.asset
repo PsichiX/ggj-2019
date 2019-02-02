@@ -18,4 +18,5 @@ MonoBehaviour:
   materialType: 1
   itemPrefab: {fileID: 6162459562674995683, guid: 977a1515772948b43bc4feaf66220b55,
     type: 3}
-  explosion: {fileID: 1000013462590818, guid: ecdd96beb7f93494880c052dfccf9dc1, type: 3}
+  explosion: {fileID: 6159769501012982291, guid: e25775da8278e2a4fa437020f8e7564c,
+    type: 3}

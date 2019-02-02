@@ -63,24 +63,10 @@ namespace GaryMoveOut.Items
             {
                 return;
             }
-			itemRigidbody2D.simulated = false;
 			IsAlive = false;
-            var ex = Instantiate(Scheme.explosion, transform);
-			HideMe();
-            ex.transform.localPosition = Vector3.zero;
-            audioSource.Play();
-            DOVirtual.DelayedCall(0.6f, KillMe);
-            // TODO: destroy viz
-        }
-
-        private void KillMe()
-        {
-			if (gameObject == null || transform == null)
-			{
-				return;
-			}
-            transform.SetParent(null);
-            Destroy(gameObject, 0.2f);
+            var ex = Instantiate(Scheme.explosion);
+			ex.transform.position = transform.position;
+            Destroy(gameObject);
         }
 
         public void UnHideMe()
