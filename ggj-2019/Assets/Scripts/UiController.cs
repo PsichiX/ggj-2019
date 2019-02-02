@@ -89,13 +89,15 @@ namespace GaryMoveOut
 		private void ReactionDeEvacuation(object obj)
 		{
 			dangerSlider.gameObject.SetActive(true);
+			dangerSlider.DOKill();
 			dangerSlider.fillAmount = 1;
-			dangerSlider.DOFillAmount(0, 30);
+			dangerSlider.DOFillAmount(0, 30).SetEase(Ease.Linear);
 		}
 
 		private void ReactionStart(object obj)
 		{
 			dangerSlider.gameObject.SetActive(true);
+			dangerSlider.DOKill();
 			dangerSlider.fillAmount = 0;
 			dangerSlider.DOFillAmount(1, gameplayManager.evacuationTimeStartToEnd).SetEase(Ease.Linear);
 		}

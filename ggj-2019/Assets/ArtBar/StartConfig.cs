@@ -183,7 +183,7 @@ namespace GaryMoveOut
 				hScores.Fill(emptyHighScoreList);
 				return;
 			}
-			allHighScores.OrderBy(h => h.points).ToList();
+			allHighScores.Sort();
 			foreach (var score in allHighScores)
 			{
 				hScores.Fill(score.playName + colonString + score.points);
