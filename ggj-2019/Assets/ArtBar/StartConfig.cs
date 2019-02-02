@@ -144,6 +144,15 @@ namespace GaryMoveOut
 			gameName = field.text;
 		}
 
+		public void SetOldGameName()
+		{
+			var field = FindObjectOfType<TMPro.TMP_InputField>();
+			if (field != null)
+			{
+				field.text = gameName;
+			}
+		}
+
 		public void SaveHiScore(int score)
 		{
 			if (gameName == null || gameName == string.Empty)
@@ -157,7 +166,6 @@ namespace GaryMoveOut
 		private string ReadHighscores()
 		{
 			return File.ReadAllText(hiScoresPath);
-			
 		}
 
 		private void CheckHighscores()
@@ -172,6 +180,7 @@ namespace GaryMoveOut
 
 		public void FillHiScores()
 		{
+			SetOldGameName();
 			CheckHighscores();
 			HighscoresPanel hScores = FindObjectOfType<HighscoresPanel>();
 			if (hScores == null)
