@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fcc529896a4670c4886a88b1246adf71, type: 3}
-  m_Name: Plant02
+  m_Name: Palm00
   m_EditorClassIdentifier: 
-  value: 10
-  weight: 1
+  isSmall: 1
+  value: 2
+  weight: 1.4
   vertical: 0
   materialType: 5
-  itemPrefab: {fileID: 1781227169358939759, guid: 54dcf5176f8d4f146874387bf8b5d2b1,
+  itemPrefab: {fileID: 2050819876204909888, guid: 99f53a0b8d4a43a40bac13e3c07a8c55,
     type: 3}
   explosion: {fileID: 1000013462590818, guid: ecdd96beb7f93494880c052dfccf9dc1, type: 3}

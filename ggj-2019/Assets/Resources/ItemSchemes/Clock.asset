@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcc529896a4670c4886a88b1246adf71, type: 3}
   m_Name: Clock
   m_EditorClassIdentifier: 
+  isSmall: 0
   value: 16
-  weight: 8
+  weight: 3
   vertical: 0
   materialType: 1
   itemPrefab: {fileID: 6197885405541708229, guid: c4e52f18bcdc7ba4887ace7fedcfbe04,

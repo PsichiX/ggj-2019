@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fcc529896a4670c4886a88b1246adf71, type: 3}
-  m_Name: Lamp00
+  m_Name: VaseRed
   m_EditorClassIdentifier: 
-  value: 20
+  isSmall: 1
+  value: 11.25
   weight: 1
   vertical: 0
   materialType: 5
-  itemPrefab: {fileID: 8158917917228346597, guid: 950f1244517989c428de6069c3329e48,
+  itemPrefab: {fileID: 5684485804950680673, guid: cddd645d88695634198cee9cd4712c50,
     type: 3}
   explosion: {fileID: 1000013462590818, guid: ecdd96beb7f93494880c052dfccf9dc1, type: 3}

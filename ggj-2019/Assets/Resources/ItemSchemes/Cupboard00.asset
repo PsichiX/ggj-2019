@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcc529896a4670c4886a88b1246adf71, type: 3}
   m_Name: Cupboard00
   m_EditorClassIdentifier: 
+  isSmall: 0
   value: 10
-  weight: 9
+  weight: 2.5
   vertical: 0
   materialType: 1
   itemPrefab: {fileID: 6162459562674995683, guid: 977a1515772948b43bc4feaf66220b55,

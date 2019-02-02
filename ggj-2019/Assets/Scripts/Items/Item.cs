@@ -20,7 +20,8 @@ namespace GaryMoveOut.Items
             itemRigidbody2D = GetComponent<Rigidbody2D>();
             pickable = GetComponent<Pickable>();
             audioSource = GetComponent<AudioSource>();
-        }
+			//itemRigidbody2D.mass = scheme.weight;
+		}
 
 		//private void OnDestroy()
 		//{

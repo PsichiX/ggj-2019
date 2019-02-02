@@ -543,12 +543,16 @@ namespace GaryMoveOut
 		{
 			aus.PlayOneShot(Resources.Load("Sounds/Throw") as AudioClip);
 
-			UnAim();
-			if (m_pickedUp != null)
+			if (m_pickedUp != null && isCarryingItem == true)
 			{
+				CarryItemEnd?.Invoke();
+				m_animator?.SetBool("PickedUp", false);
+				m_ui.DeactivateAim(this);
 				var angle = TurnToSide == Side.Left ? 180 - m_aimAngle : m_aimAngle;
 				var force = Quaternion.Euler(0, 0, angle) * Vector2.right * m_aimStrength;
 				m_pickedUp.Throw(force);
+				m_isAiming = false;
+				isCarryingItem = false;
 				m_pickedUp = null;
 			}
 			if (m_ui != null)
@@ -564,6 +568,7 @@ namespace GaryMoveOut
 			m_isAiming = false;
 			m_animator?.SetBool("PickedUp", false);
 			m_ui.DeactivateAim(this);
+			m_pickedUp = null;
 		}
 
 		private void AimMe()

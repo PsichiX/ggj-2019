@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcc529896a4670c4886a88b1246adf71, type: 3}
   m_Name: Wardrobe01
   m_EditorClassIdentifier: 
+  isSmall: 0
   value: 16
-  weight: 10
+  weight: 2.6
   vertical: 0
   materialType: 1
   itemPrefab: {fileID: 832045923641197325, guid: 938096a58d50edd4f9621022f14abfa3,

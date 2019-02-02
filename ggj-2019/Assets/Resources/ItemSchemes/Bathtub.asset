@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcc529896a4670c4886a88b1246adf71, type: 3}
   m_Name: Bathtub
   m_EditorClassIdentifier: 
+  isSmall: 0
   value: 12
-  weight: 10
+  weight: 3.5
   vertical: 0
   materialType: 5
   itemPrefab: {fileID: 9087564763860325632, guid: dc03cf899493bb340881c9d2fbb346c7,

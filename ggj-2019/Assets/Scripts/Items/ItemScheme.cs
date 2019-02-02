@@ -5,6 +5,7 @@ namespace GaryMoveOut.Items
     [CreateAssetMenu(menuName = "ScriptableObjects/Items/Item Scheme")]
     public class ItemScheme : ScriptableObject
     {
+        public bool isSmall;
         public float value;
         public float weight;
         public bool vertical;

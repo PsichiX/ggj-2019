@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fcc529896a4670c4886a88b1246adf71, type: 3}
-  m_Name: Plant01
+  m_Name: Lamp01
   m_EditorClassIdentifier: 
-  value: 10
-  weight: 1
-  vertical: 0
+  isSmall: 0
+  value: 25
+  weight: 1.5
+  vertical: 1
   materialType: 5
-  itemPrefab: {fileID: 1233156382144302253, guid: c47b3509155ec4d4aba5a17edb1289b8,
+  itemPrefab: {fileID: 8975467275653927640, guid: eb50339cb2f5f904f8ad0929e1e0c684,
     type: 3}
   explosion: {fileID: 1000013462590818, guid: ecdd96beb7f93494880c052dfccf9dc1, type: 3}

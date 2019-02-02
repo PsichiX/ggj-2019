@@ -10,14 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fcc529896a4670c4886a88b1246adf71, type: 3}
-  m_Name: Table
+  m_Name: Bust
   m_EditorClassIdentifier: 
-  isSmall: 0
-  value: 4
-  weight: 3
+  isSmall: 1
+  value: 50
+  weight: 2.5
   vertical: 0
-  materialType: 1
-  itemPrefab: {fileID: 4412790381592846228, guid: fa1a85af710d3cb4f9f56986813701bd,
+  materialType: 5
+  itemPrefab: {fileID: 9163783351286981907, guid: b9d196f51af386d40bbe368b21cd39cb,
     type: 3}
-  explosion: {fileID: 6159769501012982291, guid: e25775da8278e2a4fa437020f8e7564c,
-    type: 3}
+  explosion: {fileID: 1000013462590818, guid: ecdd96beb7f93494880c052dfccf9dc1, type: 3}
