@@ -44,9 +44,19 @@ ModelImporter:
     7400032: TreeIdle
     9500000: //RootNode
     13700000: Cube.003
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Leaves
+    second: {fileID: 2100000, guid: 967d01f1390d3904a98f61010d34d215, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Trunk
+    second: {fileID: 2100000, guid: ab92bded8a311854d82e53b98bb1aa3a, type: 2}
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
     materialLocation: 1
