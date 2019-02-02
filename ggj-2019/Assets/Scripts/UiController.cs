@@ -128,7 +128,7 @@ namespace GaryMoveOut
 			dangerSlider.fillAmount = 0;
 			manyMonthsLater.SetActive(true);
 			backgroundMusic.DOFade(0, 1.2f);
-			DOVirtual.DelayedCall(3f, () => SetActionMusic(null));
+			//DOVirtual.DelayedCall(3f, () => SetActionMusic(null));
 		}
 
 		private void SetActionMusic(object obj)
