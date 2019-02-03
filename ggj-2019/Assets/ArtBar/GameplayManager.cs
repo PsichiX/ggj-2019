@@ -240,7 +240,7 @@ namespace GaryMoveOut
 					    segmentsCount = buildingConfig.floorSegmentsCount,
 				        stairsSegmentIndex = buildingConfig.stairsSegmentIndex
 			        };
-					buildingOut = buildingsGenerator.GenerateBuilding(placeBuildingOut.transform, buildingConfig.buildingFloorsCount, floorSize, items);
+					buildingOut = buildingsGenerator.GenerateBuilding(placeBuildingOut.transform, buildingConfig.buildingFloorsCount, floorSize, false, items);
                 }
                 else
                 {
@@ -267,7 +267,7 @@ namespace GaryMoveOut
                     stairsSegmentIndex = buildingConfig.stairsSegmentIndex
                 };
 
-                buildingIn = buildingsGenerator.GenerateBuilding(placeBuildingIn.transform, buildingConfig.buildingFloorsCount, floorSize);
+                buildingIn = buildingsGenerator.GenerateBuilding(placeBuildingIn.transform, buildingConfig.buildingFloorsCount, floorSize, true);
 			}
         }
 
@@ -546,7 +546,7 @@ namespace GaryMoveOut
         {
 			// fade out?
             events.CallEvent(GamePhases.GameplayPhase.TruckStop, null);
-            buildingsGenerator.DestroyBuildingOut(ref buildingOut);
+            buildingsGenerator.DestroyBuilding(ref buildingOut);
 
             float delay = 1f;
 			DOVirtual.DelayedCall(delay, PhaseDeEvacuation);

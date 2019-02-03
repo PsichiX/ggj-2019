@@ -25,18 +25,20 @@ namespace GaryMoveOut
         public List<Item> items = new List<Item>();
 
 
-        public void AddItem(Item item)
+        public bool AddItem(Item item)
         {
             if (!items.Contains(item))
             {
                 items.Add(item);
-				GameplayManager.GetGameplayManager().SetItemInBuilding(item);
-			}
+                GameplayManager.GetGameplayManager().SetItemInBuilding(item);
+                return true;
+            }
+            return false;
         }
-        
-        public void RemoveItem(Item item)
+
+        public bool RemoveItem(Item item)
         {
-            items.Remove(item);
+            return items.Remove(item);
         }
     }
 }

@@ -8,6 +8,8 @@ namespace GaryMoveOut
     public class GameplayEvents
     {
         private Dictionary<GamePhases.GameplayPhase, Action<object>> eventDict;
+        public event System.Action<GamePhases.GameplayPhase> GameplayPhaseChanged;
+
         private static GameplayEvents events;
         public static GameplayEvents GetGameplayEvents()
         {
@@ -28,7 +30,6 @@ namespace GaryMoveOut
                 eventDict.Add(phases, null);
             }
         }
-
 
         public bool AttachToEvent(GamePhases.GameplayPhase gamePhase, Action<object> action)
         {
@@ -55,15 +56,15 @@ namespace GaryMoveOut
             if (eventDict.ContainsKey(gamePhase))
             {
                 eventDict[gamePhase]?.Invoke(param);
+                GameplayPhaseChanged?.Invoke(gamePhase);
             }
         }
+
 
         public event System.Action<GameObject> PlayerDied;
         public void CallPlayerDied(GameObject go)
         {
             PlayerDied?.Invoke(go);
         }
-
-
     }
 }

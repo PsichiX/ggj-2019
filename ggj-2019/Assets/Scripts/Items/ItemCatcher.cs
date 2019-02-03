@@ -1,68 +1,67 @@
-﻿using GaryMoveOut.Items;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
-namespace GaryMoveOut
+namespace GaryMoveOut.Items
 {
     public class ItemCatcher : MonoBehaviour
     {
-        [SerializeField] private bool isInside = true;
-        [SerializeField] private AddForce addForce;
-        [SerializeField] private GameObject glassSheet;
-		public bool isBroken = false;
+        private GameplayEvents gameplayEvents;
+        private BoxCollider2D boxCollider2D;
         private Floor floor;
+        private GamePhases.GameplayPhase gamePhase;
 
-        public void Setup(Floor floor)
+        private void Start()
         {
+            gameplayEvents = GameplayEvents.GetGameplayEvents();
+            gameplayEvents.GameplayPhaseChanged += UpdateGamePhase;
+        }
+        private void OnDestroy()
+        {
+            gameplayEvents.GameplayPhaseChanged -= UpdateGamePhase;
+        }
+
+        private void UpdateGamePhase(GamePhases.GameplayPhase newGamePhase)
+        {
+            if (newGamePhase == GamePhases.GameplayPhase.Evacuation || newGamePhase == GamePhases.GameplayPhase.DeEvacuation)
+            {
+                gamePhase = newGamePhase;
+            }
+        }
+
+        public void Setup(Vector2 center, Vector3 size, Floor floor)
+        {
+            boxCollider2D = gameObject.AddComponent<BoxCollider2D>();
+            boxCollider2D.size = size;
+            boxCollider2D.isTrigger = true;
+            gameObject.transform.position = center;
             this.floor = floor;
         }
 
-		//List<Item> alreadyPaid = new List<Item>();
-        private void OnTriggerStay2D(Collider2D other)
+        private void OnTriggerEnter2D(Collider2D other)
         {
-            var item = other.GetComponent<Item>();
-            if (item != null && floor != null)
+            if (gamePhase == GamePhases.GameplayPhase.DeEvacuation)
             {
-                if (/*isInside && */floor.items.Contains(item) == false)
+                var item = other.GetComponentInParent<Item>();
+                if (item != null && floor != null)
                 {
-                    Debug.Log("Added " + item.name + "to floor " + floor.Type);
                     floor.AddItem(item);
-					item.Scheme.value *= 0.75f;
-					GameplayManager.GetGameplayManager().GainPointsForItem(item);
-				}
-                //else if (floor.items.Contains(item) == true)
-                //{
-                //    Debug.Log("Removed " + item.name + "from floor " + floor.Type);
-                //    floor.RemoveItem(item);
-                //}
-            }
-            if (addForce != null)
-            {
-				if (isBroken == false)
-				{
-					var rigid = other.GetComponent<Rigidbody2D>();
-					if (rigid)
-					{
-						if (rigid.velocity.x > 0)
-						{
-							YouAreTearingMeApartItem(true);
-						}
-						else if (rigid.velocity.magnitude != 0)
-						{
-							YouAreTearingMeApartItem(false);
-						}
-						isBroken = true;
-					}
-				}
+                    //Debug.Log($"<color=green>Added item</color> {item.gameObject.name} to floor {floor.gameObject.name}");
+                }
             }
         }
 
-        private void YouAreTearingMeApartItem(bool toTheRight)
+        private void OnTriggerExit2D(Collider2D other)
         {
-            glassSheet.SetActive(false);
-            addForce.gameObject.SetActive(true);
-            addForce.right = toTheRight;
-            addForce.TearMeApart();
+            if (gamePhase == GamePhases.GameplayPhase.Evacuation)
+            {
+                var item = other.GetComponentInParent<Item>();
+                if (item != null && floor != null)
+                {
+                    floor.RemoveItem(item);
+                    //Debug.Log($"<color=red>Removed item</color> {item.gameObject.name} from floor {floor.gameObject.name}");
+                }
+            }
         }
+
     }
 }
