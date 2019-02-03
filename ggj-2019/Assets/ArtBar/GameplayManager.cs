@@ -48,6 +48,7 @@ namespace GaryMoveOut
         [SerializeField] private GameObject prefabPlayer;
         private Building buildingOut;
         private Building buildingIn;
+        private BuildingConfig currentBuildingConfig;
 
         private List<ItemScheme> itemsInTruck;
 		private Dictionary<int, List<ItemScheme>> itemsFromLastInBuilding;
@@ -180,7 +181,8 @@ namespace GaryMoveOut
         {
 			if (buildingIn != null)
 			{
-				Destroy(buildingIn.root.GetChild(0).gameObject);
+                buildingsGenerator.DestroyBuilding(buildingIn);
+                buildingIn = null;
 			}
 			var pos = placeBuildingIn.transform.position;
 			pos.y = 0;
@@ -226,27 +228,25 @@ namespace GaryMoveOut
 
             if (placeBuildingOut != null)
             {
-                var buildingConfig = buildingConfigurator.BuildingParameterGenerator(currentBuildingId);
+                if (currentBuildingConfig == null)
+                {
+                    currentBuildingConfig = buildingConfigurator.BuildingParameterGenerator(currentBuildingId);
+                }
 
-                var maxFreeSegments = (buildingConfig.floorSegmentsCount - 1) * buildingConfig.buildingFloorsCount;
+                var maxFreeSegments = (currentBuildingConfig.floorSegmentsCount - 1) * currentBuildingConfig.buildingFloorsCount;
 
-				if (useOldItems == false)
+				if (!useOldItems)
 				{
-					var minItemsCount = (int)(buildingConfig.minItemsCountToMaxFreeSegmentsRatio * maxFreeSegments);
+					var minItemsCount = (int)(currentBuildingConfig.minItemsCountToMaxFreeSegmentsRatio * maxFreeSegments);
 					var itemsCount = UnityEngine.Random.Range(minItemsCount, maxFreeSegments);
 					var items = buildingsGenerator.ItemsSpawner.ItemsDatabase.GetRandomItems(itemsCount);
-	                var floorSize = new FloorSize()
-		            {
-					    segmentsCount = buildingConfig.floorSegmentsCount,
-				        stairsSegmentIndex = buildingConfig.stairsSegmentIndex
-			        };
-					buildingOut = buildingsGenerator.GenerateBuilding(placeBuildingOut.transform, buildingConfig.buildingFloorsCount, floorSize, false, items);
+					buildingOut = buildingsGenerator.GenerateBuilding(placeBuildingOut.transform, currentBuildingConfig, false, items);
                 }
                 else
                 {
-					buildingOut = buildingsGenerator.GenerateBuildingBasedOnOldOne(placeBuildingOut.transform, oldFloorCount, oldFloorSize, itemsFromLastInBuilding, buildingIn.wallsColor);
+					buildingOut = buildingsGenerator.GenerateBuildingBasedOnOldOne(placeBuildingOut.transform, currentBuildingConfig, itemsFromLastInBuilding);
 				}
-                buildingFloorNumber = buildingConfig.buildingFloorsCount;
+                buildingFloorNumber = currentBuildingConfig.buildingFloorsCount;
             }
         }
 
@@ -260,14 +260,9 @@ namespace GaryMoveOut
 
             if (placeBuildingIn != null)
             {
-                var buildingConfig = buildingConfigurator.BuildingParameterGenerator(currentBuildingId);
-                var floorSize = new FloorSize()
-                {
-                    segmentsCount = buildingConfig.floorSegmentsCount,
-                    stairsSegmentIndex = buildingConfig.stairsSegmentIndex
-                };
+                currentBuildingConfig = buildingConfigurator.BuildingParameterGenerator(currentBuildingId);
 
-                buildingIn = buildingsGenerator.GenerateBuilding(placeBuildingIn.transform, buildingConfig.buildingFloorsCount, floorSize, true);
+                buildingIn = buildingsGenerator.GenerateBuilding(placeBuildingIn.transform, currentBuildingConfig, true);
 			}
         }
 
@@ -546,7 +541,7 @@ namespace GaryMoveOut
         {
 			// fade out?
             events.CallEvent(GamePhases.GameplayPhase.TruckStop, null);
-            buildingsGenerator.DestroyBuilding(ref buildingOut);
+            buildingsGenerator.DestroyBuilding(buildingOut);
 
             float delay = 1f;
 			DOVirtual.DelayedCall(delay, PhaseDeEvacuation);
@@ -587,7 +582,6 @@ namespace GaryMoveOut
 				//p.GetComponent<PlayerController>().Setup();
 			}
 			currentPlayersInTruck = 0;
-			//cameraTargets.Add(placeBuildingIn);
 			cameraTargets.Add(buildingIn.Floors[(int)buildingIn.Floors.Count / 2].segments[0].gameObject);
 			multiTargetCamera.SetTargets(cameraTargets.ToArray());
 			cachedTruckItems = new List<Item>();
@@ -669,15 +663,9 @@ namespace GaryMoveOut
 			Debug.Log("FadeIn");
 		}
 
-		private int oldFloorCount;
-		private FloorSize oldFloorSize;
-		private Color oldColor;
         private void PhaseManyMonthsLater()
         {
             events.CallEvent(GamePhases.GameplayPhase.ManyMonthsLater, null);
-			oldFloorCount = buildingIn.Floors.Count;
-			oldFloorSize = buildingIn.FloorSize;
-			oldColor = buildingIn.wallsColor;
 			itemsFromLastInBuilding = buildingIn.GetItems();
 			foreach (var i in cachedTruckItems)
 			{

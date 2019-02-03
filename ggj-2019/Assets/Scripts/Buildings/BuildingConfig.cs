@@ -1,10 +1,13 @@
-﻿namespace GaryMoveOut
+﻿using UnityEngine;
+
+namespace GaryMoveOut
 {
     public class BuildingConfig
     {
         public int floorSegmentsCount;
-        public int buildingFloorsCount;
         public int stairsSegmentIndex;
+        public int buildingFloorsCount;
         public float minItemsCountToMaxFreeSegmentsRatio;
+        public Color wallsColor;
     }
 }

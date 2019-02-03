@@ -14,25 +14,29 @@ namespace GaryMoveOut
 
     public class Building
     {
-		public Color wallsColor;
         public bool isBuildingIn;
         public Transform root;
         public Dictionary<int, Floor> Floors { get; private set; }
         public Dictionary<int, DoorPortal> Stairs { get; private set; }
-		public FloorSize FloorSize;
+
+
+        public BuildingConfig Config { get; private set; }
+		//public Color wallsColor;
+  //      public FloorSize FloorSize;
         public SegmentSize SegmentSize { get; private set; }
 
         private ItemsSpawner itemsSpawner;
 
 
-        public Building(ItemsSpawner itemsSpawner, SegmentSize segmentSize, FloorSize floorSize)
+        public Building(ItemsSpawner itemsSpawner, SegmentSize segmentSize, BuildingConfig config)
         {
             Floors = new Dictionary<int, Floor>();
             Stairs = new Dictionary<int, DoorPortal>();
-			FloorSize = floorSize;
+			//FloorSize = floorSize;
 
             this.itemsSpawner = itemsSpawner;
             SegmentSize = segmentSize;
+            Config = config;
         }
 
 

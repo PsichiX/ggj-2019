@@ -18,8 +18,9 @@ namespace GaryMoveOut
 		}
 
 
-		public void DestroyBuilding(ref Building building)
+		public void DestroyBuilding(Building building)
 		{
+            building.root = null;
 			foreach (var floor in building.Floors)
 			{
 				building.DestroyFloor(floor.Key);
@@ -30,23 +31,20 @@ namespace GaryMoveOut
 
 
 		#region Building generator
-		public Building GenerateBuilding(Transform root, int buildingFloorsCount, FloorSize floorSize, bool isBuildingIn, List<ItemScheme> items = null)
+		public Building GenerateBuilding(Transform root, BuildingConfig buildingConfig, bool isBuildingIn, List<ItemScheme> items = null)
 		{
-			useOldColor = true;
-			var building = ConstructBuilding(root, buildingFloorsCount, floorSize, isBuildingIn);
+			var building = ConstructBuilding(root, buildingConfig, isBuildingIn);
 			if (items != null)
 			{
 				building.SpawnItemsInside(items);
 			}
-			Debug.Log($"Generated building with {floorSize.segmentsCount} segments width, {buildingFloorsCount} floors and stairs at each {floorSize.stairsSegmentIndex} floor segment");
+			Debug.Log($"Generated building with {buildingConfig.floorSegmentsCount} segments width, {buildingConfig.buildingFloorsCount} floors and stairs at each {buildingConfig.stairsSegmentIndex} floor segment");
 			return building;
 		}
 
-		private bool useOldColor;
-		public Building GenerateBuildingBasedOnOldOne(Transform root, int oldHeight, FloorSize oldFloorSize, Dictionary<int, List<ItemScheme>> oldItems, Color oldColor)
+		public Building GenerateBuildingBasedOnOldOne(Transform root, BuildingConfig buildingConfig, Dictionary<int, List<ItemScheme>> oldItems)
 		{
-			useOldColor = false;
-			var building = ConstructBuilding(root, oldHeight, oldFloorSize, isBuildingIn: false);
+			var building = ConstructBuilding(root, buildingConfig, isBuildingIn: false);
 			if (oldItems != null && oldItems.Count > 0)
 			{
 				building.SpawnItemsInside(oldItems);
@@ -55,7 +53,7 @@ namespace GaryMoveOut
 			return building;
 		}
 
-		private Building ConstructBuilding(Transform root, int buildingFloorsCount, FloorSize floorSize, bool isBuildingIn)
+		private Building ConstructBuilding(Transform root, BuildingConfig buildingConfig, bool isBuildingIn)
 		{
 			var floorScheme = BuildingsDatabase.GetRandomFloorScheme();
 			var segmentSize = new SegmentSize()
@@ -64,7 +62,7 @@ namespace GaryMoveOut
 				Height = floorScheme.segmentHeight,
 				Depth = floorScheme.segmentDepth
 			};
-			var building = new Building(ItemsSpawner, segmentSize, floorSize)
+			var building = new Building(ItemsSpawner, segmentSize, buildingConfig)
 			{
 				root = root,
                 isBuildingIn = isBuildingIn
@@ -73,23 +71,23 @@ namespace GaryMoveOut
 			Vector3 position = root.position;
 			Quaternion rotation = root.rotation;
 
-			GenerateFloor(ref building, floorScheme, root, position, root.rotation, floorSize, 0, FloorType.GroundFloor);
+			GenerateFloor(ref building, floorScheme, root, position, root.rotation, 0, FloorType.GroundFloor);
 
 			int index = 1;
-			for (; index <= buildingFloorsCount; index++)
+			for (; index <= buildingConfig.buildingFloorsCount; index++)
 			{
 				position += new Vector3(0f, floorScheme.segmentHeight, 0f);
-				GenerateFloor(ref building, floorScheme, root, position, root.rotation, floorSize, index, FloorType.MiddleFloor);
+				GenerateFloor(ref building, floorScheme, root, position, root.rotation, index, FloorType.MiddleFloor);
 			}
 
 			position += new Vector3(0f, floorScheme.segmentHeight, 0f);
 			var roofScheme = BuildingsDatabase.GetRandomRoofScheme();
-			GenerateFloor(ref building, roofScheme, root, position, root.rotation, floorSize, index, FloorType.Roof);
+			GenerateFloor(ref building, roofScheme, root, position, root.rotation, index, FloorType.Roof);
 
 			return building;
 		}
 
-		private void GenerateFloor(ref Building building, FloorScheme scheme, Transform floorParent, Vector3 position, Quaternion rotation, FloorSize floorSize, int floorIndex, FloorType type)
+		private void GenerateFloor(ref Building building, FloorScheme scheme, Transform floorParent, Vector3 position, Quaternion rotation, int floorIndex, FloorType type)
 		{
 			if (!building.Floors.TryGetValue(floorIndex, out Floor floor))
 			{
@@ -116,33 +114,24 @@ namespace GaryMoveOut
 			}
 
 			var segment = GameObject.Instantiate(prefab, position, rotation, floor.transform) as GameObject;
-			//var itemCatcher = segment.GetComponentInChildren<ItemCatcher_OLD>();
-			//if (itemCatcher != null)
-			//{
-			//	itemCatcher.Setup(floor);
-			//}
+            SetObjectColor(segment, building.Config.wallsColor);
 			floor.segments.Add(segment);
 
 			// add floor middle segments:
-			for (int i = 0; i < floorSize.segmentsCount; i++)
+			for (int i = 0; i < building.Config.floorSegmentsCount; i++)
 			{
-				if (type != FloorType.Roof && i == floorSize.stairsSegmentIndex)
+				if (type != FloorType.Roof && i == building.Config.stairsSegmentIndex)
 				{
 					prefab = scheme.Stairs;
 				}
 				else
 				{
 					prefab = scheme.EmptyWall;
-					if (useOldColor)
-					{
-						building.wallsColor = Random.ColorHSV(0,1,0,1,0.65f,0.95f);
-						var mr = prefab.GetComponentInChildren<MeshRenderer>();
-						mr.sharedMaterial.color = building.wallsColor;
-					}
 				}
 
 				segment = GameObject.Instantiate(prefab, position, rotation, floor.transform) as GameObject;
-				var doorPortal = segment.GetComponentInChildren<DoorPortal>();
+                SetObjectColor(segment, building.Config.wallsColor);
+                var doorPortal = segment.GetComponentInChildren<DoorPortal>();
 				if (doorPortal != null)
 				{
 					doorPortal.floorIndex = floorIndex;
@@ -177,12 +166,8 @@ namespace GaryMoveOut
 			}
 
 			segment = GameObject.Instantiate(prefab, position, rotation, floor.transform) as GameObject;
-			//itemCatcher = segment.GetComponent<ItemCatcher_OLD>();
-			//if (itemCatcher != null)
-			//{
-			//	itemCatcher.Setup(floor);
-			//}
-			floor.segments.Add(segment);
+            SetObjectColor(segment, building.Config.wallsColor);
+            floor.segments.Add(segment);
 
             // generate ItemCatcher game object:
             if (type != FloorType.Roof)
@@ -196,49 +181,12 @@ namespace GaryMoveOut
                 itemCatcher.Setup(center, realFloorSize, floor);
             }
         }
+
+        private void SetObjectColor(GameObject go, Color color)
+        {
+            var mr = go.GetComponentInChildren<MeshRenderer>();
+            mr.sharedMaterial.color = color;
+        }
 		#endregion
-
-
-
-		//// TBR
-		//[System.Obsolete]
-		//public Building GenerateBuildingWithItems(Transform root, int floorSegmentsCount, int buildingFloorsCount, int stairsSegmentIndex, List<ItemScheme_OLD> items)
-		//{
-		//    var floorSize = new FloorSize()
-		//    {
-		//        segmentsCount = floorSegmentsCount,
-		//        stairsSegmentIndex = stairsSegmentIndex
-		//    };
-		//    var building = ConstructBuilding(root, buildingFloorsCount, floorSize);
-		//    building.SpawnItemsInside(items);
-		//    Debug.Log($"Generated building with {floorSize.segmentsCount} segments width, {buildingFloorsCount} floors and stairs at each {floorSize.stairsSegmentIndex} floor segment");
-		//    return building;
-		//}
-		//[System.Obsolete]
-		//public Building GenerateBuildingWithItems(Transform root, int floorSegmentsCount, int buildingFloorsCount, int stairsSegmentIndex, List<Item_OLD> items)
-		//{
-		//    var floorSize = new FloorSize()
-		//    {
-		//        segmentsCount = floorSegmentsCount,
-		//        stairsSegmentIndex = stairsSegmentIndex
-		//    };
-		//    var building = ConstructBuilding(root, buildingFloorsCount, floorSize);
-		//    building.SpawnItemsInside(items);
-		//    Debug.Log($"Generated building with {floorSize.segmentsCount} segments width, {buildingFloorsCount} floors and stairs at each {floorSize.stairsSegmentIndex} floor segment");
-		//    return building;
-		//}
-		//[System.Obsolete]
-		//public Building GenerateBuildingWithItems(Transform root, int floorSegmentsCount, int buildingFloorsCount, int stairsSegmentIndex, Dictionary<int, List<Item_OLD>> items)
-		//{
-		//    var floorSize = new FloorSize()
-		//    {
-		//        segmentsCount = floorSegmentsCount,
-		//        stairsSegmentIndex = stairsSegmentIndex
-		//    };
-		//    var building = ConstructBuilding(root, buildingFloorsCount, floorSize);
-		//    building.SpawnItemsInside(items);
-		//    Debug.Log($"Generated building with {floorSize.segmentsCount} segments width, {buildingFloorsCount} floors and stairs at each {floorSize.stairsSegmentIndex} floor segment");
-		//    return building;
-		//}
 	}
 }

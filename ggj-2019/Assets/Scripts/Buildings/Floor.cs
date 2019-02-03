@@ -11,13 +11,6 @@ namespace GaryMoveOut
         Roof = 999
     }
 
-    [System.Serializable]
-    public struct FloorSize
-    {
-        public int segmentsCount;
-        public int stairsSegmentIndex;
-    }
-
     public class Floor : MonoBehaviour
     {
         public FloorType Type;
