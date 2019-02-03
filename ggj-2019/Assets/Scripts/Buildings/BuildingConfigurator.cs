@@ -9,9 +9,9 @@ namespace GaryMoveOut
         {
             var buildingConfig = new BuildingConfig();
 
-            buildingConfig.floorSegmentsCount = Random.Range(5, 10);
+            buildingConfig.floorSegmentsCount = Random.Range(5, 8);
             buildingConfig.stairsSegmentIndex = Random.Range(1, buildingConfig.floorSegmentsCount - 1);
-            buildingConfig.buildingFloorsCount = Random.Range(4, 9);
+            buildingConfig.buildingFloorsCount = Random.Range(2, 5);
             buildingConfig.minItemsCountToMaxFreeSegmentsRatio = 0.8f;
             buildingConfig.wallsColor = Random.ColorHSV(0, 1, 0, 1, 0.65f, 0.95f);
 

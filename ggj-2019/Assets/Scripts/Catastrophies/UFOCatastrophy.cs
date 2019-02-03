@@ -68,34 +68,17 @@ namespace GaryMoveOut.Catastrophies
                     }));
                     sequence.Append(DOVirtual.DelayedCall(1f, () =>
                     {
-						
-
-						for (int i = 0; i < floor.items.Count; i++)
+						while(floor.transform.childCount > 0)
                         {
-                            var item = floor.items[i];
-							if (item == null)
-							{
-								return;
-							}
-                            item.gameObject.transform.SetParent(null);
-                            var time = UnityEngine.Random.Range(1.5f, 2.5f);
-                            item.gameObject.transform.DOMove(ufo.transform.position, time).SetEase(Ease.InOutExpo).OnComplete(() =>
+                            var child = floor.transform.GetChild(0);
+                            child.gameObject.transform.SetParent(null);
+                            var time = UnityEngine.Random.Range(0.7f, 2.5f);
+                            child.gameObject.transform.DOMove(ufo.transform.position, time).SetEase(Ease.InExpo).OnComplete(() =>
                             {
-                                GameObject.Destroy(item.gameObject);
+                                GameObject.Destroy(child.gameObject);
                             });
                         }
                         floor.items.Clear();
-
-                        for (int i = 0; i < floor.segments.Count; i++)
-                        {
-                            var segment = floor.segments[i];
-                            segment.gameObject.transform.SetParent(null);
-                            var time = UnityEngine.Random.Range(1.5f, 2.5f);
-                            segment.gameObject.transform.DOMove(ufo.transform.position, time).SetEase(Ease.InOutExpo).OnComplete(() =>
-                            {
-                                GameObject.Destroy(segment.gameObject);
-                            });
-                        }
                         floor.segments.Clear();
 
                     }));
