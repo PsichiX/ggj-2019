@@ -73,9 +73,12 @@ namespace GaryMoveOut.Catastrophies
                     sequence = DOTween.Sequence();
                     sequence.Append(DOVirtual.DelayedCall(1f, () =>
                     {
-						ufoAudio.Play();
+						if (ufo != null)
+						{
+							ufoAudio.Play();
+							gameplayManager.AddMultiCameraTarget(ufo);
+						}
 
-						gameplayManager.AddMultiCameraTarget(ufo);
                     }));
                     sequence.Append(DOVirtual.DelayedCall(1f, () =>
                     {

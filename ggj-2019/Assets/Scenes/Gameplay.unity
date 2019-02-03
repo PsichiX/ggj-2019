@@ -727,6 +727,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4362939246932889582, guid: 68081029321b2ce438cc755b7fd3f758,
         type: 3}
+      propertyPath: backgroundMusicClips.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4362939246932889582, guid: 68081029321b2ce438cc755b7fd3f758,
+        type: 3}
       propertyPath: m_camera
       value: 
       objectReference: {fileID: 65596275}
@@ -735,6 +740,21 @@ PrefabInstance:
       propertyPath: catastrophyAudio
       value: 
       objectReference: {fileID: 72667812}
+    - target: {fileID: 4362939246932889582, guid: 68081029321b2ce438cc755b7fd3f758,
+        type: 3}
+      propertyPath: backgroundMusicClips.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 2425d1269269da046bed0b2d60b86fa9, type: 3}
+    - target: {fileID: 4362939246932889582, guid: 68081029321b2ce438cc755b7fd3f758,
+        type: 3}
+      propertyPath: backgroundMusicClips.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: 262e01eb9e3c0b7498301899cf77b6e7, type: 3}
+    - target: {fileID: 4362939246932889582, guid: 68081029321b2ce438cc755b7fd3f758,
+        type: 3}
+      propertyPath: backgroundMusicClips.Array.data[2]
+      value: 
+      objectReference: {fileID: 8300000, guid: 7741226d36a155f43b7d000fb52fff9a, type: 3}
     - target: {fileID: 1481339694, guid: 68081029321b2ce438cc755b7fd3f758, type: 3}
       propertyPath: m_havePropertiesChanged
       value: 1
@@ -765,6 +785,10 @@ PrefabInstance:
     - target: {fileID: 1867282451, guid: 68081029321b2ce438cc755b7fd3f758, type: 3}
       propertyPath: m_Color.g
       value: 0.28152826
+      objectReference: {fileID: 0}
+    - target: {fileID: 1057877604, guid: 68081029321b2ce438cc755b7fd3f758, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 68081029321b2ce438cc755b7fd3f758, type: 3}

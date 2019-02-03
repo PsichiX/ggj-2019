@@ -30,6 +30,7 @@ namespace GaryMoveOut
 		[SerializeField] private AudioSource catastrophyAudio;
 		[SerializeField] private GameObject dangerNotification;
 		[SerializeField] private Image dangerSlider;
+		[SerializeField] private AudioClip[] backgroundMusicClips;
 
 		public int CurrentFloorBadEvent { get { return gameplayManager.currentFloorBadEvent; } }
 		public EvecuationDirection CurrentEvecuationDirection { get { return gameplayManager.currentEvacuationDirection; } }
@@ -119,6 +120,9 @@ namespace GaryMoveOut
 		{
 			dangerSlider.gameObject.SetActive(false);
 			dangerNotification.SetActive(false);
+			backgroundMusic.DOKill();
+			catastrophyAudio.DOKill();
+			catastrophyAudio.DOFade(0, 3f);
 			backgroundMusic.DOFade(0, 5f).OnComplete(SetCalmMusic);
 		}
 
@@ -127,6 +131,7 @@ namespace GaryMoveOut
 			dangerSlider.gameObject.SetActive(false);
 			dangerSlider.fillAmount = 0;
 			manyMonthsLater.SetActive(true);
+			backgroundMusic.DOKill();
 			backgroundMusic.DOFade(0, 1.2f);
 			//DOVirtual.DelayedCall(3f, () => SetActionMusic(null));
 		}
@@ -138,27 +143,37 @@ namespace GaryMoveOut
 				manyMonthsLater.SetActive(false);
 			}
 			var type = gameplayManager.currentCatastrophy.Type;
+			backgroundMusic.clip = backgroundMusicClips[0];
+
 			if (type == Catastrophies.CatastrophyType.UFO)
 			{
 				catastrophyAudio.clip = Resources.Load("Sounds/Ufo") as AudioClip;
+				backgroundMusic.clip = backgroundMusicClips[1];
 			}
 			else if (type == Catastrophies.CatastrophyType.Fire)
 			{
 				catastrophyAudio.clip = Resources.Load("Sounds/Fire") as AudioClip;
+				backgroundMusic.clip = backgroundMusicClips[0];
 			}
-			DOVirtual.DelayedCall(5f, () => catastrophyAudio.Play());
+
 			if (backgroundMusic.volume != 1)
 			{
-				backgroundMusic.clip = Resources.Load("Sounds/katastrofa") as AudioClip;
+				backgroundMusic.clip = backgroundMusicClips[0];
 				backgroundMusic.Play();
+				backgroundMusic.DOKill();
 				backgroundMusic.DOFade(1, 2f);
 			}
+			catastrophyAudio.DOKill();
+			catastrophyAudio.DOFade(1, 8f);
+			catastrophyAudio.Play();
+			backgroundMusic.Play();
 		}
 
 		private void SetCalmMusic()
 		{
-			backgroundMusic.clip = Resources.Load("Sounds/sasiedzi") as AudioClip;
-			backgroundMusic.DOFade(1, 2f);
+			backgroundMusic.clip = backgroundMusicClips[2];
+			backgroundMusic.DOKill();
+			backgroundMusic.DOFade(11, 2f);
 			backgroundMusic.Play();
 		}
 
