@@ -38,9 +38,9 @@ namespace GaryMoveOut.Catastrophies
                 for(int i = 1; i < floor.segments.Count - 1; i++)
                 {
 					var fire = Instantiate(firePrefabs[Random.Range(0, firePrefabs.Count)], floor.segments[i].transform);
-					Vector3 pos = fire.transform.localPosition;
-					pos.x = Random.Range(-2f, 0.5f);
-					fire.transform.localPosition = pos;
+					Vector3 pos = fire.transform.position;
+					pos.z = Random.Range(-0.7f, 0.2f);
+					fire.transform.position = pos;
 					//DOVirtual.DelayedCall(Random.Range(0, 0.4f), () => DelayedSpawn(floor.segments[i].transform));
 				}
             }
