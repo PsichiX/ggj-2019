@@ -114,9 +114,9 @@ namespace GaryMoveOut
 			}
 
 			var segment = GameObject.Instantiate(prefab, position, rotation, floor.transform) as GameObject;
-            SetObjectColor(segment, building.Config.wallsColor);
 			floor.segments.Add(segment);
 
+            var nonStairsSegmentIndex = 0;
 			// add floor middle segments:
 			for (int i = 0; i < building.Config.floorSegmentsCount; i++)
 			{
@@ -127,10 +127,10 @@ namespace GaryMoveOut
 				else
 				{
 					prefab = scheme.EmptyWall;
-				}
+                    nonStairsSegmentIndex = i;
+                }
 
 				segment = GameObject.Instantiate(prefab, position, rotation, floor.transform) as GameObject;
-                SetObjectColor(segment, building.Config.wallsColor);
                 var doorPortal = segment.GetComponentInChildren<DoorPortal>();
 				if (doorPortal != null)
 				{
@@ -166,8 +166,10 @@ namespace GaryMoveOut
 			}
 
 			segment = GameObject.Instantiate(prefab, position, rotation, floor.transform) as GameObject;
-            SetObjectColor(segment, building.Config.wallsColor);
             floor.segments.Add(segment);
+
+            // set walls color:
+            SetWallsColor(floor.segments[nonStairsSegmentIndex], building.Config.wallsColor);
 
             // generate ItemCatcher game object:
             if (type != FloorType.Roof)
@@ -182,7 +184,7 @@ namespace GaryMoveOut
             }
         }
 
-        private void SetObjectColor(GameObject go, Color color)
+        private void SetWallsColor(GameObject go, Color color)
         {
             var mr = go.GetComponentInChildren<MeshRenderer>();
             mr.sharedMaterial.color = color;
