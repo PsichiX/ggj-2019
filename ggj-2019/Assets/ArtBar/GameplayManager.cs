@@ -428,7 +428,7 @@ namespace GaryMoveOut
                     // game over
                     float delay = 1f;
                     DOVirtual.DelayedCall(delay, () => events.CallEvent(GamePhases.GameplayPhase.GameOver, null));
-					events.DetachFromEvent(GamePhases.GameplayPhase.GameOver, ReactionGameOver);
+					//events.DetachFromEvent(GamePhases.GameplayPhase.GameOver, ReactionGameOver);
 					Debug.Log("game over called now");
                     float delay2 = 4f;
                     DOVirtual.DelayedCall(delay2, LoadMainMenu);

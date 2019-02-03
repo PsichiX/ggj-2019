@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Clock
   m_EditorClassIdentifier: 
   isSmall: 0
+  canSpawnOnTop: 0
   value: 16
   weight: 3
-  vertical: 0
+  vertical: 1
   materialType: 1
   itemPrefab: {fileID: 6197885405541708229, guid: c4e52f18bcdc7ba4887ace7fedcfbe04,
     type: 3}
