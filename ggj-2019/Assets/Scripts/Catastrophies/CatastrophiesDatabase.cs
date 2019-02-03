@@ -18,7 +18,6 @@ namespace GaryMoveOut.Catastrophies
             var catastrophies = Resources.LoadAll<BaseCatastrophy>("Catastrophies");
             foreach (var catastrophy in catastrophies)
             {
-                catastrophy.Initialize();
                 database.Add(catastrophy);
             }
         }

@@ -14,17 +14,22 @@ namespace GaryMoveOut.Catastrophies
         public override EvecuationDirection EvacuationDirection { get { return EvecuationDirection.Up; } }
 
         private BuildingSegmentsDatabase buildingsDatabase;
-		private AudioSource aus;
+		private AudioSource audioSource;
 
         public override void Initialize()
         {
-			aus = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioSource>();
-            buildingsDatabase = Resources.Load<BuildingSegmentsDatabase>("Databases/BuildingSegmentsDatabase");
+            if (audioSource == null)
+            {
+                audioSource = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioSource>();
+            }
+            if (buildingsDatabase == null)
+            {
+                buildingsDatabase = Resources.Load<BuildingSegmentsDatabase>("Databases/BuildingSegmentsDatabase");
+            }
         }
 
         public override void Dispose()
         {
-            buildingsDatabase = null;
         }
 
         public override void DestroyFloor(Building building, int floorIndex)
@@ -63,7 +68,7 @@ namespace GaryMoveOut.Catastrophies
             //        }
             //    }
             //}
-			aus.PlayOneShot(sounds[Random.Range(0, sounds.Length)]);
+			audioSource.PlayOneShot(sounds[Random.Range(0, sounds.Length)]);
             DOVirtual.DelayedCall(floorFallTime, () =>
             {
 				building.DestroyFloor(floorIndex);

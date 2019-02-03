@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using static GaryMoveOut.GameplayManager;
-using DG.Tweening;
 
 namespace GaryMoveOut.Catastrophies
 {
@@ -41,17 +40,8 @@ namespace GaryMoveOut.Catastrophies
 					Vector3 pos = fire.transform.position;
 					pos.z = Random.Range(-0.7f, 0.2f);
 					fire.transform.position = pos;
-					//DOVirtual.DelayedCall(Random.Range(0, 0.4f), () => DelayedSpawn(floor.segments[i].transform));
 				}
             }
         }
-
-		private void DelayedSpawn(Transform trans)
-		{
-			//var fire = Instantiate(firePrefabs[Random.Range(0, firePrefabs.Count)], trans);
-			//Vector3 pos = fire.transform.localPosition;
-			//pos.z = Random.Range(-2f, 0.5f);
-			//fire.transform.localPosition = pos;
-		}
     }
 }

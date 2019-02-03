@@ -1,5 +1,4 @@
-﻿using System;
-using DG.Tweening;
+﻿using DG.Tweening;
 using UnityEngine;
 using static GaryMoveOut.GameplayManager;
 
@@ -17,7 +16,6 @@ namespace GaryMoveOut.Catastrophies
 
         private GameObject ufo;
         private GameplayManager gameplayManager;
-        private GameplayEvents gameplayEvents;
         private Vector3 currentUfoPos;
         private Sequence sequence;
 		private AudioSource ufoAudio;
@@ -27,33 +25,21 @@ namespace GaryMoveOut.Catastrophies
 
         public override void Initialize()
         {
-            gameplayEvents = GameplayEvents.GetGameplayEvents();
-            gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.TruckStart, OnTruckStart);
-            gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.Summary, JustDispose);
-            gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.GameOver, JustDispose);
-
             ufo = GameObject.Instantiate(ufoPrefab, ufoStartPos, Quaternion.identity);
             ufo.transform.Rotate(new Vector3(0f, 180f, 0f));
-			ufoAudio = ufo.GetComponent<AudioSource>();
-			gameplayManager = GameplayManager.GetGameplayManager();
-        }
-
-		private void JustDispose(object obj)
-		{
-			Dispose();
-		}
-
-        private void OnTruckStart(object obj)
-        {
-            OnFinish();
-            DOVirtual.DelayedCall(2f, () =>
+            if (ufoAudio == null)
             {
-                Dispose();
-            });
+                ufoAudio = ufo.GetComponent<AudioSource>();
+            }
+            if (gameplayManager == null)
+            {
+                gameplayManager = GameplayManager.GetGameplayManager();
+            }
         }
 
         public override void Dispose()
         {
+            OnFinish();
             GameObject.Destroy(ufo);
         }
 

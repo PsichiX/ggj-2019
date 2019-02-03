@@ -140,6 +140,7 @@ namespace GaryMoveOut
             events.AttachToEvent(GamePhases.GameplayPhase.LastItemShot, ReactionLastItemShot);
             events.AttachToEvent(GamePhases.GameplayPhase.PlayerDie, ReactionPlayerDie);
             events.AttachToEvent(GamePhases.GameplayPhase.GameOver, ReactionGameOver);
+            events.AttachToEvent(GamePhases.GameplayPhase.Summary, DisposeCatastrophyObjects);
             events.AttachToEvent(GamePhases.GameplayPhase.StartNewGame, PhaseStartNewGame);
 
             events.AttachToEvent(GamePhases.GameplayPhase.FloorEvacuationEnd, ReactionEvacuationEnd);
@@ -269,7 +270,9 @@ namespace GaryMoveOut
         public BaseCatastrophy currentCatastrophy;
         private void SetupCatastrophy()
         {
+            DisposeCatastrophyObjects();
             currentCatastrophy = catastrophiesDatabase.GetRandomCatastrophy();
+            currentCatastrophy.Initialize();
 
             // debug:
             //DOVirtual.DelKayedCall(1f, () => { ProcessCatastrophy(); });
@@ -486,6 +489,8 @@ namespace GaryMoveOut
         {
 			SaveHiScore();
 			Debug.Log("GameOver");
+
+            DisposeCatastrophyObjects();
         }
 
 		private void SaveHiScore()
@@ -512,6 +517,14 @@ namespace GaryMoveOut
             }
         }
 
+        private void DisposeCatastrophyObjects(object param = null)
+        {
+            if (currentCatastrophy != null)
+            {
+                currentCatastrophy.Dispose();
+            }
+        }
+
         private void PhaseTruckStart()
         {
             events.CallEvent(GamePhases.GameplayPhase.TruckStart, null);
@@ -532,6 +545,7 @@ namespace GaryMoveOut
 			}
 			float delay = Vector2.Distance(placeBuildingOut.transform.position, placeBuildingIn.transform.position) / truckSpeedModifier;
             truckManager.StartTruckMovement(delay);
+            DOVirtual.DelayedCall(delay / 3, () => { DisposeCatastrophyObjects(); });
             DOVirtual.DelayedCall(delay / 2, SetupBuildingIn);
             DOVirtual.DelayedCall(delay, PhaseTruckStop);
             Debug.Log("PhaseTruckStart");
