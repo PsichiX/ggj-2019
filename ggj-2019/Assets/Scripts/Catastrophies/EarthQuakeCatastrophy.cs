@@ -7,8 +7,11 @@ namespace GaryMoveOut.Catastrophies
     [CreateAssetMenu(menuName = "ScriptableObjects/Catastrophies/Earth Quake")]
     public class EarthQuakeCatastrophy : BaseCatastrophy
     {
-        public float floorFallTime = 0.4f;
-		public AudioClip[] sounds;
+        [SerializeField] private GameObject dustStorm;
+        [SerializeField] private float dustStormDuration = 5f;
+        [SerializeField] private Vector3 dustStormOffset = new Vector3(0f, 0f, -6f);
+        [SerializeField] private float floorFallTime = 0.4f;
+        [SerializeField] private AudioClip[] sounds;
 
         public override CatastrophyType Type { get { return CatastrophyType.EarthQuake; } }
         public override EvecuationDirection EvacuationDirection { get { return EvecuationDirection.Up; } }
@@ -46,29 +49,15 @@ namespace GaryMoveOut.Catastrophies
 			}
 
             var endPos = building.root.transform.position - new Vector3(0f, building.SegmentSize.Height, 0f);
-            building.root.transform.DOMove(endPos, floorFallTime).SetEase(Ease.OutBounce).
-				OnComplete(() => DeparentPlayers(players));
+            building.root.transform.DOMove(endPos, floorFallTime).SetEase(Ease.OutBounce).OnComplete(() => DeparentPlayers(players));
 
-            //var force = 3f;
-            //foreach (var floor in building.floors)
-            //{
-            //    // apply force to all items:
-            //    foreach (var floorObj in building.floors.Values)
-            //    {
-            //        foreach (var item in floorObj.itemGOs.Values)
-            //        {
-            //            if (item != null)
-            //            {
-            //                var rigidBody = item.GetComponent<Rigidbody2D>();
-            //                if (rigidBody != null)
-            //                {
-            //                    rigidBody.AddForce(new Vector2(0f, -force), ForceMode2D.Impulse);
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
-			audioSource.PlayOneShot(sounds[Random.Range(0, sounds.Length)]);
+            var buildingWidth = building.SegmentSize.Width * building.Config.floorSegmentsCount;
+            var position = building.root.transform.position;
+            position = new Vector3(position.x + buildingWidth * 0.5f, 0f, 0f) + dustStormOffset;
+            var dust = Instantiate(dustStorm, position, Quaternion.identity);
+            Destroy(dust.gameObject, dustStormDuration);
+
+            audioSource.PlayOneShot(sounds[Random.Range(0, sounds.Length)]);
             DOVirtual.DelayedCall(floorFallTime, () =>
             {
 				building.DestroyFloor(floorIndex);
