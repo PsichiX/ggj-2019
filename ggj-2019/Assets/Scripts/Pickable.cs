@@ -24,7 +24,6 @@ namespace GaryMoveOut
 
         public void PickUp(PlayerController.Side side)
         {
-
 			item.cantKillMe = true;
             m_rigidBody.bodyType = RigidbodyType2D.Kinematic;
 			m_rigidBody.velocity = Vector2.zero;
@@ -52,6 +51,7 @@ namespace GaryMoveOut
         {
 			if (item != null)
 			{
+                item.gameObject.transform.SetParent(null);
 				item.cantKillMe = false;
 			}
 			m_rigidBody.bodyType = RigidbodyType2D.Dynamic;

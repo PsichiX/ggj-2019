@@ -39,27 +39,21 @@ namespace GaryMoveOut.Items
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (gamePhase == GamePhases.GameplayPhase.DeEvacuation)
+            var item = other.GetComponentInParent<Item>();
+            if (item != null && floor != null)
             {
-                var item = other.GetComponentInParent<Item>();
-                if (item != null && floor != null)
-                {
-                    floor.AddItem(item);
-                    //Debug.Log($"<color=green>Added item</color> {item.gameObject.name} to floor {floor.gameObject.name}");
-                }
+                bool success = floor.AddItem(item);
+                if (success) Debug.Log($"<color=green>Added item</color> {item.gameObject.name} to floor {floor.gameObject.name}");
             }
         }
 
         private void OnTriggerExit2D(Collider2D other)
         {
-            if (gamePhase == GamePhases.GameplayPhase.Evacuation)
+            var item = other.GetComponentInParent<Item>();
+            if (item != null && floor != null)
             {
-                var item = other.GetComponentInParent<Item>();
-                if (item != null && floor != null)
-                {
-                    floor.RemoveItem(item);
-                    //Debug.Log($"<color=red>Removed item</color> {item.gameObject.name} from floor {floor.gameObject.name}");
-                }
+                bool success = floor.RemoveItem(item);
+                if (success) Debug.Log($"<color=red>Removed item</color> {item.gameObject.name} from floor {floor.gameObject.name}");
             }
         }
 

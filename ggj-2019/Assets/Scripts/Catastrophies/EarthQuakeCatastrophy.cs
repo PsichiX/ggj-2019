@@ -42,7 +42,8 @@ namespace GaryMoveOut.Catastrophies
 			var players = GameObject.FindGameObjectsWithTag("Player");
 			foreach (var p in players)
 			{
-				if (p.GetComponent<PlayerController>().m_inputBlocked == false || p.GetComponent<PlayerController>().m_isJumping == false)
+                var playerController = p.GetComponent<PlayerController>();
+                if (playerController.m_inputBlocked == false && playerController.m_isJumping == false)
 				{
 					p.transform.parent = building.root;
 				}

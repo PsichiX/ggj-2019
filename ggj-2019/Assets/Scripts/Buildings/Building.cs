@@ -235,12 +235,13 @@ namespace GaryMoveOut
             if (scheme != null && itemSlot != null)
             {
                 var itemGO = itemsSpawner.SpawnItem(scheme, itemSlot.transform);
-				if (addYTransform)
+                itemGO.transform.SetParent(floor.gameObject.transform);
+                if (addYTransform)
 				{
 					itemGO.transform.position += new Vector3(0, 1);
 				}
                 var item = itemGO.GetComponent<Item>();
-                floor.AddItem(item);
+                //floor.AddItem(item);
                 itemSlot.isOccupied = true;
             }
         }

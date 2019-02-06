@@ -612,6 +612,9 @@ namespace GaryMoveOut
 				//m_collider.size = new Vector2(0.5f, 0.5f);
 				m_animator.SetBool("isJumping", true);
 				m_window = null;
+
+                // unparent from building:
+                transform.SetParent(null);
 			}
 			if (m_ui != null)
 			{

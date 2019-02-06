@@ -23,6 +23,7 @@ namespace GaryMoveOut
             if (!items.Contains(item))
             {
                 items.Add(item);
+                item.transform.SetParent(this.transform);
                 GameplayManager.GetGameplayManager().SetItemInBuilding(item);
                 return true;
             }
@@ -31,7 +32,12 @@ namespace GaryMoveOut
 
         public bool RemoveItem(Item item)
         {
-            return items.Remove(item);
+            bool success = items.Remove(item);
+            if (success)
+            {
+                item.transform.SetParent(null);
+            }
+            return success;
         }
     }
 }
