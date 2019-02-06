@@ -77,6 +77,19 @@ namespace GaryMoveOut
             return itemsByFloorsId;
         }
 
+		public List<Item> GetAllItems()
+		{
+			List<Item> items = new List<Item>();
+			foreach (var floor in Floors)
+			{
+				foreach (var item in floor.Value.items)
+				{
+					items.Add(item);
+				}
+			}
+			return items;
+		}
+
 		public void SpawnItemsInside(Dictionary<int, List<ItemScheme>> oldItems)
 		{
 			if (this.Floors.Count == 0 || oldItems == null)

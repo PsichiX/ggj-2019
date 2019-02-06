@@ -615,23 +615,32 @@ namespace GaryMoveOut
         }
 
 		private List<Item> cachedTruckItems;
+		private int justInCaseTimer = 0;
 		private bool AreThereTruckItemsLeft()
 		{
+			List<Item> itemsInNewBuilding = buildingIn.GetAllItems();
+			justInCaseTimer++;
+			if (justInCaseTimer > 60)
+			{
+				justInCaseTimer = 0;
+				return React();
+			}
+			int truckItemsCount = cachedTruckItems.Count;
 			foreach (var i in cachedTruckItems)
 			{
 				if (i != null)
 				{
-					justInCaseTimer++;
-					if (justInCaseTimer > 60)
+					if (itemsInNewBuilding.Contains(i) == false)
 					{
-						justInCaseTimer = 0;
-						CancelInvoke();
-						ReactionLastItemShot(null);
-						return false;
+						return true;
 					}
-					return true;
 				}
 			}
+			return React();
+		}
+
+		private bool React()
+		{
 			CancelInvoke();
 			ReactionLastItemShot(null);
 			return false;
@@ -657,11 +666,11 @@ namespace GaryMoveOut
 			}
 			if (cachedTruckItems.Contains(it))
 			{
+				//cachedTruckItems.Remove(it);
 				atLeastOneItemInNewBuilding = true;
 			}
 		}
 
-		private int justInCaseTimer = 0;
 
         private void ReactionLastItemShot(object param)
         {

@@ -604,8 +604,11 @@ namespace GaryMoveOut
 				var angle = TurnToSide == Side.Left ? 180 - m_aimAngle : m_aimAngle;
 				var force = Quaternion.Euler(0, 0, angle) * Vector2.right * m_aimStrength;
 				m_rigidBody.AddForce(force, ForceMode2D.Impulse);
+				transform.position += new Vector3(0, 0.5f);
 				m_rigidBody.constraints = RigidbodyConstraints2D.None;
-				m_rigidBody.MovePosition(m_rigidBody.position + new Vector2(0, 1));
+				//m_collider.enabled = false;
+				//DOVirtual.DelayedCall(0.15f, () => m_collider.enabled = true);
+				m_rigidBody.AddForceAtPosition(force / 50, m_rigidBody.position + new Vector2(0, 0.8f));
 				//m_collider.size = new Vector2(0.5f, 0.5f);
 				m_animator.SetBool("isJumping", true);
 				m_window = null;
