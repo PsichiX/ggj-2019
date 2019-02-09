@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5d684b0eaf0c0844a5253702d36100a, type: 3}
   m_Name: EarthQuakeCatastrophy
   m_EditorClassIdentifier: 
+  dustStorm: {fileID: 100000, guid: 1f7aa4d40edff6e48b549003cad031e1, type: 3}
+  dustStormDuration: 5
+  dustStormOffset: {x: 0, y: 0, z: -6}
   floorFallTime: 0.6
   sounds:
   - {fileID: 8300000, guid: 18a4fa602014bae4b99da473b82e3e62, type: 3}
