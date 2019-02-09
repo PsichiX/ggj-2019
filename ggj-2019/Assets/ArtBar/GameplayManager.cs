@@ -54,7 +54,7 @@ namespace GaryMoveOut
 
 		private int playersCount = 1;
 
-        private int currentPlayersInTruck = 0;
+        private List<PlayerController> currentPlayersInTruck = new List<PlayerController>();
         private int currentPlayersDead = 0;
 
         private CatastrophiesDatabase catastrophiesDatabase;
@@ -404,11 +404,11 @@ namespace GaryMoveOut
 			Debug.Log(currentPlayersDead + " currentPlayersDead");
 			Debug.Log(currentPlayersInTruck + " currentPlayersInTruck");
 			Debug.Log(playersCount + " playersCount");
-            if (currentPlayersDead + currentPlayersInTruck == playersCount)
+            if (currentPlayersDead + currentPlayersInTruck.Count == playersCount)
             {
                 isEvacuation = false;
 
-                if(currentPlayersInTruck > 0)
+                if(currentPlayersInTruck.Count > 0)
                 {
                     // go go go
                     PhaseTruckStart();
@@ -490,7 +490,7 @@ namespace GaryMoveOut
 
         private void ReactionPlayerInTruck(object param)
         {
-			currentPlayersInTruck++;
+			currentPlayersInTruck.Add(param as PlayerController);
             EndEvacuation();
         }
 
@@ -572,20 +572,20 @@ namespace GaryMoveOut
 			//DOVirtual.DelayedCall(delay, PhaseStartGame);
 			Debug.Log("PhaseDeEvacuation");
 			cameraTargets.Clear();
-			for (int i = 0; i < currentPlayersInTruck; i++)
+			for (int i = 0; i < currentPlayersInTruck.Count; i++)
 			{
-				if (players[i] == null)
+				if (currentPlayersInTruck[i] == null || currentPlayersInTruck[i].gameObject == null)
 				{
 					return;
 				}
 				// FixMe : here be bugs
-				players[i].transform.position = truckManager.Truck.transform.position + new Vector3(0, 0.5f, 0);
-				players[i].ResetPlayer();
-				players[i].InputLayout = (InputHandler.Layout)(playerInputs[i]);
-				cameraTargets.Add(players[i].gameObject);
+				currentPlayersInTruck[i].transform.position = truckManager.Truck.transform.position + new Vector3(0, 0.5f, 0);
+				currentPlayersInTruck[i].ResetPlayer();
+				currentPlayersInTruck[i].InputLayout = (InputHandler.Layout)(currentPlayersInTruck[i].InputLayout);
+				cameraTargets.Add(currentPlayersInTruck[i].gameObject);
 				//p.GetComponent<PlayerController>().Setup();
 			}
-			currentPlayersInTruck = 0;
+			currentPlayersInTruck.Clear();
 			cameraTargets.Add(buildingIn.Floors[(int)buildingIn.Floors.Count / 2].segments[0].gameObject);
 			multiTargetCamera.SetTargets(cameraTargets.ToArray());
 			cachedTruckItems = new List<Item>();

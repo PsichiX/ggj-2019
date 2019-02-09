@@ -69,6 +69,7 @@ namespace GaryMoveOut
 		private bool m_isAlive = true;
 		private bool groundKills = false;
 		private Vector2 smallOffsetY = new Vector2(0, 0.01f);
+		private bool amIDead;
 
 		private AudioSource aus;
 
@@ -136,8 +137,9 @@ namespace GaryMoveOut
 		{
 			if (obj is PlayerController && obj as PlayerController == this)
 			{
-				Debug.Log("<color=blue> Player died");
+				Debug.Log(InputLayout + "<color=red> Player died</color>");
 				m_inputBlocked = true;
+				amIDead = true;
 				//InputLayout = InputHandler.Layout.None;
 				HideMe();
 				// FixMe: not
@@ -354,7 +356,7 @@ namespace GaryMoveOut
 			if (other.tag == "TruckLoader" && m_isAlive && groundKills == true)
 			{
 				m_animator.SetBool("isJumping", false);
-				m_gameplayEvents.CallEvent(GamePhases.GameplayPhase.PlayerInTruck, null);
+				m_gameplayEvents.CallEvent(GamePhases.GameplayPhase.PlayerInTruck, this);
 				aus.PlayOneShot(Resources.Load("Sounds/gain") as AudioClip);
 				HideMe();
 			}
@@ -657,6 +659,10 @@ namespace GaryMoveOut
 
 		private void OnTruckStop(object obj)
 		{
+			if (amIDead)
+			{
+				return;
+			}
 			UnHideMe();
 			groundKills = false;
 			m_inputBlocked = false;
