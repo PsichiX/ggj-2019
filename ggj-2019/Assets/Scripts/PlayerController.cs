@@ -110,7 +110,6 @@ namespace GaryMoveOut
 			{
 				m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.Evacuation, OnEvacuation);
 				m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.PlayerJump, OnPlayerJump);
-				m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.TruckStop, OnTruckStop);
 				m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.DeEvacuation, OnDeEvacuation);
 				m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.LastItemShot, OnLastItemShot);
 				m_gameplayEvents.AttachToEvent(GamePhases.GameplayPhase.PlayerDie, OnPlayerDie);
@@ -158,7 +157,6 @@ namespace GaryMoveOut
 				m_gameplayEvents.DetachFromEvent(GamePhases.GameplayPhase.Evacuation, OnEvacuation);
 				m_gameplayEvents.DetachFromEvent(GamePhases.GameplayPhase.PlayerJump, OnPlayerJump);
 				m_gameplayEvents.DetachFromEvent(GamePhases.GameplayPhase.DeEvacuation, OnDeEvacuation);
-				m_gameplayEvents.DetachFromEvent(GamePhases.GameplayPhase.TruckStop, OnTruckStop);
 				m_gameplayEvents.DetachFromEvent(GamePhases.GameplayPhase.LastItemShot, OnLastItemShot);
 				m_gameplayEvents.DetachFromEvent(GamePhases.GameplayPhase.PlayerDie, OnPlayerDie);
 				m_gameplayEvents.DetachFromEvent(GamePhases.GameplayPhase.FloorEvacuationEnd, OnEvacuationEnd);
@@ -652,12 +650,6 @@ namespace GaryMoveOut
 		}
 
 		private void OnDeEvacuation(object obj)
-		{
-			groundKills = false;
-			m_inputBlocked = false;
-		}
-
-		private void OnTruckStop(object obj)
 		{
 			if (amIDead)
 			{
