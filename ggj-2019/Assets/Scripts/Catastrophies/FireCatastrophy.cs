@@ -7,6 +7,7 @@ namespace GaryMoveOut.Catastrophies
     [CreateAssetMenu(menuName = "ScriptableObjects/Catastrophies/Fire")]
     public class FireCatastrophy : BaseCatastrophy
     {
+        public EvecuationDirection EvacuationDirectionOverride;
         public List<GameObject> firePrefabs;
 
         public override CatastrophyType Type { get { return CatastrophyType.Fire; } }
@@ -14,9 +15,9 @@ namespace GaryMoveOut.Catastrophies
         {
             get
             {
-                //return EvecuationDirection.Down;
-                var rnd = Random.Range(0, 3);
-                return (EvecuationDirection)rnd;
+                return EvacuationDirectionOverride;
+                //var rnd = Random.Range(0, 3);
+                //return (EvecuationDirection)rnd;
             }
         }
 

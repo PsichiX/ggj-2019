@@ -57,7 +57,7 @@ namespace GaryMoveOut
         private List<PlayerController> currentPlayersInTruck = new List<PlayerController>();
         private int currentPlayersDead = 0;
 
-        private CatastrophiesDatabase catastrophiesDatabase;
+        private CatastrophiesManager catastrophiesManager;
 
         private CameraMultiTarget multiTargetCamera;
         [SerializeField] private List<GameObject> cameraTargets;
@@ -82,8 +82,7 @@ namespace GaryMoveOut
             truckManager = new TruckManager();
             players = new PlayerController[playersCount];
 
-            catastrophiesDatabase = Resources.Load<CatastrophiesDatabase>("Databases/CatastrophiesDatabase");
-            catastrophiesDatabase.LoadDataFromResources();
+            catastrophiesManager = new CatastrophiesManager();
 
 
             var camera = Camera.main;
@@ -270,7 +269,7 @@ namespace GaryMoveOut
         private void SetupCatastrophy()
         {
             DisposeCatastrophyObjects();
-            currentCatastrophy = catastrophiesDatabase.GetRandomCatastrophy();
+            currentCatastrophy = catastrophiesManager.GetRandomCatastrophy();
             currentCatastrophy.Initialize();
 
             // debug:

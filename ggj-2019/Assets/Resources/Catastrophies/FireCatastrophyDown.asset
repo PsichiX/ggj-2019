@@ -10,8 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df113ac32d13fb24ca6c33b1dabd7bcd, type: 3}
-  m_Name: FireCatastrophy
+  m_Name: FireCatastrophyDown
   m_EditorClassIdentifier: 
+  EvacuationDirectionOverride: 1
   firePrefabs:
   - {fileID: 1048790455586534, guid: 2c7e85f4b03483447a66947c83fb7468, type: 3}
   - {fileID: 1000010823978654, guid: 3228a22491941734bb83ad691d17fcb9, type: 3}
